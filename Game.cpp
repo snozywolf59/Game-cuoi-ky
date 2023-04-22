@@ -32,10 +32,6 @@ void Game::initPlayer()
 {
     player = new Player(renderer);
 
-    player->loadEntity(FILE_ENTITY_IMAGE[IMG_PLAYER],renderer);
-
-    if (player == nullptr) cout << "Khong tai dc hinh anh cua player\n";
-
     //load sound
     player->attack = Mix_LoadWAV(snd_player_shoot);
     player->isHitted = Mix_LoadWAV(snd_player_hitted);
@@ -46,19 +42,12 @@ void Game::initPlayer()
         << Mix_GetError();
         exit(1);
     }
-
-    //WEAPON
-    tempBullet = new Bullet(renderer);
-
-    tempBullet->loadEntity(FILE_ENTITY_IMAGE[IMG_BULLET],renderer);
-
-    if (tempBullet == NULL) cout << "Khong tai dc hinh anh cua player bullet\n";
 }
 
 void Game::initEnemy()
 {
     tempEnemyMelee = new EnemyMelee(renderer);
-    tempEnemyMelee->loadEntity(FILE_ENTITY_IMAGE[IMG_ENEMY_MELEE],renderer);
+    tempEnemyMelee->loadEntity(file_enemy_melee,renderer);
     if (tempEnemyMelee == nullptr) cout << "Khong tai dc anh cua Enemy Melee\n";
 }
 
@@ -75,7 +64,7 @@ void Game::initMap(string path)
 void Game::initMouse()
 {
     mouse = new Mouse;
-    mouse->loadEntity(FILE_ENTITY_IMAGE[IMG_MOUSE_ING],renderer);
+    mouse->loadEntity(file_ing_mouse,renderer);
 }
 
 /****************************************************/
@@ -103,12 +92,12 @@ void Game::initSoundGame()
 
 void Game::initFont()
 {
-    score_word.font = TTF_OpenFont(gameFont,50);
+    score_word.font = TTF_OpenFont(gameFont.c_str(),50);
     if( score_word.font == nullptr )
     {
         cout << "Failed to load lazy font! SDL_ttf Error: " << TTF_GetError() << endl;
     }
-    score_word.color = {RGB[3*BLACK], RGB[3*BLACK+1], RGB[3*BLACK+2]};
+    score_word.color = {255, 255, 255};
 
     score_word.x = 0;
     score_word.y = 25;
@@ -119,11 +108,10 @@ void Game::initFont()
 void Game::initIng()
 {
     //load button
-    Ing_Button[ING_PAUSE].loadEntity(file_ing_but[ING_PAUSE],renderer);
 
-    for (int i = ING_RESUME; i < ING_TOTAL; i++)
+    for (int i = 0; i < ING_TOTAL; i++)
     {
-        Ing_Button[i].loadEntity(file_ing_but[i],renderer);
+        Ing_Button[i].loadEntity(FILE_ING_BUT[i],renderer);
     }
 }
 
@@ -143,8 +131,8 @@ void Game::resetStage()
     score = 0;
 
     //player
-    player->health = PLAYER_MAX_HP;
-    player->alive = true;
+    player->initStat();
+    player->initPos();
 
     //enemy
     enemy_list.clear();

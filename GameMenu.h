@@ -6,6 +6,15 @@
 const int SLIDER_W = 500;
 const int SLIDER_H = 100;
 
+const string file_menu_mouse = "image/map/mouse.png";
+const string FILE_MENU_IMAGE[] = {"image/Game/GameMenu/Play.png",
+                                "image/Game/GameMenu/Option.png",
+                                "image/Game/GameMenu/Quit.png"};
+
+
+const string file_bg = "image/Game/bgImage-min.png";
+
+
 struct optionMenu
 {
     Entity backButton;

@@ -3,6 +3,32 @@
 #include "Enemy.h"
 
 #define NORMAL 1000
+
+enum BUTTON_MENU_TYPE
+{
+    DEFAULT = -1,
+    START,
+    OPTION,
+    QUIT,
+    TOTAL_BUTTON
+};
+
+
+enum ING_BUTTON
+{
+    ING_PAUSE,
+    ING_RESUME,
+    ING_MENU,
+    ING_QUIT,
+    ING_TOTAL
+};
+const string file_ing_mouse = "image/map/mouse.png";
+
+const string FILE_ING_BUT[] = { "image/Game/InGame/Pause.png",
+                                "image/Game/InGame/Resume.png",
+                                "image/Game/InGame/Menu.png",
+                                "image/Game/GameMenu/Quit.png"};
+
 //GAME
 class Game
 {
@@ -51,9 +77,6 @@ private:
     Map gMap;
     SDL_Point camera;
     Mouse* mouse;
-
-    //Weapon
-    Bullet* tempBullet;
 
     //enemies
     EnemyMelee* tempEnemyMelee;

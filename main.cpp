@@ -73,7 +73,7 @@ void init(bool fullScreen)
         Mix_AllocateChannels(SND_MAX);
 
         //set color
-        SDL_SetRenderDrawColor(gRenderer,RGB[BACKGROUND*3],RGB[BACKGROUND*3],RGB[BACKGROUND*3+1],RGB[BACKGROUND*3+2]);
+        SDL_SetRenderDrawColor(gRenderer,0,0,0,0);
 
         SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");
         SDL_RenderSetLogicalSize(gRenderer, SCREEN_WIDTH, SCREEN_HEIGHT);

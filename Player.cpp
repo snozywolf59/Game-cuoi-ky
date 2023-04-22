@@ -17,20 +17,37 @@ BulletProp::BulletProp(const float& x_, const float& y_, const float& angle_, co
 Player::Player(SDL_Renderer* trenderer)
 {
     renderer = trenderer;
+
+    loadEntity(file_player,renderer);
+
+    initStat();
+    initPos();
+    initBullet();
+}
+
+void Player::initStat()
+{
     health = PLAYER_MAX_HP;
     reload = PLAYER_RELOAD;
     speed = PLAYER_SPEED;
     dmg = PLAYER_DMG;
     alive = true;
+    r = w/2;
+}
 
+void Player::initPos()
+{
     //set posititon
     x = SCREEN_WIDTH/2;
     y = SCREEN_HEIGHT/2;
-
-
-    bullet = new Bullet(renderer);
-    bullet->loadEntity(FILE_ENTITY_IMAGE[IMG_BULLET],renderer);
 }
+
+void Player::initBullet()
+{
+    bullet = new Bullet(renderer,file_player_bullet,file_player_bullet_fire);
+
+}
+
 
 /****************************************************/
 
@@ -47,7 +64,7 @@ void Player::update(SDL_Point& camera,Mouse* mouse,Map& gMap)
 
 void Player::updateAngle(Mouse* mouse)
 {
-    angle = getAngle(mouse) - PI/2;
+    angle = getAngle(mouse);
 }
 
 
@@ -82,6 +99,8 @@ void Player::updateBullet(SDL_Point& camera, Mouse* mouse, Map& gMap)
     if (atk == 1 && reload == PLAYER_RELOAD) shoot(mouse);
 
     if (reload < PLAYER_RELOAD) reload++;
+
+    bullet->fire->angle = angle;
 }
 
 
@@ -89,9 +108,7 @@ void Player::updateBullet(SDL_Point& camera, Mouse* mouse, Map& gMap)
 
 void Player::shoot(Mouse* mouse)
 {
-    float r = w/2;
-    BulletProp newBullet(x , y , angle - PI/2 ,15);
-    cout << x << ' ' << y << endl;
+    BulletProp newBullet(x + r * cos(angle), y + r * sin(angle) , angle ,15);
     p_bullets.push_back(newBullet);
     reload = 0;
 }
@@ -102,7 +119,12 @@ void Player::drawBullet(SDL_Renderer* renderer,SDL_Point& camera,float scale)
 {
     for (BulletProp& b: p_bullets)
     {
+        bullet->angle = b.angle;
         bullet->draw(NULL, b.x, b.y, bullet->w, bullet->h,renderer,1,camera);
+    }
+
+    if (reload < 5){
+          bullet->fire->draw(NULL,x + (r + 7) * cos(angle) ,y + (r + 7) * sin(angle) ,40,18,renderer,1,camera);
     }
 }
 
@@ -112,5 +134,7 @@ void Player::drawPlayer(SDL_Renderer* renderer, SDL_Point& camera)
 {
     draw(NULL,renderer,camera,1);
     drawBullet(renderer,camera);
-    cout << x << ' ' << y << endl;
+    SDL_SetRenderDrawColor(renderer,255,20,20,255);
+    SDL_RenderDrawPoint(renderer,x + r * cos(angle) - camera.x,y + r * sin(angle)- camera.y);
+    SDL_SetRenderDrawColor(renderer,0,0,0,255);
 }

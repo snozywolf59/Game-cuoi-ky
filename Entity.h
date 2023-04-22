@@ -11,28 +11,7 @@
 
 const SDL_Point p = {0,0};
 
-
-
-
-enum BUTTON_MENU_TYPE
-{
-    DEFAULT = -1,
-    START,
-    OPTION,
-    QUIT,
-    TOTAL_BUTTON
-};
-
-enum ING_BUTTON
-{
-    ING_PAUSE,
-    ING_RESUME,
-    ING_MENU,
-    ING_QUIT,
-    ING_TOTAL
-};
-
-SDL_Texture* loadTexture( string path, SDL_Renderer* renderer );
+SDL_Texture* loadTexture(const string& path, SDL_Renderer* renderer );
 
 float getAngleGlobal(const float& x1, const float& y1,const float& x2, const float& y2);
 
@@ -53,13 +32,14 @@ struct Entity
     float scale = 1;
 
     //func
-    void loadEntity(string path,SDL_Renderer* renderer);
+    void loadEntity(const string& path,SDL_Renderer* renderer);
 
     float getAngle(Entity* temp);
 
     void draw(SDL_Rect* clip, SDL_Renderer* renderer,
               const SDL_Point& camera = p, int atCenter = 0);
-    void draw(SDL_Rect* clip,const int& _x,const int& _y, const int& _w, const int& _h, SDL_Renderer* renderer,
+    void draw(SDL_Rect* clip,const int& _x,const int& _y, const int& _w,
+              const int& _h, SDL_Renderer* renderer,
               int atCenter = 0,const SDL_Point& camera = p);
 };
 
@@ -103,6 +83,7 @@ struct Fighter:Entity
 {
     //move
     int left = 0, right = 0, up = 0,down = 0;
+    float r;
 
     SDL_Renderer* renderer;
 
@@ -126,7 +107,9 @@ struct Fighter:Entity
 
 struct Bullet:Fighter
 {
-    Bullet(SDL_Renderer* renderer);
+    Entity* fire;
+
+    Bullet(SDL_Renderer* _renderer, const string& bullet_file, const string& bullet_fire_file);
 
     void update(Map& gMap);
 };

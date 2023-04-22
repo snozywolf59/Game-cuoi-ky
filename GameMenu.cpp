@@ -76,7 +76,7 @@ GameMenu::~GameMenu()
 
 void GameMenu::initMouse()
 {
-    mouse.loadEntity(FILE_ENTITY_IMAGE[IMG_MOUSE_ING],renderer);
+    mouse.loadEntity(file_menu_mouse,renderer);
 }
 
 void GameMenu::initButton()

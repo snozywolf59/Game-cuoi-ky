@@ -2,20 +2,20 @@
 
 float getAngleGlobal(const float& x1, const float& y1,const float& x2, const float& y2)
 {
-    return atan2(y1 - y2, x1 - x2);
+    return atan2(y1 - y2, x1 - x2) + PI;
 }
 
-SDL_Texture* loadTexture( string path, SDL_Renderer* renderer )
+SDL_Texture* loadTexture(const string& path, SDL_Renderer* renderer )
 {
     SDL_Texture* newTexture = nullptr;
     SDL_Surface* loadedSurface = IMG_Load( path.c_str() );
     if ( loadedSurface == nullptr )
-        cout << "Unable to load image " << path << " SDL_image Error: "
+        cerr << "Unable to load image " << path << " SDL_image Error: "
              << IMG_GetError() << endl;
     else {
         newTexture = SDL_CreateTextureFromSurface( renderer, loadedSurface );
         if( newTexture == nullptr )
-            cout << "Unable to create texture from " << path << " SDL Error: "
+            cerr << "Unable to create texture from " << path << " SDL Error: "
                  << SDL_GetError() << endl;
         SDL_FreeSurface( loadedSurface );
     }
@@ -25,7 +25,7 @@ SDL_Texture* loadTexture( string path, SDL_Renderer* renderer )
 ///////////////////////ENTITY///////////////////////
 
             /////load image for entity
-void Entity::loadEntity(string path, SDL_Renderer* renderer)
+void Entity::loadEntity(const string& path, SDL_Renderer* renderer)
 {
     texture = loadTexture(path,renderer);
     SDL_QueryTexture(texture,NULL,NULL,&w,&h);
@@ -59,10 +59,10 @@ void Entity::draw(SDL_Rect* clip,SDL_Renderer* renderer,const SDL_Point& camera,
 void Entity::draw(SDL_Rect* clip, const int& _x,const int& _y, const int& _w, const int& _h,
                   SDL_Renderer* renderer, int atCenter, const SDL_Point& camera)
 {
-    SDL_Rect des = { _x + (1 - scale) * _w/2 * atCenter - camera.x,
-                    _y + _h/2 * (1-scale) - camera.y,
-                    scale * _w,
-                    scale * _h
+    SDL_Rect des = {    _x  -  _w/2 * scale *  atCenter - camera.x,
+                        _y  -  _h/2 * scale * atCenter - camera.y,
+                        _w * scale,
+                        _h * scale
                     };
     SDL_RenderCopyEx(renderer, texture, clip, &des,
                                     angle * 180 / PI,NULL, SDL_FLIP_NONE);
@@ -112,7 +112,7 @@ void Button::drawButton(const int& _x,const int& _y, const int& _w, const int& _
 
     SDL_Rect selected = {now * w/2, 0, w/2, h};
 
-    draw(&selected,_x,_y,_w,_h,renderer);
+    draw(&selected,_x,_y,_w,_h,renderer,0);
 }
 
 
@@ -214,12 +214,16 @@ bool Fighter::hitted(Fighter* t2)
 
 
 /////////////////////////////BULLET//////////////////////////////////////
-Bullet::Bullet(SDL_Renderer* renderer)
+Bullet::Bullet(SDL_Renderer* _renderer, const string& bullet_file, const string& bullet_fire_file)
 {
+    renderer = _renderer;
+    loadEntity(bullet_file,renderer);
     dmg = 3;
     speed = 15;
     health = 1;
     alive = true;
+    fire = new Entity;
+    fire->loadEntity(bullet_fire_file,renderer);
 }
 
 void Bullet::update(Map& gMap)

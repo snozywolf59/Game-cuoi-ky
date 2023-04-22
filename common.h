@@ -33,84 +33,9 @@ using namespace std;
 //basic
 void logSDLError(ostream& os,const string &msg, bool fatal);
 
-//**************************IMG**********************//
-//file for image
-
-enum IMAGE_ENTITY
-{
-    IMG_MOUSE_ING,
-    IMG_PLAYER,
-    IMG_BULLET,
-    IMG_ENEMY_MELEE,
-    IMG_MOUSE_MENU,
-    TOTAL_IMAGE
-};
-
-
-const string FILE_ENTITY_IMAGE[] =
-{
-    "image/map/mouse.png",
-    "image/player/player.png",
-    "image/player/bullet.png",
-    "image/enemy/enemy_melee.png"
-};
-
-//image for menu
-
-
-const string FILE_MENU_IMAGE[] =
-{
-    "image/Game/GameMenu/Play.png",
-    "image/Game/GameMenu/Option.png",
-    "image/Game/GameMenu/Quit.png",
-    "image/Game/GameMenu/Colored/start.png"
-};
-
-//color
-const Uint8 RGB[] = { 203, 203, 203, // Gray
-                  254, 254,  31, // Yellow
-                    0, 255, 255, // Cyan
-                    0, 254,  30, // Green
-                  255,  16, 253, // Magenta
-                  253,   3,   2, // Red
-                   18,  14, 252, // Blue
-                    0,   0,   0,  // Black
-                    255, 255, 255, //White
-                    200, 170, 65 //Background
-};
-
-enum COLOR
-{
-    GRAY,
-    YELLOW,
-    CYAN,
-    GREEN,
-    MAGENTA,
-    RED,
-    BLUE,
-    BLACK,
-    WHITE,
-    BACKGROUND,
-    TOTAL_COLOR
-};
-
-    //map file
-
-const char file_bg[] = {"image/Game/bgImage-min.png"};
-const char txt_map[] = {"map/map.txt"};
-
-    //ingame button
-const string file_ing_but[] = {
-    "image/Game/InGame/Pause.png",
-    "image/Game/InGame/Resume.png",
-    "image/Game/InGame/Menu.png",
-    "image/Game/GameMenu/Quit.png"
-};
-
-
-
+const string txt_map= "map/map.txt";
 //**************************TTF***********************//
-const char gameFont[] = {"font/lazy.ttf"};
+const string gameFont = "font/lazy.ttf";
 
 
 string convertIntToString(const int& x);
