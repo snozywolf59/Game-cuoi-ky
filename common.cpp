@@ -1,6 +1,6 @@
 #include "common.h"
 
-void logSDLError(std::ostream& os,const std::string &msg, bool fatal)
+void logSDLError(ostream& os,const string &msg, bool fatal)
 {
     os << msg << " Error: " << SDL_GetError() << std::endl;
     if (fatal) {
@@ -9,9 +9,12 @@ void logSDLError(std::ostream& os,const std::string &msg, bool fatal)
     }
 }
 
-//******************IMG
+void logSuccess(const string& name)
+{
+    cout << "Khoi tao " << name << " thanh cong\n";
+}
 
-//******************TTF
+
 string convertIntToString(const int& x)
 {
     stringstream result;

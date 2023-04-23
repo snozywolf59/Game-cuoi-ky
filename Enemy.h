@@ -1,43 +1,51 @@
 #pragma once
 
 #include "Player.h"
+#include "Vec2f.h"
 
+
+const int DELAY = 7;
+
+const int maxFrameEnemyMelee = 6 * DELAY;
+const int ENEMY_RELOAD = 2 * FPS;
+const int ENEMY_MELEE_BLOCK_SIZE = 51;
+const float R_enemy = 30;
+
+const float ENEMY_SPEED = 0.2;
+//spawn time
 enum ENEMY_TYPE
 {
     ENEMY_MELEE,
     ENEMY_RANGED,
     TOTAL_TYPE_ENEMY
 };
-
-const int ENEMY_SPEED = 5;
-const int ENEMY_RELOAD = 20;
-
-//spawn time
-const int spawnTime[TOTAL_TYPE_ENEMY] = {100,150};
+const int spawnTime[TOTAL_TYPE_ENEMY] = {1 * FPS, 2 * FPS};
+const int ENEMY_HEALH[TOTAL_TYPE_ENEMY] = {8,5};
+const int ENEMY_DMG[TOTAL_TYPE_ENEMY] = {3,2};
 
 
-         /////////ENEMY
-struct Enemy:Fighter
+struct EnemyMeleeProp:FighterProp
 {
-    //base stat
-    const int nor_speed = ENEMY_SPEED;
+    int reload, maxReload, health, dmg;
+    bool left, right, up, down;
+    bool alive;
+    EnemyMeleeProp(const float& x_ = 0,const float& y_ = 0,const float& angle_ = 0,
+                const float& _speed = ENEMY_SPEED, const int& _maxReload = ENEMY_RELOAD,
+                const int& _maxFrame = maxFrameEnemyMelee);
 
-    //func
-    void drawEnemy(SDL_Renderer* renderer,const SDL_Point& camera);
+    void resetMov(const bool& t);
 
-    void getDmg(Fighter* t2);
-};
-        /////////////////////MELEE
+    void updateEnemyPos(vector <EnemyMeleeProp>& enemies);
 
-struct EnemyMelee:Enemy
-{
-    EnemyMelee(SDL_Renderer* renderer);
+    void updateStat(Player* player);
 
-    void update(SDL_Point& camera, Player* player, Map& gMap);
+    void update(vector <EnemyMeleeProp>& enemies,Player* player);
+
+    Vec2f separate(const vector<EnemyMeleeProp>& enemies);
 };
 
 
         /////////////SPAWN enemy
-void spawnEnemyMelee(EnemyMelee* temp, vector <EnemyMelee*> &enemy, Entity* player, Map& gMap, SDL_Renderer* renderer);
+void spawnEnemyMelee(vector <EnemyMeleeProp>& enemies, Player* player,Map* gMap);
 
 

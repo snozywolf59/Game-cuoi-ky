@@ -1,8 +1,8 @@
 # depslib dependency file v1.0
-1682161310 source:c:\users\administrator.maytinh-7sq41e0\desktop\game-cuoi-ky\common.cpp
+1682250465 source:c:\users\administrator.maytinh-7sq41e0\desktop\game-cuoi-ky\common.cpp
 	"common.h"
 
-1682146642 c:\users\administrator.maytinh-7sq41e0\desktop\game-cuoi-ky\common.h
+1682250331 c:\users\administrator.maytinh-7sq41e0\desktop\game-cuoi-ky\common.h
 	<fstream>
 	<vector>
 	<ctime>
@@ -14,35 +14,36 @@
 	<SDL_ttf.h>
 	<SDL_mixer.h>
 
-1682161306 source:c:\users\administrator.maytinh-7sq41e0\desktop\game-cuoi-ky\enemy.cpp
+1682275438 source:c:\users\administrator.maytinh-7sq41e0\desktop\game-cuoi-ky\enemy.cpp
 	"Enemy.h"
 
-1681912596 c:\users\administrator.maytinh-7sq41e0\desktop\game-cuoi-ky\enemy.h
+1682274898 c:\users\administrator.maytinh-7sq41e0\desktop\game-cuoi-ky\enemy.h
 	"Player.h"
+	"Vec2f.h"
 
-1682149604 c:\users\administrator.maytinh-7sq41e0\desktop\game-cuoi-ky\player.h
-	"Entity.h"
+1682273338 c:\users\administrator.maytinh-7sq41e0\desktop\game-cuoi-ky\player.h
+	"Fighter&Bullet.h"
 
-1682146798 c:\users\administrator.maytinh-7sq41e0\desktop\game-cuoi-ky\entity.h
+1682271744 c:\users\administrator.maytinh-7sq41e0\desktop\game-cuoi-ky\entity.h
 	"common.h"
 	"Map.h"
 
-1679411293 c:\users\administrator.maytinh-7sq41e0\desktop\game-cuoi-ky\map.h
+1682250693 c:\users\administrator.maytinh-7sq41e0\desktop\game-cuoi-ky\map.h
 	"common.h"
 
-1682161325 source:c:\users\administrator.maytinh-7sq41e0\desktop\game-cuoi-ky\entity.cpp
+1682271756 source:c:\users\administrator.maytinh-7sq41e0\desktop\game-cuoi-ky\entity.cpp
 	"Entity.h"
 
-1682161317 source:c:\users\administrator.maytinh-7sq41e0\desktop\game-cuoi-ky\game.cpp
+1682274916 source:c:\users\administrator.maytinh-7sq41e0\desktop\game-cuoi-ky\game.cpp
 	"Game.h"
 
-1682146511 c:\users\administrator.maytinh-7sq41e0\desktop\game-cuoi-ky\game.h
+1682270829 c:\users\administrator.maytinh-7sq41e0\desktop\game-cuoi-ky\game.h
 	"Enemy.h"
 
-1682161333 source:c:\users\administrator.maytinh-7sq41e0\desktop\game-cuoi-ky\gamemenu.cpp
+1682272250 source:c:\users\administrator.maytinh-7sq41e0\desktop\game-cuoi-ky\gamemenu.cpp
 	"GameMenu.h"
 
-1682146511 c:\users\administrator.maytinh-7sq41e0\desktop\game-cuoi-ky\gamemenu.h
+1682270864 c:\users\administrator.maytinh-7sq41e0\desktop\game-cuoi-ky\gamemenu.h
 	"Entity.h"
 	"Game.h"
 
@@ -52,9 +53,21 @@
 	"Game.h"
 	"GameMenu.h"
 
-1679411370 source:c:\users\administrator.maytinh-7sq41e0\desktop\game-cuoi-ky\map.cpp
+1682272478 source:c:\users\administrator.maytinh-7sq41e0\desktop\game-cuoi-ky\map.cpp
 	"Map.h"
 
-1682150310 source:c:\users\administrator.maytinh-7sq41e0\desktop\game-cuoi-ky\player.cpp
+1682272015 source:c:\users\administrator.maytinh-7sq41e0\desktop\game-cuoi-ky\player.cpp
 	"Player.h"
+
+1682272711 c:\users\administrator.maytinh-7sq41e0\desktop\game-cuoi-ky\fighter&bullet.h
+	"Entity.h"
+
+1682270775 source:c:\users\administrator.maytinh-7sq41e0\desktop\game-cuoi-ky\fighter&bullet.cpp
+	"Fighter&Bullet.h"
+
+1682275438 source:c:\users\administrator.maytinh-7sq41e0\desktop\game-cuoi-ky\vec2f.cpp
+	"Vec2f.h"
+
+1682275180 c:\users\administrator.maytinh-7sq41e0\desktop\game-cuoi-ky\vec2f.h
+	"common.h"
 

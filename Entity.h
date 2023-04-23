@@ -15,12 +15,15 @@ SDL_Texture* loadTexture(const string& path, SDL_Renderer* renderer );
 
 float getAngleGlobal(const float& x1, const float& y1,const float& x2, const float& y2);
 
+float getDistance(const float& x1, const float& y1,const float& x2, const float& y2);
+
 //entity
 
 struct Entity
 {
     //entity's image
     SDL_Texture* texture;
+    SDL_Renderer* renderer;
 
     //position
     float x,y,angle = 0;
@@ -31,8 +34,12 @@ struct Entity
     //scale
     float scale = 1;
 
+    Entity();
+
+    Entity(SDL_Renderer* _renderer, const string& path, const int& _x = 0, const int& _y = 0);
+
     //func
-    void loadEntity(const string& path,SDL_Renderer* renderer);
+    void loadEntity(const string& path);
 
     float getAngle(Entity* temp);
 
@@ -54,6 +61,8 @@ struct Button:Entity
     //SDL_Rect selected;
     int now = 0;
 
+    Button(SDL_Renderer* _renderer, const string& path);
+
     bool beChosen(const int& _x,const int& _y, const int& _w, const int& _h);
 
     void drawButton(const int& _x,const int& _y, const int& _w, const int& _h,SDL_Renderer* renderer);
@@ -62,7 +71,9 @@ struct Button:Entity
 //MOUSE
 struct Mouse:Entity
 {
-    int real_mouse_x,real_mouse_y;
+    int real_mouse_x, real_mouse_y, now = 0;
+
+    Mouse(SDL_Renderer* _renderer, const string& path);
 
     void updateMouse(SDL_Point& camera);
 };
@@ -74,45 +85,12 @@ struct Word:Entity
 
     SDL_Color color;
 
+    Word(SDL_Renderer* renderer);
+
     void loadFromRenderedText ( string textureText, SDL_Color textColor, SDL_Renderer* renderer);
 };
 
-////@@@@@@@@@@//////FIGHTER//////////////@@@@@@//////////
 
-struct Fighter:Entity
-{
-    //move
-    int left = 0, right = 0, up = 0,down = 0;
-    float r;
-
-    SDL_Renderer* renderer;
-
-    //base stat
-    int health,dmg,reload,speed;
-    bool alive = false;
-
-    //check move func
-    bool checkLeft(Map& gMap, const int& speed);
-    bool checkRight(Map& gMap, const int& speed);
-    bool checkUp(Map& gMap, const int& speed);
-    bool checkDown(Map& gMap, const int& speed);
-
-    void stop();
-
-    //collision
-    bool hitted(Fighter* bullet);
-};
-
-////////////////BULLET/////////////////
-
-struct Bullet:Fighter
-{
-    Entity* fire;
-
-    Bullet(SDL_Renderer* _renderer, const string& bullet_file, const string& bullet_fire_file);
-
-    void update(Map& gMap);
-};
 
 
 

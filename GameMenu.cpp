@@ -36,6 +36,7 @@ int optionMenu::handleAndUpdate(int& volume)
         opMouse->x = x;
         opMouse->y = y;
     }
+    return NORMAL;
 }
 
 void optionMenu::render()
@@ -65,7 +66,7 @@ GameMenu::GameMenu(SDL_Renderer* gRenderer)
     stage->initStage();
 
         //option
-    op = new optionMenu(&mouse,renderer);
+    op = new optionMenu(mouse,renderer);
 
     quit = false;
 }
@@ -76,24 +77,26 @@ GameMenu::~GameMenu()
 
 void GameMenu::initMouse()
 {
-    mouse.loadEntity(file_menu_mouse,renderer);
+    mouse = new Mouse(renderer,file_menu_mouse);
+    logSuccess("menu mouse");
 }
 
 void GameMenu::initButton()
 {
     for (int i = 0; i < TOTAL_BUTTON; i++)
     {
-        button[i].loadEntity(FILE_MENU_IMAGE[i],renderer);
+        button[i] = new Button(renderer,FILE_MENU_IMAGE[i]);
     }
+    logSuccess("menu buttons");
 }
 
 
 void GameMenu::initBackGround()
 {
-    bgImage.loadEntity(file_bg,renderer);
-    bgImage.w = SCREEN_WIDTH;
-    bgImage.h = SCREEN_HEIGHT;
-
+    bgImage = new Entity(renderer,file_bg);
+    bgImage->w = SCREEN_WIDTH;
+    bgImage->h = SCREEN_HEIGHT;
+    logSuccess("bgImage Menu");
 }
 
 void GameMenu::initSound()
@@ -113,6 +116,7 @@ void GameMenu::initSound()
     }
 
     volume = MIX_MAX_VOLUME;
+    logSuccess("Sound menu");
 }
 
 
@@ -123,11 +127,11 @@ void GameMenu::handleMouse()
         if (e.type == SDL_QUIT) quit = true;
 
         if (e.type == SDL_MOUSEBUTTONDOWN) {
-                mouse.scale = 1.2;
+                mouse->scale = 1.2;
                 current = choose;
         }
         if (e.type == SDL_MOUSEBUTTONUP){
-                mouse.scale = 1;
+                mouse->scale = 1;
         }
     }
 }
@@ -136,8 +140,8 @@ void GameMenu::update()
 {
     int x,y;
     SDL_GetMouseState(&x,&y);
-    mouse.x = x;
-    mouse.y = y;
+    mouse->x = x;
+    mouse->y = y;
 
     bool check = false;
 
@@ -145,7 +149,7 @@ void GameMenu::update()
 
     for (int i = 0; i < TOTAL_BUTTON; i++)
     {
-        if(button[i].beChosen(x,y, BUTTON_WIDTH,BUTTON_HEIGHT))
+        if(button[i]->beChosen(x,y, BUTTON_WIDTH,BUTTON_HEIGHT))
         {
             check = true;
             choose = i;
@@ -173,13 +177,13 @@ void GameMenu::menuDefault()
 
     //background
 
-    bgImage.draw(NULL,0,0,SCREEN_WIDTH,SCREEN_HEIGHT, renderer);
+    bgImage->draw(NULL,0,0,SCREEN_WIDTH,SCREEN_HEIGHT, renderer);
 
     //draw button
 
     for (int i = 0; i < TOTAL_BUTTON; i++)
     {
-        button[i].drawButton(100, int(BUTTON_HEIGHT * 1.5 * i) + 50,
+        button[i]->drawButton(100, int(BUTTON_HEIGHT * 1.5 * i) + 50,
                              BUTTON_WIDTH,BUTTON_HEIGHT,renderer);
     }
 }
@@ -252,7 +256,7 @@ void GameMenu::render()
 
     //draw mouse
 
-    mouse.draw(NULL,renderer);
+    mouse->draw(NULL,renderer);
 
     SDL_RenderPresent(renderer);
 }

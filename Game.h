@@ -22,7 +22,7 @@ enum ING_BUTTON
     ING_QUIT,
     ING_TOTAL
 };
-const string file_ing_mouse = "image/map/mouse.png";
+const string file_ing_mouse = "image/Game/InGame/Mouse.png";
 
 const string FILE_ING_BUT[] = { "image/Game/InGame/Pause.png",
                                 "image/Game/InGame/Resume.png",
@@ -59,6 +59,18 @@ public:
 
     void update();
 
+    void drawButtons();
+
+    void drawEnemy();
+
+    void drawPlayer();
+
+    void drawMap();
+
+    void drawPoint();
+
+    void drawMouse();
+
     void render();
 
     int GameLoop();
@@ -74,13 +86,13 @@ private:
 
     //entity
     Player* player;
-    Map gMap;
+    Map* gMap;
     SDL_Point camera;
     Mouse* mouse;
 
     //enemies
-    EnemyMelee* tempEnemyMelee;
-    vector <EnemyMelee*> enemy_list;
+    Entity* enemy_melee;
+    vector <EnemyMeleeProp> enemy_list;
 
 
     //count time
@@ -94,10 +106,10 @@ private:
     Mix_Music* bgMusic;
 
     //ing button
-    Button Ing_Button[ING_TOTAL];
+    Button* Ing_Button[ING_TOTAL];
 
     //font
-    Word score_word;
+    Word* score_word;
 };
 
 

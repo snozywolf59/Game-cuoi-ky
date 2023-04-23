@@ -5,8 +5,8 @@
 
 //MAP
 
-#define BLOCK_SIZE 60
-#define MAP_SIZE 30
+const int BLOCK_SIZE = 60;
+const int MAP_SIZE = 30;
 const int MAX_CAM_Y = (MAP_SIZE*BLOCK_SIZE)-(SCREEN_HEIGHT/2);
 const int MAX_CAM_X = (MAP_SIZE*BLOCK_SIZE)-(SCREEN_WIDTH/2);
 
@@ -21,7 +21,7 @@ struct Map
 
     int map_num[MAP_SIZE][MAP_SIZE];
 
-    int way[(MAP_SIZE-2)*(MAP_SIZE-2)];
+    int way[MAP_SIZE * MAP_SIZE];
     int count_way;
 
     void loadMap(string path);

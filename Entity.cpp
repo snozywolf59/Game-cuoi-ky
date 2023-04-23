@@ -5,6 +5,12 @@ float getAngleGlobal(const float& x1, const float& y1,const float& x2, const flo
     return atan2(y1 - y2, x1 - x2) + PI;
 }
 
+float getDistance(const float& x1, const float& y1, const float& x2, const float& y2)
+{
+    return sqrt(pow(x1-x2,2) + pow(y1-y2,2));
+}
+
+
 SDL_Texture* loadTexture(const string& path, SDL_Renderer* renderer )
 {
     SDL_Texture* newTexture = nullptr;
@@ -24,8 +30,20 @@ SDL_Texture* loadTexture(const string& path, SDL_Renderer* renderer )
 
 ///////////////////////ENTITY///////////////////////
 
+
+Entity::Entity()
+{}
+
+
+Entity::Entity(SDL_Renderer* _renderer, const string& path, const int& _x, const int& _y)
+{
+    renderer = _renderer;
+    x = _x, y = _y;
+    loadEntity(path);
+}
+
             /////load image for entity
-void Entity::loadEntity(const string& path, SDL_Renderer* renderer)
+void Entity::loadEntity(const string& path)
 {
     texture = loadTexture(path,renderer);
     SDL_QueryTexture(texture,NULL,NULL,&w,&h);
@@ -33,7 +51,7 @@ void Entity::loadEntity(const string& path, SDL_Renderer* renderer)
 
 float Entity::getAngle(Entity* temp)
 {
-    return getAngleGlobal(x + w/2, y + h/2, temp->x + temp->w/2, temp->y + temp->h/2);
+    return getAngleGlobal(x, y, temp->x, temp->y);
 }
 
                 ///////draw entity
@@ -88,6 +106,13 @@ void clean(Entity* entity, bool del)
 }
 
 ////////////////////////////////////BUTTON////////////////////////
+Button::Button(SDL_Renderer* _renderer, const string& path)
+{
+    renderer = _renderer;
+    loadEntity(path);
+}
+
+
 
 bool Button::beChosen(const int& _x,const int& _y, const int& _w, const int& _h)
 {
@@ -117,15 +142,28 @@ void Button::drawButton(const int& _x,const int& _y, const int& _w, const int& _
 
 
 ////////////////////////MOUSE AND WORDS////////////////
+Mouse::Mouse(SDL_Renderer* _renderer, const string& path)
+{
+    renderer = _renderer;
+    loadEntity(path);
+}
+
 
     //MOUSE
 void Mouse::updateMouse(SDL_Point& camera)
 {
     x = camera.x + real_mouse_x;
     y = camera.y + real_mouse_y;
+    now = (now + 1)%16;
 }
 
 ////////////////WRITE WORDS//////////////////
+
+Word::Word(SDL_Renderer* renderer)
+{
+    this->renderer = renderer;
+}
+
 void Word::loadFromRenderedText(string textureText, SDL_Color textColor, SDL_Renderer* renderer)
 {
     SDL_Surface* textSurface = TTF_RenderText_Solid( font, textureText.c_str(), textColor );
@@ -154,87 +192,5 @@ void Word::loadFromRenderedText(string textureText, SDL_Color textColor, SDL_Ren
 }
 
 
-///////////////////FIGHTER///////////////////
-
-bool Fighter::checkLeft(Map& gMap, const int& speed)
-{
-    int block_j = (x-speed-w/2)/BLOCK_SIZE;
-    int block_i1 = (y-h/2)/BLOCK_SIZE;
-    int block_i2 = (y+h/2)/BLOCK_SIZE;
-    if (gMap.map_num[block_i1][block_j] ||gMap.map_num[block_i2][block_j]) return false;
-    return true;
-}
-
-/****************************************************/
-
-bool Fighter::checkRight(Map& gMap, const int& speed)
-{
-    int block_j = (x+speed+w/2)/BLOCK_SIZE;
-    int block_i1 = (y-h/2)/BLOCK_SIZE;
-    int block_i2 = (y+h/2)/BLOCK_SIZE;
-    if (gMap.map_num[block_i1][block_j] ||gMap.map_num[block_i2][block_j]) return false;
-    return true;
-}
-
-/****************************************************/
-
-bool Fighter::checkUp(Map& gMap, const int& speed)
-{
-    int block_j1 = (x-w/2)/BLOCK_SIZE;
-    int block_j2 = (x+w/2)/BLOCK_SIZE;
-    int block_i = (y-speed-w/2)/BLOCK_SIZE;
-    if (gMap.map_num[block_i][block_j1] ||gMap.map_num[block_i][block_j2]) return false;
-    return true;
-}
-
-/****************************************************/
-
-bool Fighter::checkDown(Map& gMap, const int& speed)
-{
-    int block_j1 = (x-w/2)/BLOCK_SIZE;
-    int block_j2 = (x+w/2)/BLOCK_SIZE;
-    int block_i = (h/2+y+speed)/BLOCK_SIZE;
-    if (gMap.map_num[block_i][block_j1] ||gMap.map_num[block_i][block_j2]) return false;
-    return true;
-}
-
-/****************************************************/
-void Fighter::stop()
-{
-    left = 0, right = 0, down = 0, up = 0;
-}
-
-
-        //////collide with an other
-// Calculate the four vertices of each texture
-bool Fighter::hitted(Fighter* t2)
-{
-    return false;
-}
-
-
-/////////////////////////////BULLET//////////////////////////////////////
-Bullet::Bullet(SDL_Renderer* _renderer, const string& bullet_file, const string& bullet_fire_file)
-{
-    renderer = _renderer;
-    loadEntity(bullet_file,renderer);
-    dmg = 3;
-    speed = 15;
-    health = 1;
-    alive = true;
-    fire = new Entity;
-    fire->loadEntity(bullet_fire_file,renderer);
-}
-
-void Bullet::update(Map& gMap)
-{
-    x = x + speed*cos(angle);
-    y = y + speed*sin(angle);
-
-    if (!checkLeft(gMap,0)||!checkRight(gMap,0)||!checkLeft(gMap,0)||!checkLeft(gMap,0)||health <= 0)
-    {
-        alive = false;
-    }
-}
 
 

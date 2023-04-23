@@ -8,7 +8,6 @@
 #include<cmath>
 #include<sstream>
 
-
 #include<SDL.h>
 #include<SDL_image.h>
 #include<SDL_ttf.h>
@@ -21,7 +20,7 @@
 
 
 //control frames per second (FPS)
-#define FPS 50
+#define FPS 60
 #define frameDelay 1000/FPS
 
 //PI
@@ -33,7 +32,9 @@ using namespace std;
 //basic
 void logSDLError(ostream& os,const string &msg, bool fatal);
 
-const string txt_map= "map/map.txt";
+void logSuccess(const string& name);
+
+const string txt_map = "map/map.txt";
 //**************************TTF***********************//
 const string gameFont = "font/lazy.ttf";
 

@@ -6,7 +6,7 @@
 const int SLIDER_W = 500;
 const int SLIDER_H = 100;
 
-const string file_menu_mouse = "image/map/mouse.png";
+const string file_menu_mouse = "image/Game/GameMenu/Mouse.png";
 const string FILE_MENU_IMAGE[] = {"image/Game/GameMenu/Play.png",
                                 "image/Game/GameMenu/Option.png",
                                 "image/Game/GameMenu/Quit.png"};
@@ -17,7 +17,7 @@ const string file_bg = "image/Game/bgImage-min.png";
 
 struct optionMenu
 {
-    Entity backButton;
+    Entity* backButton;
     Entity* opMouse;
     SDL_Rect fillRect;
     SDL_Renderer* renderer;
@@ -79,11 +79,11 @@ private:
 
 
     //entity on the screen
-    Button button[TOTAL_BUTTON];
+    Button* button[TOTAL_BUTTON];
 
-    Entity bgImage;
+    Entity* bgImage;
 
-    Entity mouse;
+    Entity* mouse;
 
     //menu item
     optionMenu* op;

@@ -18,6 +18,7 @@ Game::~Game(){}
 
 void Game::initStage()
 {
+    logSuccess("loading stage");
     initMap(txt_map);
     initPlayer();
     initEnemy();
@@ -25,6 +26,7 @@ void Game::initStage()
     initSoundGame();
     initFont();
     initIng();
+    logSuccess("stage");
 }
 
 
@@ -42,29 +44,31 @@ void Game::initPlayer()
         << Mix_GetError();
         exit(1);
     }
+    logSuccess("Player");
 }
 
 void Game::initEnemy()
 {
-    tempEnemyMelee = new EnemyMelee(renderer);
-    tempEnemyMelee->loadEntity(file_enemy_melee,renderer);
-    if (tempEnemyMelee == nullptr) cout << "Khong tai dc anh cua Enemy Melee\n";
+    enemy_melee = new Entity(renderer,file_enemy_melee);
+    logSuccess("enemy");
 }
 
 
 void Game::initMap(string path)
 {
-    gMap.dirt = loadTexture("image/map/dirt.png",renderer);
-    gMap.wall = loadTexture("image/map/wall.png",renderer);
-    gMap.loadMap(path);
+    gMap = new Map();
+    gMap->dirt = loadTexture("image/map/dirt.png",renderer);
+    gMap->wall = loadTexture("image/map/wall.png",renderer);
+    gMap->loadMap(path);
+    logSuccess("map");
 }
 
 
 
 void Game::initMouse()
 {
-    mouse = new Mouse;
-    mouse->loadEntity(file_ing_mouse,renderer);
+    mouse = new Mouse(renderer,file_ing_mouse);
+    logSuccess("mouse");
 }
 
 /****************************************************/
@@ -86,21 +90,24 @@ void Game::initSoundGame()
         cerr << "Failed to load background music! SDL_mixer Error: " << Mix_GetError();
         exit(1);
     }
+    logSuccess("sound");
 }
 
 /****************************************************/
 
 void Game::initFont()
 {
-    score_word.font = TTF_OpenFont(gameFont.c_str(),50);
-    if( score_word.font == nullptr )
+    score_word = new Word(renderer);
+    score_word->font = TTF_OpenFont(gameFont.c_str(),50);
+    if( score_word->font == nullptr )
     {
-        cout << "Failed to load lazy font! SDL_ttf Error: " << TTF_GetError() << endl;
+        cout << "Failed to load game font! SDL_ttf Error: " << TTF_GetError() << endl;
     }
-    score_word.color = {255, 255, 255};
+    score_word->color = {255, 255, 255};
 
-    score_word.x = 0;
-    score_word.y = 25;
+    score_word->x = 0;
+    score_word->y = 25;
+    logSuccess("font");
 }
 
 /****************************************************/
@@ -111,8 +118,9 @@ void Game::initIng()
 
     for (int i = 0; i < ING_TOTAL; i++)
     {
-        Ing_Button[i].loadEntity(FILE_ING_BUT[i],renderer);
+        Ing_Button[i] = new Button(renderer,FILE_ING_BUT[i]);
     }
+    logSuccess("buttons");
 }
 
 void Game::resetStage()
@@ -163,7 +171,7 @@ int Game::doButton()
         {
             int tw = (i == 0 ? ING_BUT_W:BUTTON_WIDTH);
             int th = (i == 0 ? ING_BUT_H:BUTTON_HEIGHT);
-            if (Ing_Button[i].beChosen(mouse->x - camera.x,
+            if (Ing_Button[i]->beChosen(mouse->x - camera.x,
                                        mouse->y - camera.y, tw, th)
                 && e.type == SDL_MOUSEBUTTONDOWN)
             {
@@ -233,26 +241,19 @@ void Game::doKeyBoard()
 void Game::updateEnemy()
 {
     //spawn
-//    if (currentTime%spawnTime[ENEMY_MELEE] == 0) {
-//            spawnEnemyMelee(tempEnemyMelee,enemy_list,player,gMap,renderer);
-//    }
-
+    if (currentTime % spawnTime[ENEMY_MELEE] == 0) {
+            spawnEnemyMelee(enemy_list,player,gMap);
+    }
     //check all enemies
-    for (unsigned i = 0; i < enemy_list.size();i++)
+    for (auto prop = enemy_list.begin(); prop != enemy_list.end();)
     {
-        enemy_list[i]->update(camera,player,gMap);
-        if (!enemy_list[i]->alive)
-        {
-            Mix_PlayChannel(SND_ENEMY_DIE,enemy_die,0);
-
-            clean(enemy_list[i],0);
-
-            delete enemy_list[i];
-
-            enemy_list.erase(enemy_list.begin()+i);
-
-            i--;
-        }
+       prop->update(enemy_list,player);
+       if (prop->alive ==  false)
+       {
+           prop = enemy_list.erase(prop);
+       }else{
+            ++prop;
+       }
     }
 }
 
@@ -263,7 +264,6 @@ void Game::update()
     //MOUSE
     mouse->updateMouse(camera);
 
-    //UPDATE ENEMY
 
     if (!pause)
     {
@@ -275,52 +275,74 @@ void Game::update()
         if (player->alive == false) gameOver = true;
 
         //update score;s
-        score_word.loadFromRenderedText(convertIntToString(currentTime) ,score_word.color,renderer);
+        score_word->loadFromRenderedText(convertIntToString(currentTime) ,score_word->color,renderer);
     }
 }
 
 /******************************************************/
-
-void Game::render()
+void Game::drawButtons()
 {
-    //clear screen
-    SDL_RenderClear(renderer);
-
-    //draw map
-    gMap.drawMap(renderer,camera);
-
-    //draw player and his bullet
-    player->drawPlayer(renderer,camera);
-
-    for (unsigned i = 0; i < enemy_list.size();i++)
-    {
-        enemy_list[i]->drawEnemy(renderer,camera);
-    }
-
-       //draw score
-    score_word.draw(NULL,0,0,score_word.w,score_word.h,renderer);
-    SDL_DestroyTexture(score_word.texture);
-
-    //load pause button
     if (!pause)
     {
-        Ing_Button[ING_PAUSE].drawButton(SCREEN_WIDTH - ING_BUT_W, 0 ,
+        Ing_Button[ING_PAUSE]->drawButton(SCREEN_WIDTH - ING_BUT_W, 0 ,
                                           ING_BUT_W, ING_BUT_H,renderer);
     }
     else{
         SDL_RenderClear(renderer);
         for (int i = ING_RESUME; i < ING_TOTAL; i++)
             {
-                Ing_Button[i].drawButton(SCREEN_WIDTH/2 - BUTTON_WIDTH/2,
+                Ing_Button[i]->drawButton(SCREEN_WIDTH/2 - BUTTON_WIDTH/2,
                                      -120 + BUTTON_HEIGHT * 1.2 * i,
                                      BUTTON_WIDTH, BUTTON_HEIGHT, renderer);
             }
     }
+}
+
+
+void Game::drawEnemy()
+{
+    for (EnemyMeleeProp& x: enemy_list)
+    {
+        SDL_Rect cur = {(x.now /DELAY) * ENEMY_MELEE_BLOCK_SIZE, 0,ENEMY_MELEE_BLOCK_SIZE,ENEMY_MELEE_BLOCK_SIZE};
+        enemy_melee->angle = x.angle;
+        enemy_melee->draw(&cur,x.x,x.y,50,50,renderer,1,camera);
+    }
+}
+
+void Game::drawPlayer()
+{
+    player->drawPlayer(renderer,camera);
+}
+void Game::drawMap()
+{
+    gMap->drawMap(renderer,camera);
+}
+
+void Game::drawPoint()
+{
+    score_word->draw(NULL,0,0,score_word->w,score_word->h,renderer);
+    SDL_DestroyTexture(score_word->texture);
+}
+
+void Game::drawMouse()
+{
+    SDL_Rect c = {mouse->now/8 * 30,0,30,30};
+    mouse->draw(&c,renderer,camera,1);
+}
 
 
 
-    //draw mouse
-    mouse->draw(NULL,renderer,camera,1);
+
+void Game::render()
+{
+    SDL_RenderClear(renderer);
+
+    drawMap();
+    drawPlayer();
+    drawEnemy();
+    drawButtons();
+    drawPoint();
+    drawMouse();
 
     SDL_RenderPresent(renderer);
 }
@@ -369,9 +391,6 @@ void Game::clearGame()
 {
     //clear player
     player->p_bullets.clear();
-
-    //clear enemy
-    for (unsigned i = 0; i < enemy_list.size(); i++) clean(enemy_list[i],0);
 
     //clear window, renderer
 //    window = nullptr;
