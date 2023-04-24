@@ -43,8 +43,55 @@ void optionMenu::render()
 {
     SDL_RenderClear(renderer);
 
-    opMouse->draw(NULL,renderer);
+    opMouse->draw(NULL);
 
+    SDL_RenderPresent(renderer);
+}
+
+OverMenu::OverMenu(SDL_Renderer* _renderer)
+{
+    renderer = _renderer;
+    GameOver = new Entity(renderer,"image/Game/GameOver/GameOver.png");
+    MainMenu = new Button(renderer,FILE_ING_BUT[ING_MENU]);
+    NewGame = new Button(renderer, "image/Game/GameOver/NewGame.png");
+    mouse = new Mouse(renderer,file_menu_mouse);
+    cnt = 0;
+}
+
+int OverMenu::handle()
+{
+    SDL_Event event;
+        Uint32 start = SDL_GetTicks();
+        while (SDL_PollEvent(&event)){
+            if (event.type == SDL_QUIT) return QUIT;
+            int x,y;
+            SDL_GetMouseState(&x,&y);
+            mouse->x = x, mouse->y = y;
+            if (cnt > 2 * FPS)
+            {
+                if (MainMenu->beChosen(x,y,BUTTON_WIDTH,BUTTON_HEIGHT))
+                    if (event.type == SDL_MOUSEBUTTONDOWN) return DEFAULT;
+                if (NewGame->beChosen(x,y,BUTTON_WIDTH,BUTTON_HEIGHT))
+                    if (event.type == SDL_MOUSEBUTTONDOWN) return START;
+            }
+        }
+
+        cnt++;
+        Uint32 real_delay = SDL_GetTicks() - start;
+        if (real_delay < frameDelay)
+        {
+            SDL_Delay(frameDelay - real_delay);
+        }
+    return NORMAL;
+}
+
+void OverMenu::render()
+{
+    SDL_RenderClear(renderer);
+    GameOver->draw(NULL,100,0,500,300,0);
+    NewGame->drawButton(300,250,BUTTON_WIDTH,BUTTON_HEIGHT);
+    MainMenu->drawButton(300,420,BUTTON_WIDTH,BUTTON_HEIGHT);
+    mouse->draw(NULL);
     SDL_RenderPresent(renderer);
 }
 
@@ -63,10 +110,10 @@ GameMenu::GameMenu(SDL_Renderer* gRenderer)
     //menu item
         //create a stage to play
     stage = new Game(renderer);
-    stage->initStage();
 
         //option
     op = new optionMenu(mouse,renderer);
+    over = new OverMenu(renderer);
 
     quit = false;
 }
@@ -177,14 +224,14 @@ void GameMenu::menuDefault()
 
     //background
 
-    bgImage->draw(NULL,0,0,SCREEN_WIDTH,SCREEN_HEIGHT, renderer);
+    bgImage->draw(NULL,0,0,SCREEN_WIDTH,SCREEN_HEIGHT);
 
     //draw button
 
     for (int i = 0; i < TOTAL_BUTTON; i++)
     {
         button[i]->drawButton(100, int(BUTTON_HEIGHT * 1.5 * i) + 50,
-                             BUTTON_WIDTH,BUTTON_HEIGHT,renderer);
+                             BUTTON_WIDTH,BUTTON_HEIGHT);
     }
 }
 
@@ -205,14 +252,6 @@ void GameMenu::menuStart()
     Mix_HaltMusic();
 }
 
-void GameMenu::menuOption()
-{
-    current = op->handleAndUpdate(volume);
-    choose = current;
-
-    op->render();
-}
-
 void GameMenu::menuScore()
 {
 
@@ -226,7 +265,12 @@ void GameMenu::menuQuit()
 //in game button
 void GameMenu::menuOver()
 {
-
+    cout << "over\n";
+    while(1){
+            current = over->handle();
+            over->render();
+            if (current != NORMAL) break;
+    }
 }
 
 
@@ -243,20 +287,20 @@ void GameMenu::render()
     case START:
         menuStart();
         break;
-    case OPTION:
-        menuOption();
+    case SCORE:
+        menuScore();
         break;
     case QUIT:
         menuQuit();
         break;
-    case 1000:
+    case NORMAL:
         menuOver();
         break;
     };
 
     //draw mouse
 
-    mouse->draw(NULL,renderer);
+    mouse->draw(NULL);
 
     SDL_RenderPresent(renderer);
 }

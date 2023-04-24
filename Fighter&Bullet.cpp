@@ -42,7 +42,7 @@ FighterProp::FighterProp(const float& x_, const float& y_, const float& angle_,
 {
     x = x_, y = y_, angle = angle_;
     speed = _speed * frameDelay, maxFrame = _maxFrame;
-    now = 0;
+    now = 0, s = 0;
 }
 
 void FighterProp::updateAngle(const int& _x, const int& _y)
@@ -54,6 +54,7 @@ void FighterProp::updatePos()
 {
     x  = x + speed * cos(angle);
     y  = y + speed * sin(angle);
+    s += sqrt(speed * speed);
 }
 
 

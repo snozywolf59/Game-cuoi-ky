@@ -55,7 +55,7 @@ float Entity::getAngle(Entity* temp)
 }
 
                 ///////draw entity
-void Entity::draw(SDL_Rect* clip,SDL_Renderer* renderer,const SDL_Point& camera, int atCenter)
+void Entity::draw(SDL_Rect* clip,const SDL_Point& camera, int atCenter)
 {
     if (clip != NULL)
     {
@@ -75,7 +75,7 @@ void Entity::draw(SDL_Rect* clip,SDL_Renderer* renderer,const SDL_Point& camera,
 }
 
 void Entity::draw(SDL_Rect* clip, const int& _x,const int& _y, const int& _w, const int& _h,
-                  SDL_Renderer* renderer, int atCenter, const SDL_Point& camera)
+                   int atCenter, const SDL_Point& camera)
 {
     SDL_Rect des = {    _x  -  _w/2 * scale *  atCenter - camera.x,
                         _y  -  _h/2 * scale * atCenter - camera.y,
@@ -130,14 +130,14 @@ bool Button::beChosen(const int& _x,const int& _y, const int& _w, const int& _h)
 }
 
 
-void Button::drawButton(const int& _x,const int& _y, const int& _w, const int& _h, SDL_Renderer* renderer)
+void Button::drawButton(const int& _x,const int& _y, const int& _w, const int& _h)
 {
     this->x = _x;
     this->y = _y;
 
     SDL_Rect selected = {now * w/2, 0, w/2, h};
 
-    draw(&selected,_x,_y,_w,_h,renderer,0);
+    draw(&selected,_x,_y,_w,_h,0);
 }
 
 
@@ -159,12 +159,23 @@ void Mouse::updateMouse(SDL_Point& camera)
 
 ////////////////WRITE WORDS//////////////////
 
-Word::Word(SDL_Renderer* renderer)
+Word::Word(SDL_Renderer* renderer, const int& _x, const int& _y)
 {
     this->renderer = renderer;
+    font = TTF_OpenFont(gameFont.c_str(),50);
+    if(font == nullptr )
+    {
+        cout << "Failed to load game font! SDL_ttf Error: " << TTF_GetError() << endl;
+    }
+    color = {255, 255, 255};
+
+    x = _x;
+    y = _y;
+
+    pad = new Entity(renderer,"image/Game/InGame/Pad.png");
 }
 
-void Word::loadFromRenderedText(string textureText, SDL_Color textColor, SDL_Renderer* renderer)
+void Word::loadFromRenderedText(const string& textureText, SDL_Color textColor, SDL_Renderer* renderer)
 {
     SDL_Surface* textSurface = TTF_RenderText_Solid( font, textureText.c_str(), textColor );
     if( textSurface == NULL )
@@ -191,6 +202,16 @@ void Word::loadFromRenderedText(string textureText, SDL_Color textColor, SDL_Ren
     }
 }
 
+void Word::drawWord()
+{
+    SDL_Rect temp = {170 - w,y + 5,w,h};
+    pad->draw(NULL,x,y,180,60);
+    SDL_RenderCopy(renderer,texture,NULL,&temp);
+}
 
-
-
+void Word::drawWord(const int& _x, const int& _y, const int& _w, const int& _h)
+{
+    SDL_Rect temp = {_x,_y,_w,_h};
+    pad->draw(NULL,_x,_y,_w,_h,0);
+    SDL_RenderCopy(renderer,texture,NULL,&temp);
+}

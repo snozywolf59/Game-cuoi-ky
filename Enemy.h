@@ -4,12 +4,12 @@
 #include "Vec2f.h"
 
 
-const int DELAY = 7;
 
 const int maxFrameEnemyMelee = 6 * DELAY;
+const int maxFrameExplosion = 8 * DELAY;
 const int ENEMY_RELOAD = 2 * FPS;
 const int ENEMY_MELEE_BLOCK_SIZE = 51;
-const float R_enemy = 30;
+const float R_enemy = 30.0f;
 
 const float ENEMY_SPEED = 0.2;
 //spawn time
@@ -34,6 +34,10 @@ struct EnemyMeleeProp:FighterProp
                 const int& _maxFrame = maxFrameEnemyMelee);
 
     void resetMov(const bool& t);
+
+    void collisionBullet(Player* player);
+
+    void collisionPlayer(Player* player);
 
     void updateEnemyPos(vector <EnemyMeleeProp>& enemies);
 

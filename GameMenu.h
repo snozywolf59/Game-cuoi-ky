@@ -32,6 +32,24 @@ struct optionMenu
     void render();
 };
 
+struct OverMenu
+{
+    Button* MainMenu;
+    Button* NewGame;
+    Entity* GameOver;
+    Mouse* mouse;
+    Mix_Chunk* gameOverSound;
+    SDL_Renderer* renderer;
+
+    int cnt;
+
+    OverMenu(SDL_Renderer* _renderer);
+
+    int handle();
+
+    void render();
+};
+
 class GameMenu
 {
 public:
@@ -55,8 +73,6 @@ public:
     void menuDefault();
 
     void menuStart();
-
-    void menuOption();
 
     void menuScore();
 
@@ -87,6 +103,7 @@ private:
 
     //menu item
     optionMenu* op;
+    OverMenu* over;
 
     //flag for the mouse
     int choose = -1;

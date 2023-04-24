@@ -3,7 +3,9 @@
 #include "Entity.h"
 
 const float BULLET_P_SPEED = 0.6;
-const float R_bullet = 3;
+const float R_bullet = 12;
+
+const int DELAY = 7;
 
 bool checkLeft(Map& gMap, const int& speed);
 bool checkRight(Map& gMap, const int& speed);
@@ -27,6 +29,7 @@ struct FighterProp
 {
     float x, y, angle, speed;
     int now, maxFrame;
+    float s;
 
     FighterProp(const float& x_ = 0,const float& y_ = 0,const float& angle_ = 0,
                 const float& _speed = 0, const int& _maxFrame = 0);

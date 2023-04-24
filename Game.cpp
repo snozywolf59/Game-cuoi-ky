@@ -11,6 +11,7 @@ Game::Game(SDL_Renderer* gRenderer){
         cout << "LOI RENDERER CUA STAGE";
         exit(1);
     }
+    initStage();
 }
 
 Game::~Game(){}
@@ -51,6 +52,9 @@ void Game::initEnemy()
 {
     enemy_melee = new Entity(renderer,file_enemy_melee);
     logSuccess("enemy");
+
+    explosion = new Entity(renderer,"image/enemy/explosion.png");
+    logSuccess("explosion");
 }
 
 
@@ -98,15 +102,6 @@ void Game::initSoundGame()
 void Game::initFont()
 {
     score_word = new Word(renderer);
-    score_word->font = TTF_OpenFont(gameFont.c_str(),50);
-    if( score_word->font == nullptr )
-    {
-        cout << "Failed to load game font! SDL_ttf Error: " << TTF_GetError() << endl;
-    }
-    score_word->color = {255, 255, 255};
-
-    score_word->x = 0;
-    score_word->y = 25;
     logSuccess("font");
 }
 
@@ -285,7 +280,7 @@ void Game::drawButtons()
     if (!pause)
     {
         Ing_Button[ING_PAUSE]->drawButton(SCREEN_WIDTH - ING_BUT_W, 0 ,
-                                          ING_BUT_W, ING_BUT_H,renderer);
+                                          ING_BUT_W, ING_BUT_H);
     }
     else{
         SDL_RenderClear(renderer);
@@ -293,7 +288,7 @@ void Game::drawButtons()
             {
                 Ing_Button[i]->drawButton(SCREEN_WIDTH/2 - BUTTON_WIDTH/2,
                                      -120 + BUTTON_HEIGHT * 1.2 * i,
-                                     BUTTON_WIDTH, BUTTON_HEIGHT, renderer);
+                                     BUTTON_WIDTH, BUTTON_HEIGHT);
             }
     }
 }
@@ -303,15 +298,22 @@ void Game::drawEnemy()
 {
     for (EnemyMeleeProp& x: enemy_list)
     {
-        SDL_Rect cur = {(x.now /DELAY) * ENEMY_MELEE_BLOCK_SIZE, 0,ENEMY_MELEE_BLOCK_SIZE,ENEMY_MELEE_BLOCK_SIZE};
-        enemy_melee->angle = x.angle;
-        enemy_melee->draw(&cur,x.x,x.y,50,50,renderer,1,camera);
+        SDL_Rect cur;
+        if (x.health > 0)
+        {
+            cur = {(x.now /DELAY) * ENEMY_MELEE_BLOCK_SIZE, 0,ENEMY_MELEE_BLOCK_SIZE,ENEMY_MELEE_BLOCK_SIZE};
+            enemy_melee->angle = x.angle;
+            enemy_melee->draw(&cur,x.x,x.y,50,50,1,camera);
+        }else{
+            cur = {x.now/DELAY * 48,0,48,48};
+            explosion->draw(&cur,x.x,x.y,50,50,1,camera);
+        }
     }
 }
 
 void Game::drawPlayer()
 {
-    player->drawPlayer(renderer,camera);
+    player->drawPlayer(camera);
 }
 void Game::drawMap()
 {
@@ -320,28 +322,28 @@ void Game::drawMap()
 
 void Game::drawPoint()
 {
-    score_word->draw(NULL,0,0,score_word->w,score_word->h,renderer);
+    player->drawHealthBar();
+    score_word->drawWord();
     SDL_DestroyTexture(score_word->texture);
 }
 
 void Game::drawMouse()
 {
     SDL_Rect c = {mouse->now/8 * 30,0,30,30};
-    mouse->draw(&c,renderer,camera,1);
+    mouse->draw(&c,camera,1);
 }
-
-
-
 
 void Game::render()
 {
     SDL_RenderClear(renderer);
 
-    drawMap();
-    drawPlayer();
-    drawEnemy();
+    if (!pause){
+        drawMap();
+        drawPlayer();
+        drawEnemy();
+        drawPoint();
+    }
     drawButtons();
-    drawPoint();
     drawMouse();
 
     SDL_RenderPresent(renderer);

@@ -8,7 +8,7 @@ enum BUTTON_MENU_TYPE
 {
     DEFAULT = -1,
     START,
-    OPTION,
+    SCORE,
     QUIT,
     TOTAL_BUTTON
 };
@@ -94,6 +94,8 @@ private:
     Entity* enemy_melee;
     vector <EnemyMeleeProp> enemy_list;
 
+    //explosion animation
+    Entity* explosion;
 
     //count time
     Uint64 currentTime;

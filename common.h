@@ -16,7 +16,7 @@
 //based define
 #define SCREEN_WIDTH 1008
 #define SCREEN_HEIGHT 648
-#define TITLE "Slay Zombie"
+#define TITLE "Game Ban Quai"
 
 
 //control frames per second (FPS)

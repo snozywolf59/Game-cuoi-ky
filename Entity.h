@@ -43,11 +43,9 @@ struct Entity
 
     float getAngle(Entity* temp);
 
-    void draw(SDL_Rect* clip, SDL_Renderer* renderer,
-              const SDL_Point& camera = p, int atCenter = 0);
+    void draw(SDL_Rect* clip,const SDL_Point& camera = p, int atCenter = 0);
     void draw(SDL_Rect* clip,const int& _x,const int& _y, const int& _w,
-              const int& _h, SDL_Renderer* renderer,
-              int atCenter = 0,const SDL_Point& camera = p);
+              const int& _h, int atCenter = 0,const SDL_Point& camera = p);
 };
 
     // delete entity
@@ -65,7 +63,7 @@ struct Button:Entity
 
     bool beChosen(const int& _x,const int& _y, const int& _w, const int& _h);
 
-    void drawButton(const int& _x,const int& _y, const int& _w, const int& _h,SDL_Renderer* renderer);
+    void drawButton(const int& _x,const int& _y, const int& _w, const int& _h);
 };
 
 //MOUSE
@@ -83,11 +81,17 @@ struct Word:Entity
 {
     TTF_Font* font;
 
+    Entity* pad;
+
     SDL_Color color;
 
-    Word(SDL_Renderer* renderer);
+    Word(SDL_Renderer* renderer, const int& _x = 0, const int& _y = 0);
 
-    void loadFromRenderedText ( string textureText, SDL_Color textColor, SDL_Renderer* renderer);
+    void loadFromRenderedText (const string& textureText, SDL_Color textColor, SDL_Renderer* renderer);
+
+    void drawWord();
+
+    void drawWord(const int& _x,const int& _y, const int& _w, const int& _h);
 };
 
 
