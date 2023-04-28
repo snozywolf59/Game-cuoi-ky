@@ -67,7 +67,7 @@ int OverMenu::handle()
             int x,y;
             SDL_GetMouseState(&x,&y);
             mouse->x = x, mouse->y = y;
-            if (cnt > 2 * FPS)
+            if (cnt > 255)
             {
                 if (MainMenu->beChosen(x,y,BUTTON_WIDTH/2,BUTTON_HEIGHT/2))
                     if (event.type == SDL_MOUSEBUTTONDOWN) return DEFAULT;
@@ -91,6 +91,10 @@ void OverMenu::render()
     int now = (cnt%90)/6;
     SDL_Rect temp = {(now % 4) * 250, (now % 5) * 28, 250, 28};
     GameOver->draw(&temp,300,80,375,42);
+
+    SDL_SetTextureAlphaMod(NewGame->texture, cnt > 255 ? 255:cnt);
+    SDL_SetTextureAlphaMod(MainMenu->texture, cnt > 255 ? 255:cnt);
+
     NewGame->drawButton(300,250,BUTTON_WIDTH/2,BUTTON_HEIGHT/2);
     MainMenu->drawButton(300,420,BUTTON_WIDTH/2,BUTTON_HEIGHT/2);
     mouse->draw(NULL);
@@ -108,10 +112,11 @@ GameMenu::GameMenu(SDL_Renderer* gRenderer)
     initBackGround();
     initButton();
     initSound();
+    initFontAndPad();
 
     //menu item
         //create a stage to play
-    stage = new Game(renderer);
+    stage = new Game(renderer,gFont,pad);
 
         //option
     op = new optionMenu(mouse,renderer);
@@ -166,6 +171,13 @@ void GameMenu::initSound()
 
     volume = MIX_MAX_VOLUME;
     logSuccess("Sound menu");
+}
+
+
+void GameMenu::initFontAndPad()
+{
+    gFont = TTF_OpenFont(gameFont.c_str(),50);
+    pad = new Entity(renderer,file_pad);
 }
 
 

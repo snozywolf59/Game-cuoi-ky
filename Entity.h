@@ -87,7 +87,7 @@ struct Word:Entity
 
     SDL_Color color;
 
-    Word(SDL_Renderer* renderer, const int& _x = 0, const int& _y = 0);
+    Word(const int& _x, const int& _y, SDL_Renderer* renderer, TTF_Font* gFont, Entity* gPad);
 
     void loadFromRenderedText (const string& textureText, SDL_Color textColor, SDL_Renderer* renderer);
 

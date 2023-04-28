@@ -3,7 +3,7 @@
 
 //GAME INIT
 
-Game::Game(SDL_Renderer* gRenderer){
+Game::Game(SDL_Renderer* gRenderer, TTF_Font* tempFont, Entity* tempPad){
     renderer = gRenderer;
 
     if (renderer == NULL)
@@ -11,6 +11,10 @@ Game::Game(SDL_Renderer* gRenderer){
         cout << "LOI RENDERER CUA STAGE";
         exit(1);
     }
+
+    font = tempFont;
+    pad = tempPad;
+
     initStage();
 }
 
@@ -99,7 +103,7 @@ void Game::initSoundGame()
 
 void Game::initFont()
 {
-    score_word = new Word(renderer);
+    score_word = new Word(0,0,renderer,font,pad);
     logSuccess("font");
 }
 

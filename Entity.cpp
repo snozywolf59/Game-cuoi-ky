@@ -159,20 +159,15 @@ void Mouse::updateMouse(const Vec2f& camera)
 
 ////////////////WRITE WORDS//////////////////
 
-Word::Word(SDL_Renderer* renderer, const int& _x, const int& _y)
+Word::Word(const int& _x, const int& _y, SDL_Renderer* renderer, TTF_Font* gFont, Entity* gPad)
 {
     this->renderer = renderer;
-    font = TTF_OpenFont(gameFont.c_str(),50);
-    if(font == nullptr )
-    {
-        cout << "Failed to load game font! SDL_ttf Error: " << TTF_GetError() << endl;
-    }
+    font = gFont;
+    pad = gPad;
     color = {255, 255, 255};
 
     x = _x;
     y = _y;
-
-    pad = new Entity(renderer,file_pad);
 }
 
 void Word::loadFromRenderedText(const string& textureText, SDL_Color textColor, SDL_Renderer* renderer)

@@ -68,6 +68,8 @@ public:
 
     void initSound();
 
+    void initFontAndPad();
+
     void handleMouse();
 
     void update();
@@ -116,6 +118,9 @@ private:
     int volume;
     Mix_Chunk* beChosen;
     Mix_Music* bgMusic;
+
+    TTF_Font* gFont;
+    Entity* pad;
 
     //quit
     bool quit;

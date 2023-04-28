@@ -33,7 +33,7 @@ const string FILE_ING_BUT[] = { "image/GameUI/InGame/Pause.png",
 class Game
 {
 public:
-    Game( SDL_Renderer* gRenderer);
+    Game( SDL_Renderer* gRenderer, TTF_Font* tempFont, Entity* tempPad);
     ~Game();
 
     void initStage();
@@ -112,6 +112,9 @@ private:
 
     //font
     Word* score_word;
+
+    TTF_Font * font;
+    Entity* pad;
 };
 
 
