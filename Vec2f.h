@@ -24,6 +24,8 @@ struct Vec2f
     Vec2f& operator+=(const Vec2f& other);
 
     Vec2f& operator-=(const Vec2f& other);
+
+    float length();
 };
 
 Vec2f normalize(const Vec2f& v);

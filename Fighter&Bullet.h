@@ -1,16 +1,13 @@
 #pragma once
 
 #include "Entity.h"
+#include "Map.h"
 
 const float BULLET_P_SPEED = 0.6;
 const float R_bullet = 12;
 
 const int DELAY = 7;
 
-bool checkLeft(Map& gMap, const int& speed);
-bool checkRight(Map& gMap, const int& speed);
-bool checkUp(Map& gMap, const int& speed);
-bool checkDown(Map& gMap, const int& speed);
 ////////////////BULLET/////////////////
 
 struct Bullet:Entity
@@ -38,6 +35,6 @@ struct FighterProp
 
     void updateAngle(const int& _x, const int& _y);
 
-    void draw(Entity* x,const SDL_Point& camera, int now = -1);
+    void draw(Entity* x,const Vec2f& camera, int now = -1);
 };
 

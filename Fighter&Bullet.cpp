@@ -1,27 +1,5 @@
 #include "Fighter&Bullet.h"
 
-
-bool checkLeft(Map& gMap, const int& speed)
-{
-    return true;
-}
-
-bool checkRight(Map& gMap, const int& speed)
-{
-    return true;
-}
-
-bool checkUp(Map& gMap, const int& speed)
-{
-    return true;
-}
-
-bool checkDown(Map& gMap, const int& speed)
-{
-    return true;
-}
-
-
 /////////////////////////////BULLET//////////////////////////////////////
 Bullet::Bullet(SDL_Renderer* _renderer, const string& bullet_file, const string& bullet_fire_file)
 {

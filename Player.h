@@ -3,13 +3,15 @@
 #include "Fighter&Bullet.h"
 
 
-const string file_player = "image/player/player.png";
-const string file_enemy_melee = "image/enemy/enemy_melee.png";
-const string file_player_bullet = "image/player/bullet.png";
-const string file_player_bullet_fire = "image/player/fire.png";
+const string file_player = "image/Player/player.png";
+const string file_player_bullet = "image/Player/bullet.png";
+const string file_player_bullet_fire = "image/Player/fire.png";
+const string file_bar = "image/Player/bar.png";
+const string file_bar_health = "image/Player/red.png";
+const string file_player_pulse = "image/Player/pulse.png";
 
 const int PLAYER_MAX_HP = 100;
-const int PLAYER_RELOAD = 8;
+const int PLAYER_RELOAD = 12;
 const float PLAYER_SPEED = 0.2f;
 const int PLAYER_DMG = 3;
 
@@ -24,7 +26,8 @@ struct Player:Entity
     Player(SDL_Renderer* renderer);
 
     int left = 0, right = 0, up = 0,down = 0;
-    int health,dmg,reload,speed;
+    int health,dmg,reload;
+    float speed;
     bool alive = false;
 
     int now = 0;
@@ -47,21 +50,21 @@ struct Player:Entity
 
     void initPos();
 
-    void update(SDL_Point& camera, Mouse* mouse, Map* gMap);
+    void update(Vec2f& camera, Mouse* mouse, Map* gMap);
 
     void updateAngle(Mouse* mouse);
 
-    void updatePos(SDL_Point& camera,Map* gMap);
+    void updatePos(Vec2f& camera,Map* gMap);
 
-    void updateBullet(SDL_Point& camera, Mouse* mouse, Map* gMap);
+    void updateBullet(Vec2f& camera, Mouse* mouse, Map* gMap);
 
-    void updateEngine(SDL_Point& camera,Mouse* mouse, Map* gMap);
+    void updateEngine(Vec2f& camera,Mouse* mouse, Map* gMap);
 
     void shoot(Mouse* mouse);
 
-    void drawEngine(SDL_Point& camera);
+    void drawEngine(Vec2f& camera);
 
-    void drawPlayer(SDL_Point& camera);
+    void drawPlayer(Vec2f& camera);
 
     void drawHealthBar();
 };

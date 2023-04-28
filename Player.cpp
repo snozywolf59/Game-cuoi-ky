@@ -15,12 +15,12 @@ void Player::initEngine()
 {
     loadEntity(file_player);
 
-    bar = new Entity(renderer,"image/player/bar.png");
-    health_bar = new Entity(renderer, "image/player/red.png");
+    bar = new Entity(renderer,file_bar);
+    health_bar = new Entity(renderer, file_bar_health);
 
     bullet = new Bullet(renderer,file_player_bullet,file_player_bullet_fire);
 
-    pulse = new Entity(renderer,"image/player/pulse.png");
+    pulse = new Entity(renderer,file_player_pulse);
     pulse->w = 28;
     pulse->h = 14;
 }
@@ -46,7 +46,7 @@ void Player::initPos()
 
 /****************************************************/
 
-void Player::update(SDL_Point& camera,Mouse* mouse,Map* gMap)
+void Player::update(Vec2f& camera,Mouse* mouse,Map* gMap)
 {
     if (health <= 0) alive = false;
 
@@ -65,27 +65,49 @@ void Player::updateAngle(Mouse* mouse)
 }
 
 
-void Player::updatePos(SDL_Point& camera,Map* gMap)
+void Player::updatePos(Vec2f& camera,Map* gMap)
 {
-    float t = sqrt(-1.0+left*left+right*right+up*up+down*down+1.0);
-    if(left && camera.x>-SCREEN_WIDTH/2){
-            if(checkLeft(*gMap,0)) camera.x -= speed/t;
+    int nextI = (x + speed * cosf(angle))/BLOCK_SIZE;
+    int nextJ = (y + speed * sinf(angle))/BLOCK_SIZE;
+
+    Vec2f direction;
+    direction.x = right - left;
+    direction.y = down - up;
+    float temp = direction.length();
+    if (temp == 0) return;
+    float d = speed/temp;
+    if (left){
+        if (x >= MAX_CAM_X + SCREEN_WIDTH/2 + d) x -= d;
+        else{
+            if (camera.x <= MAX_CAM_X && camera.x >= MIN_CAM_X) camera.x -= min(d,camera.x - MIN_CAM_X);
+            if (x >= MIN_CAM_X + d) x -= d;
+        }
     }
-    if(right && camera.x<MAX_CAM_X){
-            if(checkRight(*gMap,0)) camera.x += speed/t;
+    if (right){
+        if (x <= MIN_CAM_X + SCREEN_WIDTH/2 - d) x += d;
+        else{
+            if (camera.x <= MAX_CAM_X && camera.x >= MIN_CAM_X) camera.x += min(d,MAX_CAM_X - camera.x);
+            if ( x <= MAP_SIZE - d) x += d;
+        }
     }
-    if(up && camera.y > -SCREEN_HEIGHT/2){
-            if(checkUp(*gMap,0)) camera.y -= speed/t;
+    if (up){
+        if (y >= MAX_CAM_Y + SCREEN_HEIGHT/2 + d) y -= d;
+        else{
+            if (camera.y <= MAX_CAM_Y && camera.y >= MIN_CAM_Y) camera.y -= min(d, camera.y - MIN_CAM_Y);
+            if (y >= -SCREEN_WIDTH/2 +d) y -= d;
+        }
     }
-    if(down && camera.y < MAX_CAM_Y){
-           if(checkDown(*gMap,0)) camera.y += speed/t;
+    if (down){
+        if (y <= MIN_CAM_Y + SCREEN_HEIGHT/2 - d) y += d;
+        else{
+            if (camera.y <= MAX_CAM_Y && camera.y >= MIN_CAM_Y) camera.y += min(d, MAX_CAM_Y - camera.y);
+            if ( y <= MAP_SIZE - d) y += d;
+        }
     }
-    x = SCREEN_WIDTH/2 - w/2 + camera.x;
-    y = SCREEN_HEIGHT/2 - h/2 + camera.y;
 }
 
 
-void Player::updateBullet(SDL_Point& camera, Mouse* mouse, Map* gMap)
+void Player::updateBullet(Vec2f& camera, Mouse* mouse, Map* gMap)
 {
     for (auto prop = p_bullets.begin(); prop != p_bullets.end();)
     {
@@ -104,7 +126,7 @@ void Player::updateBullet(SDL_Point& camera, Mouse* mouse, Map* gMap)
 
     bullet->fire->angle = angle;
 }
-void Player::updateEngine(SDL_Point& camera,Mouse* mouse, Map* gMap)
+void Player::updateEngine(Vec2f& camera,Mouse* mouse, Map* gMap)
 {
     updateBullet(camera,mouse,gMap);
 
@@ -126,7 +148,7 @@ void Player::shoot(Mouse* mouse)
 
 /****************************************************/
 
-void Player::drawEngine(SDL_Point& camera)
+void Player::drawEngine(Vec2f& camera)
 {
     for (FighterProp& b: p_bullets)
     {
@@ -155,7 +177,7 @@ void Player::drawHealthBar()
 }
 
 
-void Player::drawPlayer(SDL_Point& camera)
+void Player::drawPlayer(Vec2f& camera)
 {
     draw(NULL,camera,1);
     drawEngine(camera);

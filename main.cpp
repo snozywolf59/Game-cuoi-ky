@@ -1,4 +1,3 @@
-#include "Game.h"
 #include "GameMenu.h"
 
 GameMenu* menu;

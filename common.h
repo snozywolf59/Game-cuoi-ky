@@ -36,7 +36,7 @@ void logSuccess(const string& name);
 
 const string txt_map = "map/map.txt";
 //**************************TTF***********************//
-const string gameFont = "font/lazy.ttf";
+const string gameFont = "font/Ouders.ttf";
 
 
 string convertIntToString(const int& x);

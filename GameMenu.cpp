@@ -51,9 +51,9 @@ void optionMenu::render()
 OverMenu::OverMenu(SDL_Renderer* _renderer)
 {
     renderer = _renderer;
-    GameOver = new Entity(renderer,"image/Game/GameOver/GameOver.png");
+    GameOver = new Entity(renderer,file_game_over);
     MainMenu = new Button(renderer,FILE_ING_BUT[ING_MENU]);
-    NewGame = new Button(renderer, "image/Game/GameOver/NewGame.png");
+    NewGame = new Button(renderer, file_new_game);
     mouse = new Mouse(renderer,file_menu_mouse);
     cnt = 0;
 }
@@ -69,7 +69,7 @@ int OverMenu::handle()
             mouse->x = x, mouse->y = y;
             if (cnt > 2 * FPS)
             {
-                if (MainMenu->beChosen(x,y,BUTTON_WIDTH,BUTTON_HEIGHT))
+                if (MainMenu->beChosen(x,y,BUTTON_WIDTH/2,BUTTON_HEIGHT/2))
                     if (event.type == SDL_MOUSEBUTTONDOWN) return DEFAULT;
                 if (NewGame->beChosen(x,y,BUTTON_WIDTH,BUTTON_HEIGHT))
                     if (event.type == SDL_MOUSEBUTTONDOWN) return START;
@@ -89,8 +89,8 @@ void OverMenu::render()
 {
     SDL_RenderClear(renderer);
     GameOver->draw(NULL,100,0,500,300,0);
-    NewGame->drawButton(300,250,BUTTON_WIDTH,BUTTON_HEIGHT);
-    MainMenu->drawButton(300,420,BUTTON_WIDTH,BUTTON_HEIGHT);
+    NewGame->drawButton(300,250,BUTTON_WIDTH/2,BUTTON_HEIGHT/2);
+    MainMenu->drawButton(300,420,BUTTON_WIDTH/2,BUTTON_HEIGHT/2);
     mouse->draw(NULL);
     SDL_RenderPresent(renderer);
 }

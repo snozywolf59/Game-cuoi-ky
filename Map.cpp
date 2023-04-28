@@ -1,28 +1,47 @@
 #include "Map.h"
 
+int i, j, nextI, nextJ;
+
 //MAP
 bool canMove(const int& x)
 {
-    if (x == 0) return true;
+    if (x <= 3) return true;
     return false;
 }
 
 /****************************************************/
 
-void Map::loadMap(string path)
+Map::Map(SDL_Renderer* _renderer)
 {
-    count_way = 0;
+    renderer = _renderer;
+    for (int i = 0; i < Num_Of_UniObj;i++){
+        planet[i] = new Entity(renderer,FILE_UNI_OBJ[i]);
+    }
+}
+
+void Map::loadMap(const string& path)
+{
+
     ifstream read(path);
     int cnt = 0, x;
-    while (cnt < MAP_SIZE*MAP_SIZE)
+    while (cnt < NUM_BLOCKS * NUM_BLOCKS)
     {
         read >> x;
-        map_num [cnt/MAP_SIZE][cnt%MAP_SIZE] = x;
-        if (canMove(x))
+        map_num[cnt / NUM_BLOCKS][cnt % NUM_BLOCKS] = x;
+
+        if ( x < 0 || x >= Num_Of_UniObj)
         {
-            way[count_way] = cnt;
-            count_way++;
+            cerr << "Invalid map num\n";
+            exit(0);
         }
+
+        if (!canMove(x))
+        {
+            blockObj.push_back(Vec2f(cnt/NUM_BLOCKS + BLOCK_SIZE/2, cnt%NUM_BLOCKS + BLOCK_SIZE/2));
+        }
+
+        UniObjProp[cnt / NUM_BLOCKS][cnt % NUM_BLOCKS] = rand()%100;
+
         cnt++;
     }
     read.close();
@@ -30,7 +49,21 @@ void Map::loadMap(string path)
 
 /****************************************************/
 
-void Map::drawMap(SDL_Renderer* renderer, SDL_Point& camera)
+bool Map::checkNextMove(const int& nowX, const int& nowY, const float& speed, const float& angle)
+{
+
+}
+
+
+void Map::updateMap()
+{
+    for (i = 0; i < NUM_BLOCKS; i++)
+        for (j = 0; j < NUM_BLOCKS; j++)
+        UniObjProp[i][j]++;
+}
+
+
+void Map::drawMap(const Vec2f& camera)
 {
     int type = 0;
 
@@ -39,28 +72,25 @@ void Map::drawMap(SDL_Renderer* renderer, SDL_Point& camera)
     des.h = BLOCK_SIZE;
     des.w = BLOCK_SIZE;
 
-    //cout << start_i << ' ' << start_j <<'\n';
-
-    for (int i=start_i;i<start_i+SCREEN_HEIGHT/BLOCK_SIZE+3;i++)
+    for (i = start_i; i < start_i + SCREEN_HEIGHT/BLOCK_SIZE+3; i++)
     {
-        if (i < 0 || i > MAP_SIZE-1) continue;
-        des.y = -camera.y+i*BLOCK_SIZE;
-        for (int j=start_j;j<start_j+SCREEN_WIDTH/BLOCK_SIZE+3;j++)
+        if (i < 0 || i > NUM_BLOCKS-1) continue;
+        des.y = -camera.y + i * BLOCK_SIZE;
+        for (j = start_j; j < start_j + SCREEN_WIDTH/BLOCK_SIZE + 3; j++)
         {
-            if (j < 0 || j > MAP_SIZE-1) continue;
+            if (j < 0 || j > NUM_BLOCKS-1) continue;
 
-            type = this->map_num[i][j];
+            type = map_num[i][j];
 
-            des.x = -camera.x+j*BLOCK_SIZE;
+            des.x = -camera.x + j * BLOCK_SIZE;
 
-            switch (type)
-            {
-            case 2:
-                SDL_RenderCopy(renderer,dirt,NULL,&des);
-                break;
-            case 5:
-                SDL_RenderCopy(renderer,wall,NULL,&des);
-                break;
+            src = {((UniObjProp[i][j]/15) % 4) * 128,0,128,128};
+
+            planet[Star]->draw(&src,des.x,des.y,des.w,des.h);
+
+            if (type == Moon) {
+                src = {((UniObjProp[i][j]/5) % 60) * 48,0,48,48};
+                planet[Moon]->draw(&src,des.x,des.y,des.w,des.h);
             }
         }
     }
@@ -69,11 +99,9 @@ void Map::drawMap(SDL_Renderer* renderer, SDL_Point& camera)
 /****************************************************/
 void Map::destroy()
 {
-    SDL_DestroyTexture(dirt);
-    SDL_DestroyTexture(wall);
-    dirt = nullptr;
-    wall = nullptr;
-
+    for (i = 0; i < Num_Of_UniObj; i++){
+        clean(planet[i],1);
+    }
 }
 
 

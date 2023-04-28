@@ -58,11 +58,9 @@ void Game::initEnemy()
 }
 
 
-void Game::initMap(string path)
+void Game::initMap(const string& path)
 {
-    gMap = new Map();
-    gMap->dirt = loadTexture("image/map/dirt.png",renderer);
-    gMap->wall = loadTexture("image/map/wall.png",renderer);
+    gMap = new Map(renderer);
     gMap->loadMap(path);
     logSuccess("map");
 }
@@ -120,8 +118,8 @@ void Game::initIng()
 
 void Game::resetStage()
 {
-    camera.x = (MAP_SIZE/4-1)*BLOCK_SIZE - BLOCK_SIZE/2;
-    camera.y = (MAP_SIZE/2-1)*BLOCK_SIZE - BLOCK_SIZE;
+    camera.x = MAP_SIZE/2 - SCREEN_WIDTH/2;
+    camera.y = MAP_SIZE/2 - SCREEN_HEIGHT/2;
 
     gameOver = false;
     pause = false;
@@ -136,7 +134,8 @@ void Game::resetStage()
     //player
     player->initStat();
     player->initPos();
-
+    player->x += camera.x;
+    player->y += camera.y;
     //enemy
     enemy_list.clear();
 }
@@ -236,9 +235,9 @@ void Game::doKeyBoard()
 void Game::updateEnemy()
 {
     //spawn
-    if (currentTime % spawnTime[ENEMY_MELEE] == 0) {
+    /*if (currentTime % spawnTime[ENEMY_MELEE] == 0) {
             spawnEnemyMelee(enemy_list,player,gMap);
-    }
+    }*/
     //check all enemies
     for (auto prop = enemy_list.begin(); prop != enemy_list.end();)
     {
@@ -256,10 +255,6 @@ void Game::updateEnemy()
 
 void Game::update()
 {
-    //MOUSE
-    mouse->updateMouse(camera);
-
-
     if (!pause)
     {
         updateEnemy();
@@ -272,6 +267,10 @@ void Game::update()
         //update score;s
         score_word->loadFromRenderedText(convertIntToString(currentTime) ,score_word->color,renderer);
     }
+    gMap->updateMap();
+       //MOUSE
+    mouse->updateMouse(camera);
+
 }
 
 /******************************************************/
@@ -306,7 +305,7 @@ void Game::drawEnemy()
             enemy_melee->draw(&cur,x.x,x.y,50,50,1,camera);
         }else{
             cur = {x.now/DELAY * 48,0,48,48};
-            explosion->draw(&cur,x.x,x.y,50,50,1,camera);
+            explosion->draw(&cur,x.x,x.y,60,60,1,camera);
         }
     }
 }
@@ -317,7 +316,7 @@ void Game::drawPlayer()
 }
 void Game::drawMap()
 {
-    gMap->drawMap(renderer,camera);
+    gMap->drawMap(camera);
 }
 
 void Game::drawPoint()

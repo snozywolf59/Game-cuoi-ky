@@ -73,6 +73,12 @@ Vec2f normalize(const Vec2f& v)
         }
 }
 
+float Vec2f::length()
+{
+    return sqrtf(powf(x,2) + powf(y,2));
+}
+
+
 float distance(const Vec2f& a, const Vec2f& b)
 {
     return sqrtf(powf(a.x - b.x, 2) + powf(a.y - b.y, 2));

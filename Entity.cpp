@@ -55,7 +55,7 @@ float Entity::getAngle(Entity* temp)
 }
 
                 ///////draw entity
-void Entity::draw(SDL_Rect* clip,const SDL_Point& camera, int atCenter)
+void Entity::draw(SDL_Rect* clip,const Vec2f& camera, int atCenter)
 {
     if (clip != NULL)
     {
@@ -63,8 +63,8 @@ void Entity::draw(SDL_Rect* clip,const SDL_Point& camera, int atCenter)
         h = clip->h;
     }
 
-    SDL_Rect renderQuad = { int(x - w/2 * scale * atCenter) - camera.x,
-                            int(y - h/2 * scale * atCenter) - camera.y,
+    SDL_Rect renderQuad = { int(x - w/2 * scale * atCenter - camera.x),
+                            int(y - h/2 * scale * atCenter - camera.y),
                             int(scale * w),
                             int(scale * h)
                             };
@@ -75,7 +75,7 @@ void Entity::draw(SDL_Rect* clip,const SDL_Point& camera, int atCenter)
 }
 
 void Entity::draw(SDL_Rect* clip, const int& _x,const int& _y, const int& _w, const int& _h,
-                   int atCenter, const SDL_Point& camera)
+                   int atCenter, const Vec2f& camera)
 {
     SDL_Rect des = {    _x  -  _w/2 * scale *  atCenter - camera.x,
                         _y  -  _h/2 * scale * atCenter - camera.y,
@@ -150,7 +150,7 @@ Mouse::Mouse(SDL_Renderer* _renderer, const string& path)
 
 
     //MOUSE
-void Mouse::updateMouse(SDL_Point& camera)
+void Mouse::updateMouse(const Vec2f& camera)
 {
     x = camera.x + real_mouse_x;
     y = camera.y + real_mouse_y;
@@ -172,7 +172,7 @@ Word::Word(SDL_Renderer* renderer, const int& _x, const int& _y)
     x = _x;
     y = _y;
 
-    pad = new Entity(renderer,"image/Game/InGame/Pad.png");
+    pad = new Entity(renderer,file_pad);
 }
 
 void Word::loadFromRenderedText(const string& textureText, SDL_Color textColor, SDL_Renderer* renderer)

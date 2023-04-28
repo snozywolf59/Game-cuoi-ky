@@ -6,13 +6,17 @@
 const int SLIDER_W = 500;
 const int SLIDER_H = 100;
 
-const string file_menu_mouse = "image/Game/GameMenu/Mouse.png";
-const string FILE_MENU_IMAGE[] = {"image/Game/GameMenu/Play.png",
-                                "image/Game/GameMenu/Option.png",
-                                "image/Game/GameMenu/Quit.png"};
+const string file_game_over = "image/GameUI/GameOver/GameOver.png";
+const string file_new_game = "image/GameUI/GameOver/NewGame.png";
+const string file_menu_mouse = "image/GameUI/GameMenu/Mouse.png";
+const string FILE_MENU_IMAGE[] = {"image/GameUI/GameMenu/Play.png",
+                                "image/GameUI/GameMenu/Option.png",
+                                "image/GameUI/GameMenu/Quit.png"};
 
 
-const string file_bg = "image/Game/bgImage-min.png";
+const string file_bg = "image/GameUI/GameMenu/bg.png";
+
+
 
 
 struct optionMenu
@@ -98,6 +102,7 @@ private:
     Button* button[TOTAL_BUTTON];
 
     Entity* bgImage;
+    Entity* moon;
 
     Entity* mouse;
 

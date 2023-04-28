@@ -22,12 +22,12 @@ enum ING_BUTTON
     ING_QUIT,
     ING_TOTAL
 };
-const string file_ing_mouse = "image/Game/InGame/Mouse.png";
+const string file_ing_mouse = "image/GameUI/InGame/Mouse.png";
 
-const string FILE_ING_BUT[] = { "image/Game/InGame/Pause.png",
-                                "image/Game/InGame/Resume.png",
-                                "image/Game/InGame/Menu.png",
-                                "image/Game/GameMenu/Quit.png"};
+const string FILE_ING_BUT[] = { "image/GameUI/InGame/Pause.png",
+                                "image/GameUI/InGame/Resume.png",
+                                "image/GameUI/InGame/Menu.png",
+                                "image/GameUI/GameMenu/Quit.png"};
 
 //GAME
 class Game
@@ -38,7 +38,7 @@ public:
 
     void initStage();
     void initPlayer();
-    void initMap(string path);
+    void initMap(const string& path);
     void initEnemy();
     void initMouse();
     void initSoundGame();
@@ -87,7 +87,7 @@ private:
     //entity
     Player* player;
     Map* gMap;
-    SDL_Point camera;
+    Vec2f camera;
     Mouse* mouse;
 
     //enemies

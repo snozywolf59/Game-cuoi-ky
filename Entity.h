@@ -1,7 +1,7 @@
 #pragma once
 
 #include "common.h"
-#include "Map.h"
+#include "Vec2f.h"
 
 //button
 #define BUTTON_HEIGHT 120
@@ -9,7 +9,9 @@
 #define ING_BUT_W 80
 #define ING_BUT_H 80
 
-const SDL_Point p = {0,0};
+const string file_pad = "image/GameUI/InGame/Pad.png";
+
+const Vec2f p = {0,0};
 
 SDL_Texture* loadTexture(const string& path, SDL_Renderer* renderer );
 
@@ -43,9 +45,9 @@ struct Entity
 
     float getAngle(Entity* temp);
 
-    void draw(SDL_Rect* clip,const SDL_Point& camera = p, int atCenter = 0);
+    void draw(SDL_Rect* clip,const Vec2f& camera = p, int atCenter = 0);
     void draw(SDL_Rect* clip,const int& _x,const int& _y, const int& _w,
-              const int& _h, int atCenter = 0,const SDL_Point& camera = p);
+              const int& _h, int atCenter = 0,const Vec2f& camera = p);
 };
 
     // delete entity
@@ -73,7 +75,7 @@ struct Mouse:Entity
 
     Mouse(SDL_Renderer* _renderer, const string& path);
 
-    void updateMouse(SDL_Point& camera);
+    void updateMouse(const Vec2f& camera);
 };
 
 ///////******Write words on screen///////////
