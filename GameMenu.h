@@ -17,8 +17,6 @@ const string FILE_MENU_IMAGE[] = {"image/GameUI/GameMenu/Play.png",
 const string file_bg = "image/GameUI/GameMenu/bg.png";
 
 
-
-
 struct optionMenu
 {
     Entity* backButton;
@@ -45,7 +43,7 @@ struct OverMenu
     Mix_Chunk* gameOverSound;
     SDL_Renderer* renderer;
 
-    int cnt;
+    unsigned int cnt;
 
     OverMenu(SDL_Renderer* _renderer);
 

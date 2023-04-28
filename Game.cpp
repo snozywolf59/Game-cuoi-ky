@@ -235,9 +235,9 @@ void Game::doKeyBoard()
 void Game::updateEnemy()
 {
     //spawn
-    /*if (currentTime % spawnTime[ENEMY_MELEE] == 0) {
+    if (currentTime % spawnTime[ENEMY_MELEE] == 0) {
             spawnEnemyMelee(enemy_list,player,gMap);
-    }*/
+    }
     //check all enemies
     for (auto prop = enemy_list.begin(); prop != enemy_list.end();)
     {

@@ -88,7 +88,9 @@ int OverMenu::handle()
 void OverMenu::render()
 {
     SDL_RenderClear(renderer);
-    GameOver->draw(NULL,100,0,500,300,0);
+    int now = (cnt%90)/6;
+    SDL_Rect temp = {(now % 4) * 250, (now % 5) * 28, 250, 28};
+    GameOver->draw(&temp,300,80,375,42);
     NewGame->drawButton(300,250,BUTTON_WIDTH/2,BUTTON_HEIGHT/2);
     MainMenu->drawButton(300,420,BUTTON_WIDTH/2,BUTTON_HEIGHT/2);
     mouse->draw(NULL);
