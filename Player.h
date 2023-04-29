@@ -10,7 +10,7 @@ const string file_bar = "image/Player/bar.png";
 const string file_bar_health = "image/Player/red.png";
 const string file_player_pulse = "image/Player/pulse.png";
 
-const int PLAYER_MAX_HP = 0;
+const int PLAYER_MAX_HP = 50;
 const int PLAYER_RELOAD = 12;
 const float PLAYER_SPEED = 0.2f;
 const int PLAYER_DMG = 3;
@@ -19,7 +19,7 @@ const float R_player = 25.0f;
 
 const float player_range = 1000.0f;
 
-///////////////@@@##//PLAYER////////////////
+/////////////////PLAYER////////////////
 
 struct Player:Entity
 {

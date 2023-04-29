@@ -37,7 +37,7 @@ void Map::loadMap(const string& path)
 
         if (!canMove(x))
         {
-            blockObj.push_back(Vec2f(cnt/NUM_BLOCKS + BLOCK_SIZE/2, cnt%NUM_BLOCKS + BLOCK_SIZE/2));
+            blockObj.push_back(Vec2f(cnt/NUM_BLOCKS, cnt%NUM_BLOCKS));
         }
 
         UniObjProp[cnt / NUM_BLOCKS][cnt % NUM_BLOCKS] = rand()%100;
@@ -59,7 +59,7 @@ void Map::updateMap()
 {
     for (i = 0; i < NUM_BLOCKS; i++)
         for (j = 0; j < NUM_BLOCKS; j++)
-        UniObjProp[i][j]++;
+        UniObjProp[i][j] = (UniObjProp[i][j] + 1)%640;
 }
 
 
@@ -85,15 +85,18 @@ void Map::drawMap(const Vec2f& camera)
             des.x = -camera.x + j * BLOCK_SIZE;
 
             src = {((UniObjProp[i][j]/15) % 4) * 128,0,128,128};
-
             planet[Star]->draw(&src,des.x,des.y,des.w,des.h);
 
-            if (type == Moon) {
-                src = {((UniObjProp[i][j]/5) % 60) * 48,0,48,48};
-                planet[Moon]->draw(&src,des.x,des.y,des.w,des.h);
+            if (type != 0)
+            {
+                if (type < 3) src = {((UniObjProp[i][j]/10) % 8) * 128, ((UniObjProp[i][j]/10) / 8) * 128,128,128};
+                else src = {((UniObjProp[i][j]/10) % 8) * 256, ((UniObjProp[i][j]/10) / 8) * 256,256,256};
+                planet[type]->draw(&src,des.x,des.y,des.w,des.h);
             }
         }
     }
+
+    planet[Planet3]->draw(NULL,115,825,planet[Planet3]->w,planet[Planet3]->h,0,camera);
 }
 
 /****************************************************/
