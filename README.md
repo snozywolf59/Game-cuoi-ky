@@ -29,11 +29,9 @@
 - ![Ảnh demo](https://user-images.githubusercontent.com/120768537/235300002-62a2c498-14de-4d05-934c-ce0f3ee37081.png)
 
 ### Các tài nguyên được lấy từ:
--
--
--
-
-### Điều chỉnh map:
+- [Các artist trên itch.io](https://itch.io/game-assets)
+- [Các artist trên craftpix.net](https://craftpix.net)
+- [Âm thanh từ mixkit.co](https://mixkit.co/)
 
 ## Thông tin liên lạc
 - Email: thbang727@gmail.com
