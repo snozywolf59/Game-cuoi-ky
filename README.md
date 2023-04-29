@@ -24,8 +24,9 @@
 - S: di chuyển xuống
 - F hoặc click: Bắn đạn
 
-### Video:
+### Một số hình ảnh:
 - link
+- ![Ảnh demo](https://user-images.githubusercontent.com/120768537/235300002-62a2c498-14de-4d05-934c-ce0f3ee37081.png)
 
 ### Các tài nguyên được lấy từ:
 -
