@@ -140,7 +140,7 @@ void Player::updateEngine(Vec2f& camera,Mouse* mouse, Map* gMap)
 
 void Player::shoot(Mouse* mouse)
 {
-    FighterProp newBullet(x + w/2 * cosf(angle), y + w/2 * sinf(angle) , angle ,BULLET_P_SPEED, 4*DELAY);
+    FighterProp newBullet(x + w/2 * cosf(angle), y + w/2 * sinf(angle) , angle ,BULLET_P_SPEED, 4*5);
     p_bullets.push_back(newBullet);
     reload = 0;
     Mix_PlayChannel(SND_PLAYER_SHOOT,attack,0);
@@ -152,7 +152,7 @@ void Player::drawEngine(Vec2f& camera)
 {
     for (FighterProp& b: p_bullets)
     {
-        SDL_Rect t = {b.now/DELAY * 48, 0, 48, 32};
+        SDL_Rect t = {b.now/5 * 48, 0, 48, 32};
         bullet->angle = b.angle;
         bullet->draw(&t, b.x, b.y, 48 , 32,1,camera);
     }

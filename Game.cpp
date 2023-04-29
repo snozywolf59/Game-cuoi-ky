@@ -217,7 +217,6 @@ void Game::doKeyBoard()
         case SDLK_s: player->down = 1; break;
         case SDLK_a: player->left = 1; break;
         case SDLK_d: player->right = 1;break;
-        case SDLK_f: player->atk = 1; break;
                         //case SDLK_SPACE: pause = true; break;
     }
     if (e.type == SDL_KEYUP)
@@ -227,7 +226,6 @@ void Game::doKeyBoard()
         case SDLK_s: player->down = 0; break;
         case SDLK_a: player->left = 0; break;
         case SDLK_d: player->right = 0; break;
-        case SDLK_f: player->atk = 0; break;
                     //case SDLK_SPACE: pause = false; break;
     }
 }
