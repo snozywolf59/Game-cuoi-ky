@@ -3,12 +3,12 @@
 #include "Player.h"
 
 const string file_enemy_melee = "image/Enemy/enemy_melee.png";
+const string file_enemy_ranged = "image/Enemy/enemy_ranged.png";
 
 const int maxFrameEnemyMelee = 6 * DELAY;
 const int maxFrameEnemyRanged = DELAY;
 const int maxFrameExplosion = 8 * DELAY;
 const int ENEMY_RELOAD = 2 * FPS;
-const int ENEMY_MELEE_BLOCK_SIZE = 51;
 const float R_enemy = 30.0f;
 
 const float ENEMY_SPEED = 0.2;
@@ -19,21 +19,30 @@ enum ENEMY_TYPE
     ENEMY_RANGED,
     TOTAL_TYPE_ENEMY
 };
-const int spawnTime[TOTAL_TYPE_ENEMY] = {1 * FPS, 2 * FPS};
-const int ENEMY_HEALH[TOTAL_TYPE_ENEMY] = {8,5};
+const int enemy_melee_spawntime = FPS;
+const int enemy_ranged_spawntime = 2 * FPS;
+
+const int enemy_melee_range = 10;
+const int enemy_ranged_range = 400;
+
+const int ENEMY_HEALH[TOTAL_TYPE_ENEMY] = {6,3};
 const int ENEMY_DMG[TOTAL_TYPE_ENEMY] = {3,2};
+
+enum ENEMY_STAT
+{
+    MOVE,
+    ATTACK
+};
 
 struct EnemyProp:FighterProp
 {
-    int reload, maxReload, health, dmg;
+    int reload, maxReload, health, dmg, st, range;
     bool left, right, up, down;
     bool alive;
 
     void resetMov(const bool& t);
 
     void collisionBullet(Player* player);
-
-    void collisionPlayer(Player* player);
 
     Vec2f separate(vector <EnemyProp>& enemies);
 };
@@ -46,6 +55,8 @@ struct EnemyMeleeProp:EnemyProp
 
     void updateStat(Player* player);
 
+    void collisionPlayer(Player* player);
+
     void updateEnemyPos(vector <EnemyMeleeProp>& enemies);
 
     void update(vector <EnemyMeleeProp>& enemies,Player* player);
@@ -53,12 +64,17 @@ struct EnemyMeleeProp:EnemyProp
 
 struct EnemyRangedProp:EnemyProp
 {
+    vector <FighterProp> E_bullets;
 
     EnemyRangedProp(const float& x_ = 0,const float& y_ = 0,const float& angle_ = 0,
                 const float& _speed = ENEMY_SPEED, const int& _maxReload = ENEMY_RELOAD,
                 const int& _maxFrame = maxFrameEnemyRanged);
 
     void updateStat(Player* player);
+
+    void updateBullet(Player* player);
+
+    void shoot(Player* player);
 
     void updateEnemyPos(vector <EnemyRangedProp>& enemies);
 
@@ -68,5 +84,6 @@ struct EnemyRangedProp:EnemyProp
 
         /////////////SPAWN enemy
 void spawnEnemyMelee(vector <EnemyMeleeProp>& enemies, Player* player,Map* gMap);
+void spawnEnemyRanged(vector <EnemyRangedProp>& enemies, Player* player,Map* gMap);
 
 

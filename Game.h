@@ -92,7 +92,11 @@ private:
 
     //enemies
     Entity* enemy_melee;
-    vector <EnemyMeleeProp> enemy_list;
+    vector <EnemyMeleeProp> enemy_melee_list;
+
+    Entity* enemy_ranged;
+    Entity* e_bullet;
+    vector <EnemyRangedProp> enemy_ranged_list;
 
     //explosion animation
     Entity* explosion;

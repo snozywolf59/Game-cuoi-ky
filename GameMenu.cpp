@@ -88,8 +88,8 @@ int OverMenu::handle()
 void OverMenu::render()
 {
     SDL_RenderClear(renderer);
-    int now = cnt % (3 * 20);
-    SDL_Rect temp = {(now % 4)/3 * 250,(now / 5)/3 * 28 , 250, 28};
+    int now = cnt % 120;
+    SDL_Rect temp = {(now % 4)/6 * 250,(now / 5)/6 * 28 , 250, 28};
     GameOver->draw(&temp,300,80,375,42);
 
     SDL_SetTextureAlphaMod(NewGame->texture, cnt > 255 ? 255:cnt);

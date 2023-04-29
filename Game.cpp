@@ -55,7 +55,12 @@ void Game::initPlayer()
 void Game::initEnemy()
 {
     enemy_melee = new Entity(renderer,file_enemy_melee);
-    logSuccess("enemy");
+    logSuccess("enemy melee");
+
+    enemy_ranged = new Entity(renderer,file_enemy_ranged);
+    e_bullet = new Entity(renderer,"image/enemy/bullet.png");
+    logSuccess("enemy ranged");
+
 
     explosion = new Entity(renderer,"image/enemy/explosion.png");
     logSuccess("explosion");
@@ -141,7 +146,8 @@ void Game::resetStage()
     player->x += camera.x;
     player->y += camera.y;
     //enemy
-    enemy_list.clear();
+    enemy_melee_list.clear();
+    enemy_ranged_list.clear();
 }
 
 //GAME LOOP
@@ -231,29 +237,40 @@ void Game::doKeyBoard()
 }
 
 
-/****************************************************/
-
 //UPDATE
 void Game::updateEnemy()
 {
     //spawn
-    if (currentTime % spawnTime[ENEMY_MELEE] == 0) {
-            spawnEnemyMelee(enemy_list,player,gMap);
+    if (currentTime % enemy_melee_spawntime == 0) {
+            spawnEnemyMelee(enemy_melee_list,player,gMap);
+    }
+
+    if (currentTime % enemy_ranged_spawntime == 0)
+    {
+        spawnEnemyRanged(enemy_ranged_list,player,gMap);
     }
     //check all enemies
-    for (auto prop = enemy_list.begin(); prop != enemy_list.end();)
+    for (auto prop = enemy_melee_list.begin(); prop != enemy_melee_list.end();)
     {
-       prop->update(enemy_list,player);
+       prop->update(enemy_melee_list,player);
        if (prop->alive ==  false)
        {
-           prop = enemy_list.erase(prop);
+           prop = enemy_melee_list.erase(prop);
+       }else{
+            ++prop;
+       }
+    }
+    for (auto prop = enemy_ranged_list.begin(); prop != enemy_ranged_list.end();)
+    {
+       prop->update(enemy_ranged_list,player);
+       if (prop->alive ==  false)
+       {
+           prop = enemy_ranged_list.erase(prop);
        }else{
             ++prop;
        }
     }
 }
-
-/*******************************************************/
 
 void Game::update()
 {
@@ -275,7 +292,6 @@ void Game::update()
 
 }
 
-/******************************************************/
 void Game::drawButtons()
 {
     if (!pause)
@@ -297,14 +313,31 @@ void Game::drawButtons()
 
 void Game::drawEnemy()
 {
-    for (EnemyMeleeProp& x: enemy_list)
+    SDL_Rect cur;
+    for (EnemyMeleeProp& x: enemy_melee_list)
     {
-        SDL_Rect cur;
         if (x.health > 0)
         {
-            cur = {(x.now /DELAY) * ENEMY_MELEE_BLOCK_SIZE, 0,ENEMY_MELEE_BLOCK_SIZE,ENEMY_MELEE_BLOCK_SIZE};
+            cur = {(x.now /DELAY) * 51, x.st * 51,51,51};
             enemy_melee->angle = x.angle;
             enemy_melee->draw(&cur,x.x,x.y,50,50,1,camera);
+        }else{
+            cur = {x.now/DELAY * 48,0,48,48};
+            explosion->draw(&cur,x.x,x.y,60,60,1,camera);
+        }
+    }
+    for (EnemyRangedProp& x: enemy_ranged_list)
+    {
+        if (x.health > 0)
+        {
+            cur = {(x.now /DELAY) * 51, x.st * 51,51,51};
+            enemy_ranged->angle = x.angle;
+            enemy_ranged->draw(&cur,x.x,x.y,50,50,1,camera);
+            for (FighterProp& bul:x.E_bullets)
+            {
+                cur = {(bul.now)/5 * 32, 0, 32, 32};
+                e_bullet->draw(&cur, bul.x,bul.x,50,50,1,camera);
+            }
         }else{
             cur = {x.now/DELAY * 48,0,48,48};
             explosion->draw(&cur,x.x,x.y,60,60,1,camera);
@@ -392,11 +425,7 @@ int Game::GameLoop()
 //clear
 void Game::clearGame()
 {
-    //clear player
+    enemy_melee_list.clear();
+    enemy_ranged_list.clear();
     player->p_bullets.clear();
-
-    //clear window, renderer
-//    window = nullptr;
-//    renderer = nullptr;
-    cout << "\end a stage\n";
 }
