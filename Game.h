@@ -8,7 +8,7 @@ enum BUTTON_MENU_TYPE
 {
     DEFAULT = -1,
     START,
-    SCORE,
+    OPTION,
     QUIT,
     TOTAL_BUTTON
 };
