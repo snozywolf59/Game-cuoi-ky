@@ -150,6 +150,7 @@ void EnemyRangedProp::updateBullet(Player* player){
     for (auto prop = E_bullets.begin(); prop != E_bullets.end();)
     {
         prop->updatePos();
+        cout << prop->x << ' ' << prop-> y << ' ' << player->x <<' ' << player->y << endl;
         prop->now = (prop->now + 1)%prop->maxFrame;
         if (prop->s > range)
         {
@@ -158,7 +159,7 @@ void EnemyRangedProp::updateBullet(Player* player){
         }
         if (getDistance(player->x,player->y,prop->x,prop->y) < maxR)
         {
-            player->health += dmg;
+            player->health -= dmg;
             prop = E_bullets.erase(prop);
             continue;
         }
@@ -191,6 +192,7 @@ void EnemyRangedProp::update(vector<EnemyRangedProp>& enemies, Player* player)
         updateEnemyPos(enemies);
     }
     else now++;
+
     updateBullet(player);
 }
 

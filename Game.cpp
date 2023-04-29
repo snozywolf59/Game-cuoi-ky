@@ -310,8 +310,7 @@ void Game::drawButtons()
     }
 }
 
-
-void Game::drawEnemy()
+void Game::drawEnemyMelee()
 {
     SDL_Rect cur;
     for (EnemyMeleeProp& x: enemy_melee_list)
@@ -326,6 +325,11 @@ void Game::drawEnemy()
             explosion->draw(&cur,x.x,x.y,60,60,1,camera);
         }
     }
+}
+
+void Game::drawEnemyRanged()
+{
+    SDL_Rect cur;
     for (EnemyRangedProp& x: enemy_ranged_list)
     {
         if (x.health > 0)
@@ -335,14 +339,21 @@ void Game::drawEnemy()
             enemy_ranged->draw(&cur,x.x,x.y,50,50,1,camera);
             for (FighterProp& bul:x.E_bullets)
             {
-                cur = {(bul.now)/5 * 32, 0, 32, 32};
-                e_bullet->draw(&cur, bul.x,bul.x,50,50,1,camera);
+                cur = {(bul.now%4) * 32, 0, 32, 32};
+                e_bullet->angle = bul.angle;
+                e_bullet->draw(&cur, bul.x,bul.y,50,50,1,camera);
             }
         }else{
             cur = {x.now/DELAY * 48,0,48,48};
             explosion->draw(&cur,x.x,x.y,60,60,1,camera);
         }
     }
+}
+
+void Game::drawEnemy()
+{
+    drawEnemyMelee();
+    drawEnemyRanged();
 }
 
 void Game::drawPlayer()

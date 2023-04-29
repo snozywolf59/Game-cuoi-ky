@@ -61,6 +61,10 @@ public:
 
     void drawButtons();
 
+    void drawEnemyMelee();
+
+    void drawEnemyRanged();
+
     void drawEnemy();
 
     void drawPlayer();

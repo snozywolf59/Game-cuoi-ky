@@ -14,10 +14,10 @@
 	<SDL_ttf.h>
 	<SDL_mixer.h>
 
-1682754974 source:c:\users\administrator.maytinh-7sq41e0\desktop\game-cuoi-ky\enemy.cpp
+1682756242 source:c:\users\administrator.maytinh-7sq41e0\desktop\game-cuoi-ky\enemy.cpp
 	"Enemy.h"
 
-1682755342 c:\users\administrator.maytinh-7sq41e0\desktop\game-cuoi-ky\enemy.h
+1682756087 c:\users\administrator.maytinh-7sq41e0\desktop\game-cuoi-ky\enemy.h
 	"Player.h"
 
 1682707923 c:\users\administrator.maytinh-7sq41e0\desktop\game-cuoi-ky\player.h
@@ -34,10 +34,10 @@
 1682698769 source:c:\users\administrator.maytinh-7sq41e0\desktop\game-cuoi-ky\entity.cpp
 	"Entity.h"
 
-1682754922 source:c:\users\administrator.maytinh-7sq41e0\desktop\game-cuoi-ky\game.cpp
+1682755565 source:c:\users\administrator.maytinh-7sq41e0\desktop\game-cuoi-ky\game.cpp
 	"Game.h"
 
-1682754612 c:\users\administrator.maytinh-7sq41e0\desktop\game-cuoi-ky\game.h
+1682756330 c:\users\administrator.maytinh-7sq41e0\desktop\game-cuoi-ky\game.h
 	"Enemy.h"
 
 1682751598 source:c:\users\administrator.maytinh-7sq41e0\desktop\game-cuoi-ky\gamemenu.cpp
