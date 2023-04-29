@@ -41,9 +41,12 @@
 		<Unit filename="Game.h" />
 		<Unit filename="GameMenu.cpp" />
 		<Unit filename="GameMenu.h" />
-		<Unit filename="JOB_NEED_TO_DO" />
 		<Unit filename="Map.cpp" />
 		<Unit filename="Map.h" />
+		<Unit filename="OptionMenu.cpp" />
+		<Unit filename="OptionMenu.h" />
+		<Unit filename="OverMenu.cpp" />
+		<Unit filename="OverMenu.h" />
 		<Unit filename="Player.cpp" />
 		<Unit filename="Player.h" />
 		<Unit filename="Vec2f.cpp" />

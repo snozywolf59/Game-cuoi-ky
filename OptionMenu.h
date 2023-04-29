@@ -7,12 +7,14 @@ const int SLIDER_W = 500;
 const int SLIDER_H = 100;
 
 const string file_back_button = "image/GameUI/GameOption/Back.png";
-const string file_music_button = "image/GameUI/GameOption/Music.png";
+const string file_music_buttonOn = "image/GameUI/GameOption/MusicOn.png";
+const string file_music_buttonOff = "image/GameUI/GameOption/MusicOff.png";
 
 struct OptionMenu
 {
     Button* backButton;
-    Button* music;
+    Button* musicOn;
+    Button* musicOff;
     Entity* opMouse;
     SDL_Rect fillRect;
     SDL_Renderer* renderer;
@@ -22,8 +24,8 @@ struct OptionMenu
 
     OptionMenu(TTF_Font* _font,Entity* mouse, SDL_Renderer* tRenderer);
 
-    int handleAndUpdate(int& vol);
+    int handleAndUpdate(unsigned int& vol);
 
-    void render();
+    void render(const unsigned int& vol);
 };
 

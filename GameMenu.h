@@ -74,7 +74,7 @@ private:
     int current = -1;
 
     //sound
-    int volume;
+    unsigned int volume;
     Mix_Chunk* beChosen;
     Mix_Music* bgMusic;
 

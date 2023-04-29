@@ -125,6 +125,7 @@ void GameMenu::update()
 
 void GameMenu::menuDefault()
 {
+    Mix_VolumeMusic(volume);
     if (Mix_PlayingMusic() == 0)
     {
         Mix_PlayMusic(bgMusic,0);
@@ -168,7 +169,7 @@ void GameMenu::menuOpTion()
     while(1)
     {
         current = op->handleAndUpdate(volume);
-        op->render();
+        op->render(volume);
         if (current != NORMAL) break;
     }
 }
