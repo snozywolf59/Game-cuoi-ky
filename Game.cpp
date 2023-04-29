@@ -3,7 +3,7 @@
 
 //GAME INIT
 
-Game::Game(SDL_Renderer* gRenderer, TTF_Font* tempFont, Entity* tempPad){
+Game::Game(SDL_Renderer* gRenderer, TTF_Font* tempFont, Entity* tempPad, Mix_Chunk* beChosen){
     renderer = gRenderer;
 
     if (renderer == NULL)
@@ -14,6 +14,11 @@ Game::Game(SDL_Renderer* gRenderer, TTF_Font* tempFont, Entity* tempPad){
 
     font = tempFont;
     pad = tempPad;
+
+    chosen = beChosen;
+
+    choose = -1;
+    old_choose = -1;
 
     initStage();
 }
@@ -137,7 +142,6 @@ void Game::resetStage()
     currentTime = 0;
 
     //score
-
     score = 0;
 
     //player
@@ -171,30 +175,35 @@ int Game::handleEvent()
 
 int Game::doButton()
 {
+    bool inButton = false;
+    old_choose = choose;
     for (int i = 0; i < ING_TOTAL; i++)
+    {
+        int tw = (i == 0 ? ING_BUT_W:BUTTON_WIDTH);
+        int th = (i == 0 ? ING_BUT_H:BUTTON_HEIGHT);
+        if (Ing_Button[i]->beChosen(mouse->x - camera.x,mouse->y - camera.y, tw, th))
         {
-            int tw = (i == 0 ? ING_BUT_W:BUTTON_WIDTH);
-            int th = (i == 0 ? ING_BUT_H:BUTTON_HEIGHT);
-            if (Ing_Button[i]->beChosen(mouse->x - camera.x,
-                                       mouse->y - camera.y, tw, th)
-                && e.type == SDL_MOUSEBUTTONDOWN)
-            {
+            inButton = true, choose = i;
+            if( e.type == SDL_MOUSEBUTTONDOWN){
                 if (!pause && i == ING_PAUSE) pause = true;
                 if (pause) {
                     switch (i)
                     {
-                    case ING_RESUME:
-                        pause = false;
-                        return NORMAL;
-                    case ING_MENU:
-                        return DEFAULT;
-                    case ING_QUIT:
-                        return QUIT;
-                        break;
+                        case ING_RESUME:
+                            pause = false;
+                            return NORMAL;
+                        case ING_MENU:
+                            return DEFAULT;
+                        case ING_QUIT:
+                            return QUIT;
+                            break;
                     }
                 }
             }
+            continue;
         }
+    }
+    if (!inButton) choose = -1;
     return NORMAL;
 }
 
@@ -286,6 +295,8 @@ void Game::update()
         //update score;s
         score_word->loadFromRenderedText(convertIntToString(currentTime) ,score_word->color,renderer);
     }
+
+    if (old_choose != choose && choose != -1) Mix_PlayChannel(0,chosen,0);
     gMap->updateMap();
        //MOUSE
     mouse->updateMouse(camera);

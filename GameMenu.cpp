@@ -15,7 +15,7 @@ GameMenu::GameMenu(SDL_Renderer* gRenderer)
 
     //menu item
         //create a stage to play
-    stage = new Game(renderer,gFont,pad);
+    stage = new Game(renderer,gFont,pad,beChosen);
 
         //option
     op = new OptionMenu(gFont,mouse,renderer);

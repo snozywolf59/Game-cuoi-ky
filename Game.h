@@ -33,7 +33,7 @@ const string FILE_ING_BUT[] = { "image/GameUI/InGame/Pause.png",
 class Game
 {
 public:
-    Game( SDL_Renderer* gRenderer, TTF_Font* tempFont, Entity* tempPad);
+    Game( SDL_Renderer* gRenderer, TTF_Font* tempFont, Entity* tempPad, Mix_Chunk* beChosen);
     ~Game();
 
     void initStage();
@@ -107,6 +107,7 @@ private:
 
     //count time
     Uint64 currentTime;
+    int old_choose,choose;
 
     //score
     int score;
@@ -114,7 +115,7 @@ private:
     //sound
     Mix_Chunk* enemy_die;
     Mix_Music* bgMusic;
-
+    Mix_Chunk* chosen;
     //ing button
     Button* Ing_Button[ING_TOTAL];
 
