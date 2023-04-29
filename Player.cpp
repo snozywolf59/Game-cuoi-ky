@@ -152,9 +152,9 @@ void Player::drawEngine(Vec2f& camera)
 {
     for (FighterProp& b: p_bullets)
     {
-        SDL_Rect t = {b.now/DELAY * 32, 0, 32, 32};
+        SDL_Rect t = {b.now/DELAY * 48, 0, 48, 32};
         bullet->angle = b.angle;
-        bullet->draw(&t, b.x, b.y, R_bullet * 2, R_bullet * 2,1,camera);
+        bullet->draw(&t, b.x, b.y, 48 , 32,1,camera);
     }
 
     if (reload < 5){
