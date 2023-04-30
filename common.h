@@ -34,7 +34,7 @@ void logSDLError(ostream& os,const string &msg, bool fatal);
 
 void logSuccess(const string& name);
 
-const string txt_map = "map/map.txt";
+const string txt_map = "text/map.txt";
 //**************************TTF***********************//
 const string gameFont = "font/Ouders.ttf";
 

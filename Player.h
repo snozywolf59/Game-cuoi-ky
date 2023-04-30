@@ -1,6 +1,9 @@
 #pragma once
 
 #include "Fighter&Bullet.h"
+#include "Mouse.h"
+#include "Word.h"
+#include "Button.h"
 
 
 const string file_player = "image/Player/player.png";

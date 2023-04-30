@@ -53,53 +53,6 @@ struct Entity
     // delete entity
 void clean(Entity* entity,bool del);
 
-//BUTTON
-struct Button:Entity
-{
-    const float default_scale = 1;
-
-    //SDL_Rect selected;
-    int now = 0;
-
-    Button(SDL_Renderer* _renderer, const string& path);
-
-    bool beChosen(const int& _x,const int& _y, const int& _w, const int& _h);
-
-    void drawButton(const int& _x,const int& _y, const int& _w, const int& _h);
-};
-
-//MOUSE
-struct Mouse:Entity
-{
-    int real_mouse_x, real_mouse_y, now = 0;
-
-    Mouse(SDL_Renderer* _renderer, const string& path);
-
-    void updateMouse(const Vec2f& camera);
-};
-
-///////******Write words on screen///////////
-struct Word:Entity
-{
-    TTF_Font* font;
-
-    Entity* pad;
-
-    SDL_Color color;
-
-    Word(const int& _x, const int& _y, SDL_Renderer* renderer, TTF_Font* gFont, Entity* gPad);
-
-    void loadFromRenderedText (const string& textureText, SDL_Color textColor, SDL_Renderer* renderer);
-
-    void drawWord();
-
-    void drawWord(const int& _x,const int& _y, const int& _w, const int& _h);
-};
-
-
-
-
-
 
 
 

@@ -51,6 +51,6 @@ void HighScoreMenu::render()
     SDL_RenderClear(renderer);
     for (int i = 0; i < TOP_SCORE; i++)
     {
-        SDL_DestroyTexture(topScore->texture);
+        SDL_DestroyTexture(topScore[i]->texture);
     }
 }

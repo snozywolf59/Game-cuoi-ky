@@ -1,6 +1,9 @@
 #pragma once
 
 #include "Entity.h"
+#include "Button.h"
+#include "Word.h"
+#include "Mouse.h"
 
 const int TOP_SCORE = 5;
 
