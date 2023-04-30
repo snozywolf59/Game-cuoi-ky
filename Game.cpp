@@ -183,25 +183,30 @@ int Game::doButton()
         int th = (i == 0 ? ING_BUT_H:BUTTON_HEIGHT);
         if (Ing_Button[i]->beChosen(mouse->x - camera.x,mouse->y - camera.y, tw, th))
         {
-            inButton = true, choose = i;
-            if( e.type == SDL_MOUSEBUTTONDOWN){
-                if (!pause && i == ING_PAUSE) pause = true;
-                if (pause) {
-                    switch (i)
-                    {
-                        case ING_RESUME:
-                            pause = false;
-                            return NORMAL;
-                        case ING_MENU:
-                            return DEFAULT;
-                        case ING_QUIT:
-                            return QUIT;
-                            break;
-                    }
+            if (!pause && i == ING_PAUSE)
+            {
+                inButton = true, choose = i;
+                if( e.type == SDL_MOUSEBUTTONDOWN) pause = true;
+                continue;
+            }
+
+            if (pause) {
+                inButton = true, choose = i;
+                if (e.type == SDL_MOUSEBUTTONDOWN)
+                switch (i)
+                {
+                    case ING_RESUME:
+                        pause = false;
+                        return NORMAL;
+                    case ING_MENU:
+                        return DEFAULT;
+                    case ING_QUIT:
+                        return QUIT;
+                        break;
                 }
             }
-            continue;
         }
+        continue;
     }
     if (!inButton) choose = -1;
     return NORMAL;

@@ -69,6 +69,7 @@ void GameMenu::initSound()
     }
 
     volume = MIX_MAX_VOLUME;
+    snd = MIX_MAX_VOLUME;
     logSuccess("Sound menu");
 }
 
@@ -125,7 +126,6 @@ void GameMenu::update()
 
 void GameMenu::menuDefault()
 {
-    Mix_VolumeMusic(volume);
     if (Mix_PlayingMusic() == 0)
     {
         Mix_PlayMusic(bgMusic,0);
@@ -168,8 +168,8 @@ void GameMenu::menuOpTion()
     //this func will display highscore and button to turn off music
     while(1)
     {
-        current = op->handleAndUpdate(volume);
-        op->render(volume);
+        current = op->handleAndUpdate(volume,snd);
+        op->render(volume,snd);
         if (current != NORMAL) break;
     }
 }

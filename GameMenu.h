@@ -75,6 +75,7 @@ private:
 
     //sound
     unsigned int volume;
+    unsigned int snd;
     Mix_Chunk* beChosen;
     Mix_Music* bgMusic;
 
