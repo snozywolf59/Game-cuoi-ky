@@ -49,20 +49,18 @@ void OverMenu::render()
 {
     SDL_RenderClear(renderer);
     int now = cnt % 120;
-    SDL_Rect temp = {(now % 4)/6 * 250,(now / 5)/6 * 28 , 250, 28};
+    SDL_Rect temp = {(now - (now/5) * 5)/6 * 250,(now / 5)/6 * 28 , 250, 28};
     GameOver->draw(&temp,300,80,375,42);
 
     SDL_SetTextureAlphaMod(NewGame->texture, cnt > 255 ? 255:cnt);
     SDL_SetTextureAlphaMod(MainMenu->texture, cnt > 255 ? 255:cnt);
     if (cnt <= 255)
     {
-        NewGame->angle = (cnt/255.0 - 1) * M_PI;
         NewGame->scale = cnt/255.0;
         MainMenu->scale = cnt/255.0;
-        MainMenu->angle = (cnt/255.0 - 1) * M_PI;
     }
-    NewGame->drawButton(300,250,BUTTON_WIDTH/2,BUTTON_HEIGHT/2);
-    MainMenu->drawButton(300,420,BUTTON_WIDTH/2,BUTTON_HEIGHT/2);
+    NewGame->drawButton(375,250,BUTTON_WIDTH/2,BUTTON_HEIGHT/2);
+    MainMenu->drawButton(375,420,BUTTON_WIDTH/2,BUTTON_HEIGHT/2);
     mouse->draw(NULL);
     SDL_RenderPresent(renderer);
 }
