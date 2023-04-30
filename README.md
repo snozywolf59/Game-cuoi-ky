@@ -14,7 +14,7 @@
   + [SDL_image](https://lazyfoo.net/tutorials/SDL/06_extension_libraries_and_loading_other_image_formats/index.php)
   + [SDL_mixer](https://lazyfoo.net/tutorials/SDL/21_sound_effects_and_music/index.php)
   + [SDL_ttf](https://lazyfoo.net/tutorials/SDL/16_true_type_fonts/index.php)
-- Tạo một project mới. Cho các file từ include và src vào project đấy.
+- Tạo một project mới. Cho các file .h và .cpp vào project.
 - Build & Run
 
 ### Cách chơi:
@@ -24,9 +24,13 @@
 - S: di chuyển xuống
 - F hoặc click: Bắn đạn
 
+### Một số tùy chỉnh:
+- Bạn có thể điều chỉnh âm lượng nhạc và sfx trong phần option ở main menu.
+- Bạn có thể xem điểm cao ở option.
+
 ### Một số hình ảnh:
 - link
-- ![Ảnh demo](https://user-images.githubusercontent.com/120768537/235300002-62a2c498-14de-4d05-934c-ce0f3ee37081.png)
+ ![Ảnh demo](https://user-images.githubusercontent.com/120768537/235300002-62a2c498-14de-4d05-934c-ce0f3ee37081.png)
 
 ### Các tài nguyên được lấy từ:
 - [Các artist trên itch.io](https://itch.io/game-assets)
