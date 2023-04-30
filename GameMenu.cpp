@@ -1,85 +1,21 @@
 #include "GameMenu.h"
 
-GameMenu::GameMenu(SDL_Renderer* gRenderer)
+GameMenu::GameMenu(Resource* _res)
 {
-    renderer = gRenderer;
-
-    //init(0);
-    gRenderer = renderer;
-
-    initMouse();
-    initBackGround();
-    initButton();
-    initSound();
-    initFontAndPad();
-
+    res = _res;
     //menu item
         //create a stage to play
-    stage = new Game(renderer,gFont,pad,beChosen);
+    stage = new Game(res);
 
         //option
-    op = new OptionMenu(gFont,mouse,renderer);
-    over = new OverMenu(mouse,renderer);
+    op = new OptionMenu(res->font,res->Menu_Mouse,res->renderer);
+    over = new OverMenu(res->Menu_Mouse,res->renderer);
 
     quit = false;
 }
 
 GameMenu::~GameMenu()
 {}
-
-
-void GameMenu::initMouse()
-{
-    mouse = new Mouse(renderer,file_menu_mouse);
-    logSuccess("menu mouse");
-}
-
-void GameMenu::initButton()
-{
-    for (int i = 0; i < TOTAL_BUTTON; i++)
-    {
-        button[i] = new Button(renderer,FILE_MENU_IMAGE[i]);
-    }
-    logSuccess("menu buttons");
-}
-
-
-void GameMenu::initBackGround()
-{
-    bgImage = new Entity(renderer,file_bg);
-    bgImage->w = SCREEN_WIDTH;
-    bgImage->h = SCREEN_HEIGHT;
-    logSuccess("bgImage Menu");
-}
-
-void GameMenu::initSound()
-{
-    beChosen = Mix_LoadWAV(snd_menu_beChosen);
-    if (beChosen == NULL)
-    {
-        cerr << "Failed to load beChosen sound effect! SDL_mixer Error: " << Mix_GetError();
-        exit(1);
-    }
-
-    bgMusic = Mix_LoadMUS(snd_menu_bgMusic);
-    if (bgMusic == NULL)
-    {
-        cerr << "Failed to load background music! SDL_mixer Error: " << Mix_GetError();
-        exit(1);
-    }
-
-    volume = MIX_MAX_VOLUME;
-    snd = MIX_MAX_VOLUME;
-    logSuccess("Sound menu");
-}
-
-
-void GameMenu::initFontAndPad()
-{
-    gFont = TTF_OpenFont(gameFont.c_str(),50);
-    pad = new Entity(renderer,file_pad);
-}
-
 
 void GameMenu::handleMouse()
 {
@@ -88,11 +24,11 @@ void GameMenu::handleMouse()
         if (e.type == SDL_QUIT) quit = true;
 
         if (e.type == SDL_MOUSEBUTTONDOWN) {
-                mouse->scale = 1.2;
+                res->Menu_Mouse->scale = 1.2;
                 current = choose;
         }
         if (e.type == SDL_MOUSEBUTTONUP){
-                mouse->scale = 1;
+                res->Menu_Mouse->scale = 1;
         }
     }
 }
@@ -101,8 +37,8 @@ void GameMenu::update()
 {
     int x,y;
     SDL_GetMouseState(&x,&y);
-    mouse->x = x;
-    mouse->y = y;
+    res->Menu_Mouse->x = x;
+    res->Menu_Mouse->y = y;
 
     bool check = false;
 
@@ -110,7 +46,7 @@ void GameMenu::update()
 
     for (int i = 0; i < TOTAL_BUTTON; i++)
     {
-        if(button[i]->beChosen(x,y, BUTTON_WIDTH,BUTTON_HEIGHT))
+        if(res->But_Menu[i]->beChosen(x,y, BUTTON_WIDTH,BUTTON_HEIGHT))
         {
             check = true;
             choose = i;
@@ -121,27 +57,27 @@ void GameMenu::update()
             choose = -1;
     }
 
-    if (old_choose != choose && choose != -1) Mix_PlayChannel(0,beChosen,0);
+    if (old_choose != choose && choose != -1) Mix_PlayChannel(0,res->But_beChosen,0);
 }
 
 void GameMenu::menuDefault()
 {
     if (Mix_PlayingMusic() == 0)
     {
-        Mix_PlayMusic(bgMusic,0);
+        Mix_PlayMusic(res->Menu_bgMusic,0);
     }
 
-    SDL_RenderClear(renderer);
+    SDL_RenderClear(res->renderer);
 
     //background
 
-    bgImage->draw(NULL,0,0,SCREEN_WIDTH,SCREEN_HEIGHT);
+    res->MenuBG->draw(NULL,0,0,SCREEN_WIDTH,SCREEN_HEIGHT);
 
     //draw button
 
     for (int i = 0; i < TOTAL_BUTTON; i++)
     {
-        button[i]->drawButton(100, int(BUTTON_HEIGHT * 1.5 * i) + 50,
+        res->But_Menu[i]->drawButton(100, int(BUTTON_HEIGHT * 1.5 * i) + 50,
                              BUTTON_WIDTH,BUTTON_HEIGHT);
     }
 }
@@ -213,9 +149,9 @@ void GameMenu::render()
 
     //draw mouse
 
-    mouse->draw(NULL);
+    res->Menu_Mouse->draw(NULL);
 
-    SDL_RenderPresent(renderer);
+    SDL_RenderPresent(res->renderer);
 }
 
 bool GameMenu::out()

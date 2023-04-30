@@ -13,9 +13,9 @@ Word::Word(const int& _x, const int& _y, SDL_Renderer* renderer, TTF_Font* gFont
     y = _y;
 }
 
-void Word::loadFromRenderedText(const string& textureText, SDL_Color textColor, SDL_Renderer* renderer)
+void Word::loadFromRenderedText(const string& textureText)
 {
-    SDL_Surface* textSurface = TTF_RenderText_Solid( font, textureText.c_str(), textColor );
+    SDL_Surface* textSurface = TTF_RenderText_Solid( font, textureText.c_str(), color );
     if( textSurface == NULL )
     {
         cerr << "Unable to render text surface! SDL_TTF Error: " << TTF_GetError() << endl;
@@ -43,13 +43,21 @@ void Word::loadFromRenderedText(const string& textureText, SDL_Color textColor, 
 void Word::drawWord()
 {
     SDL_Rect temp = {170 - w,y + 5,w,h};
-    pad->draw(NULL,x,y,180,60);
+    if (pad != NULL) pad->draw(NULL,x,y,180,60);
     SDL_RenderCopy(renderer,texture,NULL,&temp);
 }
+
+void Word::drawWord(const int& _x, const int& _y)
+{
+    SDL_Rect temp = {_x,_y,w,h};
+    if (pad != NULL)  pad->draw(NULL,_x,_y,w,h,0);
+    SDL_RenderCopy(renderer,texture,NULL,&temp);
+}
+
 
 void Word::drawWord(const int& _x, const int& _y, const int& _w, const int& _h)
 {
     SDL_Rect temp = {_x,_y,_w,_h};
-    pad->draw(NULL,_x,_y,_w,_h,0);
+    if (pad != NULL) pad->draw(NULL,_x,_y,_w,_h,0);
     SDL_RenderCopy(renderer,texture,NULL,&temp);
 }

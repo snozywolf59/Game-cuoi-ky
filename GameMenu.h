@@ -1,34 +1,15 @@
 #pragma once
 
+#include "Resource.h"
 #include "OverMenu.h"
 #include "OptionMenu.h"
 #include "HighScore.h"
 
-const string file_menu_mouse = "image/GameUI/GameMenu/Mouse.png";
-const string FILE_MENU_IMAGE[] = {"image/GameUI/GameMenu/Play.png",
-                                "image/GameUI/GameMenu/Option.png",
-                                "image/GameUI/GameMenu/Quit.png"};
-
-
-const string file_bg = "image/GameUI/GameMenu/bg.png";
-
 class GameMenu
 {
 public:
-    GameMenu(SDL_Renderer* gRenderer);
+    GameMenu(Resource* _res);
     ~GameMenu();
-
-    //void init(bool fullScreen);
-
-    void initMouse();
-
-    void initButton();
-
-    void initBackGround();
-
-    void initSound();
-
-    void initFontAndPad();
 
     void handleMouse();
 
@@ -51,22 +32,13 @@ public:
     bool out();
 
 private:
-    SDL_Renderer* renderer;
 
-    //pointer to a stage
-    Game* stage;
     SDL_Event e;
 
-
-    //entity on the screen
-    Button* button[TOTAL_BUTTON];
-
-    Entity* bgImage;
-    Entity* moon;
-
-    Mouse* mouse;
+    Resource* res;
 
     //menu item
+    Game* stage;
     OptionMenu* op;
     OverMenu* over;
 
@@ -77,11 +49,6 @@ private:
     //sound
     unsigned int volume;
     unsigned int snd;
-    Mix_Chunk* beChosen;
-    Mix_Music* bgMusic;
-
-    TTF_Font* gFont;
-    Entity* pad;
 
     //quit
     bool quit;

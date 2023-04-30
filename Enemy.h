@@ -1,10 +1,6 @@
 #pragma once
 
 #include "Player.h"
-
-const string file_enemy_melee = "image/Enemy/enemy_melee.png";
-const string file_enemy_ranged = "image/Enemy/enemy_ranged.png";
-
 const int maxFrameEnemyMelee = 6 * DELAY;
 const int maxFrameEnemyRanged = 6 * DELAY;
 const int maxFrameExplosion = 8 * DELAY;

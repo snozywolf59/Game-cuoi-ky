@@ -18,7 +18,7 @@ public:
 
     void read();
     void write();
-
+    int handle();
     void update(const unsigned int& newScore);
     void updateScore(const unsigned int& newScore);
     void render();

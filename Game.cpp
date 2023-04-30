@@ -1,26 +1,18 @@
 #include "Game.h"
 
 
+
 //GAME INIT
 
-Game::Game(SDL_Renderer* gRenderer, TTF_Font* tempFont, Entity* tempPad, Mix_Chunk* beChosen){
-    renderer = gRenderer;
-
-    if (renderer == NULL)
-    {
-        cout << "LOI RENDERER CUA STAGE";
-        exit(1);
-    }
-
-    font = tempFont;
-    pad = tempPad;
-
-    chosen = beChosen;
+Game::Game(Resource* _res){
+    res = _res;
 
     choose = -1;
     old_choose = -1;
 
     initStage();
+    initPlayer();
+    score_word = new Word(0,0,res->renderer,res->font,res->pad);
 }
 
 Game::~Game(){}
@@ -29,105 +21,19 @@ Game::~Game(){}
 void Game::initStage()
 {
     logSuccess("loading stage");
-    initMap(txt_map);
     initPlayer();
-    initEnemy();
-    initMouse();
-    initSoundGame();
-    initFont();
-    initIng();
+    gMap = new Map(res->renderer);
+    gMap->loadMap(txt_map);
     logSuccess("stage");
 }
 
 
 void Game::initPlayer()
 {
-    player = new Player(renderer);
-
-    //load sound
+    player = new Player(res->renderer);
     player->attack = Mix_LoadWAV(snd_player_shoot);
     player->isHitted = Mix_LoadWAV(snd_player_hitted);
-
-    if (player->attack == NULL||player->isHitted == NULL)
-    {
-        cerr << "Failed to load player shoot or player is hitted sound effect! SDL_mixer Error: "
-        << Mix_GetError();
-        exit(1);
-    }
     logSuccess("Player");
-}
-
-void Game::initEnemy()
-{
-    enemy_melee = new Entity(renderer,file_enemy_melee);
-    logSuccess("enemy melee");
-
-    enemy_ranged = new Entity(renderer,file_enemy_ranged);
-    e_bullet = new Entity(renderer,"image/enemy/bullet.png");
-    logSuccess("enemy ranged");
-
-
-    explosion = new Entity(renderer,"image/enemy/explosion.png");
-    logSuccess("explosion");
-}
-
-
-void Game::initMap(const string& path)
-{
-    gMap = new Map(renderer);
-    gMap->loadMap(path);
-    logSuccess("map");
-}
-
-
-
-void Game::initMouse()
-{
-    mouse = new Mouse(renderer,file_ing_mouse);
-    logSuccess("mouse");
-}
-
-/****************************************************/
-
-void Game::initSoundGame()
-{
-    //sound when an enemy dies
-    enemy_die = Mix_LoadWAV(snd_enemy_die);
-    if (enemy_die == NULL)
-    {
-        cerr << "Failed to load enemy die sound effect! SDL_mixer Error: " << Mix_GetError();
-        exit(1);
-    }
-
-    //background music
-    bgMusic =  Mix_LoadMUS(snd_game_bgMusic);
-    if (bgMusic == NULL)
-    {
-        cerr << "Failed to load background music! SDL_mixer Error: " << Mix_GetError();
-        exit(1);
-    }
-    logSuccess("sound");
-}
-
-/****************************************************/
-
-void Game::initFont()
-{
-    score_word = new Word(0,0,renderer,font,pad);
-    logSuccess("font");
-}
-
-/****************************************************/
-
-void Game::initIng()
-{
-    //load button
-
-    for (int i = 0; i < ING_TOTAL; i++)
-    {
-        Ing_Button[i] = new Button(renderer,FILE_ING_BUT[i]);
-    }
-    logSuccess("buttons");
 }
 
 void Game::resetStage()
@@ -181,7 +87,7 @@ int Game::doButton()
     {
         int tw = (i == 0 ? ING_BUT_W:BUTTON_WIDTH);
         int th = (i == 0 ? ING_BUT_H:BUTTON_HEIGHT);
-        if (Ing_Button[i]->beChosen(mouse->x - camera.x,mouse->y - camera.y, tw, th))
+        if (res->But_InG[i]->beChosen(res->InGame_Mouse->x - camera.x,res->InGame_Mouse->y - camera.y, tw, th))
         {
             if (!pause && i == ING_PAUSE)
             {
@@ -214,15 +120,15 @@ int Game::doButton()
 
 void Game::doMouse()
 {
-     SDL_GetMouseState(&mouse->real_mouse_x,&mouse->real_mouse_y);
+     SDL_GetMouseState(&res->InGame_Mouse->real_mouse_x,&res->InGame_Mouse->real_mouse_y);
      if (e.type == SDL_MOUSEBUTTONUP) {
             player->atk = 0;
-            mouse->scale = 1;
+            res->InGame_Mouse->scale = 1;
      }
         if (e.type == SDL_MOUSEBUTTONDOWN)
         {
             player->atk = 1;
-            mouse->scale = 1.2;
+            res->InGame_Mouse->scale = 1.2;
         }
 }
 
@@ -256,7 +162,7 @@ void Game::updateEnemy()
 {
     //spawn
     if (currentTime % enemy_melee_spawntime == 0) {
-            spawnEnemyMelee(enemy_melee_list,player,gMap);
+        spawnEnemyMelee(enemy_melee_list,player,gMap);
     }
 
     if (currentTime % enemy_ranged_spawntime == 0)
@@ -293,33 +199,32 @@ void Game::update()
         updateEnemy();
 
         //UPDATE PLAYER
-        player->update(camera,mouse,gMap);
+        player->update(camera,res->InGame_Mouse,gMap);
 
         if (player->alive == false) gameOver = true;
 
         //update score;s
-        score_word->loadFromRenderedText(convertIntToString(currentTime) ,score_word->color,renderer);
+        score_word->loadFromRenderedText(convertIntToString(currentTime));
     }
 
-    if (old_choose != choose && choose != -1) Mix_PlayChannel(0,chosen,0);
+    if (old_choose != choose && choose != -1) Mix_PlayChannel(0,res->But_beChosen,0);
     gMap->updateMap();
        //MOUSE
-    mouse->updateMouse(camera);
-
+    res->InGame_Mouse->updateMouse(camera);
 }
 
 void Game::drawButtons()
 {
     if (!pause)
     {
-        Ing_Button[ING_PAUSE]->drawButton(SCREEN_WIDTH - ING_BUT_W, 0 ,
+        res->But_InG[ING_PAUSE]->drawButton(SCREEN_WIDTH - ING_BUT_W, 0 ,
                                           ING_BUT_W, ING_BUT_H);
     }
     else{
-        SDL_RenderClear(renderer);
+        SDL_RenderClear(res->renderer);
         for (int i = ING_RESUME; i < ING_TOTAL; i++)
             {
-                Ing_Button[i]->drawButton(SCREEN_WIDTH/2 - BUTTON_WIDTH/2,
+                res->But_InG[i]->drawButton(SCREEN_WIDTH/2 - BUTTON_WIDTH/2,
                                      -120 + BUTTON_HEIGHT * 1.2 * i,
                                      BUTTON_WIDTH, BUTTON_HEIGHT);
             }
@@ -334,11 +239,11 @@ void Game::drawEnemyMelee()
         if (x.health > 0)
         {
             cur = {(x.now /DELAY) * 51, x.st * 51,51,51};
-            enemy_melee->angle = x.angle;
-            enemy_melee->draw(&cur,x.x,x.y,50,50,1,camera);
+            res->enemy_melee->angle = x.angle;
+            res->enemy_melee->draw(&cur,x.x,x.y,50,50,1,camera);
         }else{
             cur = {x.now/DELAY * 48,0,48,48};
-            explosion->draw(&cur,x.x,x.y,60,60,1,camera);
+            res->explosion->draw(&cur,x.x,x.y,60,60,1,camera);
         }
     }
 }
@@ -351,17 +256,17 @@ void Game::drawEnemyRanged()
         if (x.health > 0)
         {
             cur = {(x.now /DELAY) * 51, x.st * 51,51,51};
-            enemy_ranged->angle = x.angle;
-            enemy_ranged->draw(&cur,x.x,x.y,50,50,1,camera);
+            res->enemy_ranged->angle = x.angle;
+            res->enemy_ranged->draw(&cur,x.x,x.y,50,50,1,camera);
             for (FighterProp& bul:x.E_bullets)
             {
                 cur = {(bul.now%4) * 32, 0, 32, 32};
-                e_bullet->angle = bul.angle;
-                e_bullet->draw(&cur, bul.x,bul.y,50,50,1,camera);
+                res->e_bullet->angle = bul.angle;
+                res->e_bullet->draw(&cur, bul.x,bul.y,50,50,1,camera);
             }
         }else{
             cur = {x.now/DELAY * 48,0,48,48};
-            explosion->draw(&cur,x.x,x.y,60,60,1,camera);
+            res->explosion->draw(&cur,x.x,x.y,60,60,1,camera);
         }
     }
 }
@@ -390,13 +295,13 @@ void Game::drawPoint()
 
 void Game::drawMouse()
 {
-    SDL_Rect c = {mouse->now/8 * 30,0,30,30};
-    mouse->draw(&c,camera,1);
+    SDL_Rect c = {res->InGame_Mouse->now/8 * 30,0,30,30};
+    res->InGame_Mouse->draw(&c,camera,1);
 }
 
 void Game::render()
 {
-    SDL_RenderClear(renderer);
+    SDL_RenderClear(res->renderer);
 
     if (!pause){
         drawMap();
@@ -407,7 +312,7 @@ void Game::render()
     drawButtons();
     drawMouse();
 
-    SDL_RenderPresent(renderer);
+    SDL_RenderPresent(res->renderer);
 }
 
 /*******************************************************/
@@ -421,7 +326,7 @@ int Game::GameLoop()
 
         if (Mix_PlayingMusic() == 0)
         {
-            Mix_PlayMusic(bgMusic,0);
+            Mix_PlayMusic(res->InG_Music,0);
         }
 
         int a = handleEvent();

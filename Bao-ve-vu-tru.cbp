@@ -55,6 +55,8 @@
 		<Unit filename="OverMenu.h" />
 		<Unit filename="Player.cpp" />
 		<Unit filename="Player.h" />
+		<Unit filename="Resource.cpp" />
+		<Unit filename="Resource.h" />
 		<Unit filename="Vec2f.cpp" />
 		<Unit filename="Vec2f.h" />
 		<Unit filename="Word.cpp" />

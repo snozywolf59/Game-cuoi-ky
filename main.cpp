@@ -4,7 +4,7 @@
 
 SDL_Window* gWindow;
 SDL_Renderer* gRenderer;
-GameMenu* menu;
+Resource* res;
 
 void init(bool fullScreen);
 
@@ -15,7 +15,9 @@ int main(int argc, char* argv[])
 
     init(0);
 
-    menu =  new GameMenu(gRenderer);
+    res = new Resource(gRenderer);
+
+    GameMenu* menu =  new GameMenu(res);
 
     while (!menu->out())
     {
@@ -27,6 +29,7 @@ int main(int argc, char* argv[])
     }
 
     menu->clearMenu();
+
     return 0;
 }
 
