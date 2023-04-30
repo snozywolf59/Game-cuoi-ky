@@ -1,10 +1,10 @@
 #include "GameMenu.h"
 
-GameMenu* menu;
+
 
 SDL_Window* gWindow;
 SDL_Renderer* gRenderer;
-
+GameMenu* menu;
 
 void init(bool fullScreen);
 

@@ -7,6 +7,7 @@
 #include<iostream>
 #include<cmath>
 #include<sstream>
+#include<algorithm>
 
 #include<SDL.h>
 #include<SDL_image.h>

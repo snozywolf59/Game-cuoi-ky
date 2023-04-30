@@ -31,6 +31,8 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
+		<Unit filename="Button.cpp" />
+		<Unit filename="Button.h" />
 		<Unit filename="Enemy.cpp" />
 		<Unit filename="Enemy.h" />
 		<Unit filename="Entity.cpp" />
@@ -45,6 +47,8 @@
 		<Unit filename="HighScore.h" />
 		<Unit filename="Map.cpp" />
 		<Unit filename="Map.h" />
+		<Unit filename="Mouse.cpp" />
+		<Unit filename="Mouse.h" />
 		<Unit filename="OptionMenu.cpp" />
 		<Unit filename="OptionMenu.h" />
 		<Unit filename="OverMenu.cpp" />
@@ -53,6 +57,8 @@
 		<Unit filename="Player.h" />
 		<Unit filename="Vec2f.cpp" />
 		<Unit filename="Vec2f.h" />
+		<Unit filename="Word.cpp" />
+		<Unit filename="Word.h" />
 		<Unit filename="common.cpp" />
 		<Unit filename="common.h" />
 		<Unit filename="icon.rc">

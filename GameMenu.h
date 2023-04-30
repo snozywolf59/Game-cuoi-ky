@@ -2,6 +2,7 @@
 
 #include "OverMenu.h"
 #include "OptionMenu.h"
+#include "HighScore.h"
 
 const string file_menu_mouse = "image/GameUI/GameMenu/Mouse.png";
 const string FILE_MENU_IMAGE[] = {"image/GameUI/GameMenu/Play.png",

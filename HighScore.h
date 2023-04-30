@@ -12,6 +12,7 @@ const string file_score = "text/HighScore.txt";
 class HighScoreMenu
 {
 public:
+    HighScoreMenu(SDL_Renderer* _renderer);
     HighScoreMenu(SDL_Renderer* _renderer, TTF_Font* _font, Button* _backButton);
     ~HighScoreMenu();
 
