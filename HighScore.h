@@ -25,9 +25,13 @@ public:
     void read();
     void write();
     int handle();
+
+    bool check(const unsigned int& newS);
+
     void update(const Name& newScore);
-    void createTexture();
     void updateScore(const Name& newScore);
+    void createTexture();
+
     void render();
 
 private:

@@ -47,4 +47,10 @@ Resource::Resource(SDL_Renderer* _renderer)
 
     //font
     font = TTF_OpenFont(gameFont.c_str(),font_size);
+
+    //word
+    congratulate = new Word(0,0,renderer,font,NULL);
+    congratulate->loadFromRenderedText("You achieved a new high score");
+    enter_name = new Word(0,0,renderer,font,NULL);
+    enter_name->loadFromRenderedText("Enter your name");
 }

@@ -108,8 +108,13 @@ struct Resource
     Entity* e_bullet;
     Entity* explosion;
 
+
     //font
     TTF_Font* font;
+
+    //WORD
+    Word* congratulate;
+    Word* enter_name;
 
     //music
     Mix_Music* Menu_bgMusic;

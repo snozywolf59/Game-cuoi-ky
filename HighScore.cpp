@@ -71,13 +71,15 @@ void HighScoreMenu::write()
 
 int HighScoreMenu::handle()
 {
-    SDL_Event event;
     Uint32 start = SDL_GetTicks();
+    SDL_Event event;
+    int x,y;
+    SDL_GetMouseState(&x,&y);
+    res->Menu_Mouse->x = x, res->Menu_Mouse->y = y;
+
     while (SDL_PollEvent(&event)){
         if (event.type == SDL_QUIT) return QUIT;
-        int x,y;
-        SDL_GetMouseState(&x,&y);
-        res->Menu_Mouse->x = x, res->Menu_Mouse->y = y;
+
 
         if (res->But_Back->beChosen(x,y,ING_BUT_W,ING_BUT_H))
             if (event.type == SDL_MOUSEBUTTONDOWN) return DEFAULT;
@@ -94,6 +96,11 @@ int HighScoreMenu::handle()
     return NORMAL;
 }
 
+bool HighScoreMenu::check(const unsigned int& newS)
+{
+    if (newS > top[TOP_SCORE - 1].point) return true;
+    return false;
+}
 
 
 void HighScoreMenu::update(const Name& newScore)

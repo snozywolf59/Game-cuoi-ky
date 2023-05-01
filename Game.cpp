@@ -126,12 +126,12 @@ void Game::doMouse()
 {
      SDL_GetMouseState(&res->InGame_Mouse->real_mouse_x,&res->InGame_Mouse->real_mouse_y);
      if (e.type == SDL_MOUSEBUTTONUP) {
-            player->atk = 0;
+            if (e.button.button ==  SDL_BUTTON_LEFT) player->atk = 0;
             res->InGame_Mouse->scale = 1;
      }
         if (e.type == SDL_MOUSEBUTTONDOWN)
         {
-            player->atk = 1;
+            if (e.button.button ==  SDL_BUTTON_LEFT) player->atk = 1;
             res->InGame_Mouse->scale = 1.2;
         }
 }
