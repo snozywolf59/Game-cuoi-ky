@@ -17,6 +17,8 @@ public:
 
     void resetStage();
 
+    unsigned int getScore();
+
     int handleEvent();
 
     int doButton();
@@ -71,6 +73,7 @@ private:
     int old_choose,choose;
 
     //score
+    unsigned int sub_score;
     unsigned int score;
 
     Word* score_word;

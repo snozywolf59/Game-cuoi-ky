@@ -1,84 +1,143 @@
 #include "HighScore.h"
 
-HighScoreMenu::HighScoreMenu(SDL_Renderer* _renderer)
+Name::Name(const string& _name, const int& _point)
 {
-    renderer = _renderer;
+    name = _name;
+    point = _point;
 }
 
 
-HighScoreMenu::HighScoreMenu(SDL_Renderer* _renderer, TTF_Font* _font, Button* _backButton)
+HighScoreMenu::HighScoreMenu()
+{}
+
+
+HighScoreMenu::HighScoreMenu(Resource* _res)
 {
-    renderer = _renderer;
-    font = _font;
-    backButton = _backButton;
+    res = _res;
 
     for (int i = 0; i < TOP_SCORE; i++)
-        topScore[i] = new Word(0,0,renderer,font,NULL);
+    {
+        topScore[i] = new Word(0,0,res->renderer,res->font,res->pad);
+    }
 
-    backButton = _backButton;
 }
 
 HighScoreMenu::~HighScoreMenu()
-{}
+{
+    for (int i = 0; i < TOP_SCORE; i++)
+    {
+        top[i].name = "";
+        top[i].point = 0;
+        if (topScore[i]->texture != NULL)
+        {
+            SDL_DestroyTexture(topScore[i]->texture);
+            delete topScore[i];
+            topScore[i] = NULL;
+        }
+    }
+}
 
 void HighScoreMenu::read()
 {
-    cout << 1;
     ifstream readfile(file_score);
-    unsigned int n;
+    string line;
+
     int cnt = 0;
     while (!readfile.eof())
     {
-        readfile >> n;
+        getline(readfile,top[cnt].name);
 
-        top[cnt++] = n;
+        getline(readfile,line);
 
-        if (cnt >= 5) break;
+        stringstream s(line);
+
+        s >> top[cnt].point;
+
+        cnt++;
+
+        if (cnt >= TOP_SCORE) break;
     }
 
     readfile.close();
-
-    sort(top,top + TOP_SCORE,greater <unsigned int>());
-    cout << 1;
 }
 
 void HighScoreMenu::write()
 {
     ofstream writefile(file_score);
-    sort(top,top + TOP_SCORE,greater <unsigned int>());
     for (int i = 0; i < TOP_SCORE; i++)
-        writefile << top[i] << '\n';
+        writefile << top[i].name << '\n' << top[i].point << '\n';
     writefile.close();
 }
 
+int HighScoreMenu::handle()
+{
+    SDL_Event event;
+    Uint32 start = SDL_GetTicks();
+    while (SDL_PollEvent(&event)){
+        if (event.type == SDL_QUIT) return QUIT;
+        int x,y;
+        SDL_GetMouseState(&x,&y);
+        res->Menu_Mouse->x = x, res->Menu_Mouse->y = y;
 
-void HighScoreMenu::update(const unsigned int& newScore)
+        if (res->But_Back->beChosen(x,y,ING_BUT_W,ING_BUT_H))
+            if (event.type == SDL_MOUSEBUTTONDOWN) return DEFAULT;
+
+        if (event.type == SDL_MOUSEBUTTONDOWN) res->Menu_Mouse->scale = 1.1;
+        if (event.type == SDL_MOUSEBUTTONUP) res->Menu_Mouse->scale = 1;
+    }
+
+    Uint32 real_delay = SDL_GetTicks() - start;
+    if (real_delay < frameDelay)
+    {
+        SDL_Delay(frameDelay - real_delay);
+    }
+    return NORMAL;
+}
+
+
+
+void HighScoreMenu::update(const Name& newScore)
 {
     updateScore(newScore);
 }
 
-void HighScoreMenu::updateScore(const unsigned int& newScore)
+void HighScoreMenu::createTexture()
+{
+    for (int i = 0; i < TOP_SCORE; i++)
+    {
+        if (topScore[i]->texture != NULL) SDL_DestroyTexture(topScore[i]->texture);
+        stringstream point;
+        point << '#' << i+1 << ' ' << top[i].name << ' ' << top[i].point << '\n';
+        topScore[i]->loadFromRenderedText(point.str());
+    }
+}
+
+
+void HighScoreMenu::updateScore(const Name& newScore)
 {
     unsigned int now = TOP_SCORE;
-    if (top[--now] < newScore) top[now] = newScore;
+    if (top[--now] .point< newScore.point) {
+            top[now].point = newScore.point;
+            top[now].name = newScore.name;
+    }
     else return;
-    while (top[now] > top[now - 1] && now > 0)
+    while (top[now].point > top[now - 1].point && now > 0)
     {
-        swap(top[now],top[--now]);
+        swap(top[now].name, top[now - 1].name);
+        swap(top[now].point, top[--now].point);
     }
 }
 
 void HighScoreMenu::render()
 {
-    SDL_RenderClear(renderer);
+    SDL_RenderClear(res->renderer);
+    res->board->draw(NULL,0,0,SCREEN_WIDTH,SCREEN_HEIGHT);
+    res->score->draw(NULL,SCREEN_WIDTH/2,51,361,101,1);
     for (int i = 0; i < TOP_SCORE; i++)
     {
-        if (topScore[i]->texture != NULL) SDL_DestroyTexture(topScore[i]->texture);
-        stringstream point;
-        point << '#' << i+1 << ' ' << top[i];
-        topScore[i]->loadFromRenderedText(point.str());
-        topScore[i]->drawWord(100,80 * i);
+        topScore[i]->drawWord(300,100 * i + 120);
     }
-
-    SDL_RenderPresent(renderer);
+    res->But_Back->drawButton(0,SCREEN_HEIGHT - ING_BUT_H,ING_BUT_W,ING_BUT_H);
+    res->Menu_Mouse->draw(NULL);
+    SDL_RenderPresent(res->renderer);
 }

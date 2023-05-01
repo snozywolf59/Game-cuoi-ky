@@ -3,14 +3,6 @@
 #include "common.h"
 #include "Vec2f.h"
 
-//button
-#define BUTTON_HEIGHT 120
-#define BUTTON_WIDTH 360
-#define ING_BUT_W 80
-#define ING_BUT_H 80
-
-const string file_pad = "image/GameUI/InGame/Pad.png";
-
 const Vec2f p = {0,0};
 
 SDL_Texture* loadTexture(const string& path, SDL_Renderer* renderer );

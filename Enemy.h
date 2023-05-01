@@ -19,7 +19,7 @@ const int enemy_melee_spawntime = FPS;
 const int enemy_ranged_spawntime = 2 * FPS;
 
 const int enemy_melee_range = 10;
-const int enemy_ranged_range = 400;
+const int enemy_ranged_range = 800;
 
 const int ENEMY_HEALH[TOTAL_TYPE_ENEMY] = {6,3};
 const int ENEMY_DMG[TOTAL_TYPE_ENEMY] = {3,2};

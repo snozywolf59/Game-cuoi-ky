@@ -30,6 +30,14 @@ int main(int argc, char* argv[])
 
     menu->clearMenu();
 
+//    HighScoreMenu temp(res);
+//    temp.read();
+//    temp.createTexture();
+//    temp.render();
+
+    char a;
+    cin >> a;
+
     return 0;
 }
 

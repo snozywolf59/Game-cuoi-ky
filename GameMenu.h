@@ -17,6 +17,8 @@ public:
 
     void menuDefault();
 
+    void menuScores();
+
     void menuStart();
 
     void menuOpTion();
@@ -41,6 +43,7 @@ private:
     Game* stage;
     OptionMenu* op;
     OverMenu* over;
+    HighScoreMenu* scores;
 
     //flag for the mouse
     int choose = -1;

@@ -2,6 +2,12 @@
 
 #include "Entity.h"
 
+
+#define BUTTON_HEIGHT 90
+#define BUTTON_WIDTH 270
+#define ING_BUT_W 80
+#define ING_BUT_H 80
+
 struct Button:Entity
 {
     const float default_scale = 1;

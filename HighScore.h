@@ -1,32 +1,37 @@
 #pragma once
 
 #include "Entity.h"
-#include "Button.h"
-#include "Word.h"
-#include "Mouse.h"
+#include "Resource.h"
+#include "Game.h"
 
 const int TOP_SCORE = 5;
 
 const string file_score = "text/HighScore.txt";
 
+struct Name{
+    string name;
+    unsigned int point;
+
+    Name(const string& _name = "NoName", const int& _point = 0);
+};
+
 class HighScoreMenu
 {
 public:
-    HighScoreMenu(SDL_Renderer* _renderer);
-    HighScoreMenu(SDL_Renderer* _renderer, TTF_Font* _font, Button* _backButton);
+    HighScoreMenu();
+    HighScoreMenu(Resource* _res);
     ~HighScoreMenu();
 
     void read();
     void write();
     int handle();
-    void update(const unsigned int& newScore);
-    void updateScore(const unsigned int& newScore);
+    void update(const Name& newScore);
+    void createTexture();
+    void updateScore(const Name& newScore);
     void render();
 
 private:
-    SDL_Renderer* renderer;
-    unsigned int top[TOP_SCORE];
+    Name top[TOP_SCORE];
     Word* topScore[TOP_SCORE];
-    Button* backButton;
-    TTF_Font* font;
+    Resource* res;
 };

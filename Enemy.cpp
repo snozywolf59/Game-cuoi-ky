@@ -109,8 +109,8 @@ void EnemyMeleeProp::update(vector <EnemyMeleeProp>& enemies,Player* player)
             //spawn Enemy
 void spawnEnemyMelee(vector <EnemyMeleeProp>& enemy, Player* player,Map* gMap)
 {
-    int spawnX = 0;
-    int spawnY = 0;
+    int spawnX = player->x - 1000 + rand() % 2000;
+    int spawnY = (2 * (rand()%2) - 1) * (sqrtf(pow(rand()%200 + 800,2) - pow(spawnX - player->x,2))) + player->y;
     EnemyMeleeProp x(spawnX,spawnY,getAngleGlobal(spawnX,spawnY,player->x,player->y));
     enemy.push_back(x);
 }
@@ -150,7 +150,6 @@ void EnemyRangedProp::updateBullet(Player* player){
     for (auto prop = E_bullets.begin(); prop != E_bullets.end();)
     {
         prop->updatePos();
-        cout << prop->x << ' ' << prop-> y << ' ' << player->x <<' ' << player->y << endl;
         prop->now = (prop->now + 1)%prop->maxFrame;
         if (prop->s > range)
         {
@@ -198,8 +197,8 @@ void EnemyRangedProp::update(vector<EnemyRangedProp>& enemies, Player* player)
 
 void spawnEnemyRanged(vector<EnemyRangedProp>& enemies, Player* player, Map* gMap)
 {
-    int spawnX = 0;
-    int spawnY = 0;
+    int spawnX = player->x - 1000 + rand() % 2000;;
+    int spawnY = (2 * (rand()%2) - 1) * (sqrtf(pow(rand()%200 + 800,2) - pow(spawnX - player->x,2))) + player->y;;
     EnemyRangedProp x(spawnX,spawnY,getAngleGlobal(spawnX,spawnY,player->x,player->y));
     enemies.push_back(x);
 }

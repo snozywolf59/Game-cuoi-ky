@@ -8,10 +8,14 @@ GameMenu::GameMenu(Resource* _res)
     stage = new Game(res);
 
         //option
-    op = new OptionMenu(res->font,res->Menu_Mouse,res->renderer);
-    over = new OverMenu(res->Menu_Mouse,res->renderer);
+    op = new OptionMenu(res);
+    volume = MIX_MAX_VOLUME;
+    snd = MIX_MAX_VOLUME;
+    over = new OverMenu(res);
+    scores = new HighScoreMenu(res);
 
     quit = false;
+
 }
 
 GameMenu::~GameMenu()
@@ -104,6 +108,10 @@ void GameMenu::menuOpTion()
     //this func will display highscore and button to turn off music
     while(1)
     {
+        if (Mix_PlayingMusic() == 0)
+        {
+        Mix_PlayMusic(res->Menu_bgMusic,0);
+        }
         current = op->handleAndUpdate(volume,snd);
         op->render(volume,snd);
         if (current != NORMAL) break;
@@ -119,12 +127,33 @@ void GameMenu::menuQuit()
 //in game button
 void GameMenu::menuOver()
 {
+    cout << stage->getScore();
     while(1){
+            if (Mix_PlayingMusic() == 0)
+            {
+            Mix_PlayMusic(res->Menu_bgMusic,0);
+            }
             current = over->handle();
             over->render();
             if (current != NORMAL) break;
     }
 }
+
+void GameMenu::menuScores()
+{
+    scores->read();
+    scores->createTexture();
+    while(1){
+            if (Mix_PlayingMusic() == 0)
+            {
+                Mix_PlayMusic(res->Menu_bgMusic,0);
+            }
+            current = scores->handle();
+            scores->render();
+            if (current != NORMAL) break;
+    }
+}
+
 
 void GameMenu::render()
 {
@@ -138,6 +167,9 @@ void GameMenu::render()
         break;
     case OPTION:
         menuOpTion();
+        break;
+    case HIGHSCORE:
+        menuScores();
         break;
     case QUIT:
         menuQuit();

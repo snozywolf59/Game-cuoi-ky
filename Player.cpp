@@ -23,6 +23,8 @@ void Player::initEngine()
     pulse = new Entity(renderer,file_player_pulse);
     pulse->w = 28;
     pulse->h = 14;
+    attack = Mix_LoadWAV(snd_player_shoot);
+    isHitted = Mix_LoadWAV(snd_player_hitted);
 }
 
 

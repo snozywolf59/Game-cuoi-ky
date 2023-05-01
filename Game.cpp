@@ -31,10 +31,14 @@ void Game::initStage()
 void Game::initPlayer()
 {
     player = new Player(res->renderer);
-    player->attack = Mix_LoadWAV(snd_player_shoot);
-    player->isHitted = Mix_LoadWAV(snd_player_hitted);
     logSuccess("Player");
 }
+
+unsigned int Game::getScore()
+{
+    return score;
+}
+
 
 void Game::resetStage()
 {
@@ -176,6 +180,7 @@ void Game::updateEnemy()
        if (prop->alive ==  false)
        {
            prop = enemy_melee_list.erase(prop);
+           sub_score += 3;
        }else{
             ++prop;
        }
@@ -186,6 +191,7 @@ void Game::updateEnemy()
        if (prop->alive ==  false)
        {
            prop = enemy_ranged_list.erase(prop);
+           sub_score += 3;
        }else{
             ++prop;
        }
@@ -203,13 +209,14 @@ void Game::update()
 
         if (player->alive == false) gameOver = true;
 
-        //update score;s
-        score_word->loadFromRenderedText(convertIntToString(currentTime));
+        //update score;
+        score = sub_score + currentTime/500;
+        score_word->loadFromRenderedText(convertIntToString(score));
     }
 
     if (old_choose != choose && choose != -1) Mix_PlayChannel(0,res->But_beChosen,0);
     gMap->updateMap();
-       //MOUSE
+
     res->InGame_Mouse->updateMouse(camera);
 }
 
@@ -225,7 +232,7 @@ void Game::drawButtons()
         for (int i = ING_RESUME; i < ING_TOTAL; i++)
             {
                 res->But_InG[i]->drawButton(SCREEN_WIDTH/2 - BUTTON_WIDTH/2,
-                                     -120 + BUTTON_HEIGHT * 1.2 * i,
+                                     20 + BUTTON_HEIGHT * 1.2 * i,
                                      BUTTON_WIDTH, BUTTON_HEIGHT);
             }
     }
@@ -260,7 +267,7 @@ void Game::drawEnemyRanged()
             res->enemy_ranged->draw(&cur,x.x,x.y,50,50,1,camera);
             for (FighterProp& bul:x.E_bullets)
             {
-                cur = {(bul.now%4) * 32, 0, 32, 32};
+                cur = {((bul.now/8)%4) * 32, 0, 32, 32};
                 res->e_bullet->angle = bul.angle;
                 res->e_bullet->draw(&cur, bul.x,bul.y,50,50,1,camera);
             }
