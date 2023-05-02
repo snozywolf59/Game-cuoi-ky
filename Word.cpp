@@ -61,3 +61,10 @@ void Word::drawWord(const int& _x, const int& _y, const int& _w, const int& _h)
     if (pad != NULL) pad->draw(NULL,_x,_y,_w,_h,0);
     SDL_RenderCopy(renderer,texture,NULL,&temp);
 }
+
+
+Name::Name(const string& _name, const unsigned int& _point)
+{
+    name = _name;
+    point = _point;
+}

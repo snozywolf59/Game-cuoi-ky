@@ -2,6 +2,8 @@
 
 #include "Entity.h"
 
+const int NameMaxLength = 20;
+
 struct Word:Entity
 {
     TTF_Font* font;
@@ -21,5 +23,12 @@ struct Word:Entity
     void drawWord(const int& _x,const int& _y, const int& _w, const int& _h);
 };
 
+
+struct Name{
+    string name;
+    unsigned int point;
+
+    Name(const string& _name = "NoName", const unsigned int& _point = 0);
+};
 
 

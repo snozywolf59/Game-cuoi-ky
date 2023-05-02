@@ -11,12 +11,9 @@ public:
 
     int handle();
 
-    string enter_name();
-
-    void render_enter_name(const string& temp);
-
     void render();
 private:
     unsigned int cnt;
+    bool maxL;
     Resource* res;
 };

@@ -53,4 +53,6 @@ Resource::Resource(SDL_Renderer* _renderer)
     congratulate->loadFromRenderedText("You achieved a new high score");
     enter_name = new Word(0,0,renderer,font,NULL);
     enter_name->loadFromRenderedText("Enter your name");
+    too_long = new Word(0,0,renderer,font,NULL);
+    too_long->loadFromRenderedText("Your name is too long");
 }

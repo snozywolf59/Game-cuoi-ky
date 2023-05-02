@@ -16,22 +16,19 @@ int main(int argc, char* argv[])
     init(0);
 
     res = new Resource(gRenderer);
-//
-//    GameMenu* menu =  new GameMenu(res);
-//
-//    while (!menu->out())
-//    {
-//        menu->handleMouse();
-//
-//        menu->update();
-//
-//        menu->render();
-//    }
-//
-//    menu->clearMenu();
 
-    OverMenu test(res);
-    cout << test.enter_name();
+    GameMenu* menu =  new GameMenu(res);
+
+    while (!menu->out())
+    {
+        menu->handleMouse();
+
+        menu->update();
+
+        menu->render();
+    }
+
+    menu->clearMenu();
 
     return 0;
 }

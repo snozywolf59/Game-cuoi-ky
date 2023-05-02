@@ -127,7 +127,12 @@ void GameMenu::menuQuit()
 //in game button
 void GameMenu::menuOver()
 {
-    cout << stage->getScore();
+    unsigned int newScore = stage->getScore();
+    if (scores->check(newScore))
+    {
+        string newName = scores->enter_name();
+        scores->update(Name(newName,newScore));
+    }
     while(1){
             if (Mix_PlayingMusic() == 0)
             {

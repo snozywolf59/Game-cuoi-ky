@@ -115,6 +115,7 @@ struct Resource
     //WORD
     Word* congratulate;
     Word* enter_name;
+    Word* too_long;
 
     //music
     Mix_Music* Menu_bgMusic;

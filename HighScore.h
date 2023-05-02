@@ -8,13 +8,6 @@ const int TOP_SCORE = 5;
 
 const string file_score = "text/HighScore.txt";
 
-struct Name{
-    string name;
-    unsigned int point;
-
-    Name(const string& _name = "NoName", const int& _point = 0);
-};
-
 class HighScoreMenu
 {
 public:
@@ -32,10 +25,15 @@ public:
     void updateScore(const Name& newScore);
     void createTexture();
 
+    string enter_name();
+
+    void render_enter_name(const string& temp);
+
     void render();
 
 private:
     Name top[TOP_SCORE];
     Word* topScore[TOP_SCORE];
     Resource* res;
+    bool maxL;
 };
