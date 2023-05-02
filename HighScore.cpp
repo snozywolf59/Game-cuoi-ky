@@ -205,7 +205,7 @@ void HighScoreMenu::render()
 {
     SDL_RenderClear(res->renderer);
     res->board->draw(NULL,0,0,SCREEN_WIDTH,SCREEN_HEIGHT);
-    res->score->draw(NULL,SCREEN_WIDTH/2,51,361,101,1);
+    res->score->draw(NULL,SCREEN_WIDTH/2,53,234,45,1);
     for (int i = 0; i < TOP_SCORE; i++)
     {
         topScore[i]->drawWord(300,100 * i + 120);

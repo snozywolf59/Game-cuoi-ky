@@ -53,6 +53,7 @@ void Game::resetStage()
 
     //score
     score = 0;
+    sub_score = 0;
 
     //player
     player->initStat();

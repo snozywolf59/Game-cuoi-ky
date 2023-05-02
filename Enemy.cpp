@@ -109,9 +109,9 @@ void EnemyMeleeProp::update(vector <EnemyMeleeProp>& enemies,Player* player)
             //spawn Enemy
 void spawnEnemyMelee(vector <EnemyMeleeProp>& enemy, Player* player,Map* gMap)
 {
-    int spawnX = player->x - 1000 + rand() % 2000;
-    int spawnY = (2 * (rand()%2) - 1) * (sqrtf(pow(rand()%200 + 800,2) - pow(spawnX - player->x,2))) + player->y;
-    EnemyMeleeProp x(spawnX,spawnY,getAngleGlobal(spawnX,spawnY,player->x,player->y));
+    int distance = 800 + (rand() % 201);
+    float angle = (rand()%360 - 180) * M_PI/180 ;
+    EnemyMeleeProp x(player->x + distance * cos(angle),player->y + distance * sin(angle),angle);
     enemy.push_back(x);
 }
 
