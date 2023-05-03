@@ -79,7 +79,7 @@ struct EnemyRangedProp:EnemyProp
 
 
         /////////////SPAWN enemy
-void spawnEnemyMelee(vector <EnemyMeleeProp>& enemies, Player* player,Map* gMap);
-void spawnEnemyRanged(vector <EnemyRangedProp>& enemies, Player* player,Map* gMap);
+void spawnEnemyMelee(const Uint64& time, vector <EnemyMeleeProp>& enemies, Player* player,Map* gMap);
+void spawnEnemyRanged(const Uint64& time, vector <EnemyRangedProp>& enemies, Player* player,Map* gMap);
 
 

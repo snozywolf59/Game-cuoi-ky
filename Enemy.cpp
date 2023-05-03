@@ -106,16 +106,6 @@ void EnemyMeleeProp::update(vector <EnemyMeleeProp>& enemies,Player* player)
     else now++;
 }
 
-            //spawn Enemy
-void spawnEnemyMelee(vector <EnemyMeleeProp>& enemy, Player* player,Map* gMap)
-{
-    int distance = 800 + (rand() % 201);
-    float angle = (rand()%360 - 180) * M_PI/180 ;
-    EnemyMeleeProp x(player->x + distance * cos(angle),player->y + distance * sin(angle),angle);
-    enemy.push_back(x);
-}
-
-
 EnemyRangedProp::EnemyRangedProp(const float& x_, const float& y_, const float& angle_, const float& _speed, const int& _maxReload, const int& _maxFrame)
 {
     x = x_, y = y_, angle = angle_, speed = _speed * frameDelay, maxReload = _maxReload;
@@ -195,10 +185,26 @@ void EnemyRangedProp::update(vector<EnemyRangedProp>& enemies, Player* player)
     updateBullet(player);
 }
 
-void spawnEnemyRanged(vector<EnemyRangedProp>& enemies, Player* player, Map* gMap)
+            //spawn Enemy
+void spawnEnemyMelee(const Uint64& time, vector <EnemyMeleeProp>& enemy, Player* player,Map* gMap)
 {
-    int spawnX = player->x - 1000 + rand() % 2000;;
-    int spawnY = (2 * (rand()%2) - 1) * (sqrtf(pow(rand()%200 + 800,2) - pow(spawnX - player->x,2))) + player->y;;
-    EnemyRangedProp x(spawnX,spawnY,getAngleGlobal(spawnX,spawnY,player->x,player->y));
+    int distance = 800 + (rand() % 201);
+    float angle = (rand()%360 - 180) * M_PI/180 ;
+    float difficulty = 1.5 * time;
+    difficulty /= (time + 50000);
+    EnemyMeleeProp x(player->x + distance * cos(angle),player->y + distance * sin(angle),
+                     angle,ENEMY_SPEED * (1 + difficulty));
+    enemy.push_back(x);
+}
+
+
+void spawnEnemyRanged(const Uint64& time, vector<EnemyRangedProp>& enemies, Player* player, Map* gMap)
+{
+    int distance = 800 + (rand() % 201);
+    float angle = (rand()%360 - 180) * M_PI/180 ;
+    float difficulty = 1.5 * time;
+    difficulty /= (time + 40000);
+    EnemyRangedProp x(player->x + distance * cos(angle),player->y + distance * sin(angle),
+                     angle,ENEMY_SPEED, ENEMY_RELOAD * (1 + difficulty));
     enemies.push_back(x);
 }

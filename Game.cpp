@@ -167,12 +167,11 @@ void Game::updateEnemy()
 {
     //spawn
     if (currentTime % enemy_melee_spawntime == 0) {
-        spawnEnemyMelee(enemy_melee_list,player,gMap);
+        spawnEnemyMelee(currentTime, enemy_melee_list,player,gMap);
     }
 
-    if (currentTime % enemy_ranged_spawntime == 0)
-    {
-        spawnEnemyRanged(enemy_ranged_list,player,gMap);
+    if (currentTime % enemy_ranged_spawntime == 0){
+        spawnEnemyRanged(currentTime, enemy_ranged_list,player,gMap);
     }
     //check all enemies
     for (auto prop = enemy_melee_list.begin(); prop != enemy_melee_list.end();)
@@ -181,7 +180,7 @@ void Game::updateEnemy()
        if (prop->alive ==  false)
        {
            prop = enemy_melee_list.erase(prop);
-           sub_score += 3;
+           sub_score += 4;
        }else{
             ++prop;
        }
