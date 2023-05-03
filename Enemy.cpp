@@ -7,7 +7,7 @@ void EnemyProp::resetMov(const bool& t)
     else st = ATTACK;
 }
 
-Vec2f EnemyProp::separate(vector<EnemyProp>& enemies)
+Vec2f EnemyMeleeProp::separate(vector<EnemyMeleeProp>& enemies)
 {
     Vec2f sum(0.0f, 0.0f);
     int cnt = 0;
@@ -19,13 +19,13 @@ Vec2f EnemyProp::separate(vector<EnemyProp>& enemies)
         if (&t != this && distance(pos, other) < maxR)
         {
             Vec2f diff = pos - other;
-            sum += diff;
+            sum += normalize(diff);
             cnt++;
         }
     }
     if (cnt > 0)
     {
-        sum /= (float)cnt;
+        sum /= cnt;
     }
     return normalize(sum);
 }
@@ -59,10 +59,10 @@ void EnemyMeleeProp::updateStat(Player* player)
 
 void EnemyMeleeProp::updateEnemyPos(vector <EnemyMeleeProp>& enemies)
 {
-    float dx = cosf(angle);
-    float dy = sinf(angle);
-    if ((left && dx < 0) || (right && dx > 0)) x += speed * dx;
-    if ((up && dy < 0) || (down && dy > 0)) y += speed * dy;
+    Vec2f sep = separate(enemies);
+    Vec2f d = normalize(Vec2f(cosf(angle) + sep.x, sinf(angle) + sep.y));
+    if ((left && d.x < 0) || (right && d.x > 0)) x += speed * d.x;
+    if ((up && d.y < 0) || (down && d.y > 0)) y += speed * d.y;
 }
 
 void EnemyProp::collisionBullet(Player* player)

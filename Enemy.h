@@ -39,8 +39,6 @@ struct EnemyProp:FighterProp
     void resetMov(const bool& t);
 
     void collisionBullet(Player* player);
-
-    Vec2f separate(vector <EnemyProp>& enemies);
 };
 
 struct EnemyMeleeProp:EnemyProp
@@ -52,6 +50,8 @@ struct EnemyMeleeProp:EnemyProp
     void updateStat(Player* player);
 
     void collisionPlayer(Player* player);
+
+    Vec2f separate(vector <EnemyMeleeProp>& enemies);
 
     void updateEnemyPos(vector <EnemyMeleeProp>& enemies);
 
