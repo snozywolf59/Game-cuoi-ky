@@ -26,7 +26,6 @@
 
 ### Một số tùy chỉnh:
 - Bạn có thể điều chỉnh âm lượng nhạc và sfx trong phần option ở main menu.
-- Bạn có thể xem điểm cao ở option.
 
 ### Một số hình ảnh:
 - link
