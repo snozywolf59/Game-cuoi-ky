@@ -178,7 +178,9 @@ void HighScoreMenu::createTexture()
     {
         if (topScore[i]->texture != NULL) SDL_DestroyTexture(topScore[i]->texture);
         stringstream point;
-        point << '#' << i+1 << ' ' << top[i].name << ' ' << top[i].point << '\n';
+        point << '#' << i+1 << "      " << top[i].name;
+        for (int j = 15 - top[i].name.size(); j > 0; j--) point << ' ';
+        point << top[i].point ;
         topScore[i]->loadFromRenderedText(point.str());
     }
 }

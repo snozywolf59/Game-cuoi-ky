@@ -1,7 +1,7 @@
 # BẢO VỆ VŨ TRỤ
- - project: Game Ban Quai
- - Họ tên: Tô Hữu Bằng
- - MSV: 22021172
+- project: Game Ban Quai
+- Họ tên: Tô Hữu Bằng
+- MSV: 22021172
 
 ## Nội dung game
 - Bạn điều khiển máy bay tấn công các quái vật xuất hiện trên màn hình.
@@ -23,6 +23,7 @@
 - D: di chuyển sang phải
 - S: di chuyển xuống
 - F hoặc click: Bắn đạn
+- Theo thời gian, quái đánh gần sẽ chạy nhanh hơn, quái đánh xa bắn nhanh hơn.
 
 ### Một số tùy chỉnh:
 - Bạn có thể điều chỉnh âm lượng nhạc và sfx trong phần option ở main menu.

@@ -6,5 +6,5 @@ t
 131
 test
 124
-aw
-75
+global ban
+104

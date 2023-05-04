@@ -2,7 +2,7 @@
 
 #include "Entity.h"
 
-const int NameMaxLength = 20;
+const int NameMaxLength = 12;
 
 struct Word:Entity
 {
