@@ -1,5 +1,19 @@
 #include "Enemy.h"
 
+EnemyProp::EnemyProp(ENEMY_TYPE _type, const float& x_, const float& y_,
+                     const float& angle_)
+{
+    type = _type;
+    x = x_, y = y_, angle = angle_, speed = E_SPEED * frameDelay;
+    maxReload = E_RELOAD[type];
+    maxFrame = E_MAX_FRAME[type], now = 0, reload = 0;
+    health = E_HEALH[type];
+    dmg = E_DMG[type];
+    range = E_RANGE[type];
+    resetMov(true);
+    alive = true;
+}
+
 void EnemyProp::resetMov(const bool& t)
 {
     left = t, right = t, up = t, down = t;
@@ -7,7 +21,42 @@ void EnemyProp::resetMov(const bool& t)
     else st = ATTACK;
 }
 
-Vec2f EnemyMeleeProp::separate(vector<EnemyMeleeProp>& enemies)
+void EnemyProp::shoot(Player* player, vector <FighterProp>& E_bullets)
+{
+    switch(type)
+    {
+        case ENEMY_MELEE:
+            player->health -= dmg;
+            break;
+        case ENEMY_RANGED:
+            FighterProp newBullet(x + 25 * cosf(angle), y + 25 * sinf(angle) , angle ,BULLET_P_SPEED,dmg, 4*5);
+            E_bullets.push_back(newBullet);
+            break;
+    }
+    resetMov(false);
+    reload = 0;
+}
+
+
+void EnemyProp::collisionBullet(Player* player)
+{
+    float maxR = R_bullet + R_enemy;
+    for (auto it = player->p_bullets.begin(); it != player->p_bullets.end();){
+        if (health > 0 && getDistance(it->x,it->y,x,y) < maxR ){
+                health -= player->dmg;
+                it = player->p_bullets.erase(it);
+                if (health <= 0){
+                    now = 0;
+                    maxFrame = maxFrameExplosion;
+                    resetMov(false);
+                }
+        }
+        else ++it;
+    }
+}
+
+
+Vec2f EnemyProp::separate(vector<EnemyProp>& enemies)
 {
     Vec2f sum(0.0f, 0.0f);
     int cnt = 0;
@@ -30,34 +79,28 @@ Vec2f EnemyMeleeProp::separate(vector<EnemyMeleeProp>& enemies)
     return normalize(sum);
 }
 
-
-
-EnemyMeleeProp::EnemyMeleeProp(const float& x_, const float& y_,
-                               const float& angle_, const float& _speed, const int& _maxReload, const int& _maxFrame)
-{
-    x = x_, y = y_, angle = angle_, speed = _speed * frameDelay, maxReload = _maxReload;
-    maxFrame = _maxFrame, now = 0, reload = 0;
-    health = ENEMY_HEALH[ENEMY_MELEE];
-    dmg = ENEMY_DMG[ENEMY_MELEE];
-    range = enemy_melee_range;
-    resetMov(true);
-    alive = true;
-}
-
-void EnemyMeleeProp::updateStat(Player* player)
+void EnemyProp::updateStat(Player* player, vector<FighterProp>& E_bullets)
 {
     if (health <= 0 && now == maxFrame)
     {
         alive = false;
         return;
     }
+    if (health > 0 && reload > maxReload/3) resetMov(true);
+    float dis = getDistance(x,y,player->x,player->y);
+    if ( dis < R_player + range){
+        if (reload >= maxReload)
+        {
+            shoot(player,E_bullets);
+        }
+        resetMov(false);
+    }
     collisionBullet(player);
-    collisionPlayer(player);
-    if (reload < ENEMY_RELOAD) reload++;
+    if (reload < maxReload) reload++;
 }
 
 
-void EnemyMeleeProp::updateEnemyPos(vector <EnemyMeleeProp>& enemies)
+void EnemyProp::updateEnemyPos(vector<EnemyProp>& enemies)
 {
     Vec2f sep = separate(enemies);
     Vec2f d = normalize(Vec2f(cosf(angle) + sep.x, sinf(angle) + sep.y));
@@ -65,39 +108,9 @@ void EnemyMeleeProp::updateEnemyPos(vector <EnemyMeleeProp>& enemies)
     if ((up && d.y < 0) || (down && d.y > 0)) y += speed * d.y;
 }
 
-void EnemyProp::collisionBullet(Player* player)
+void EnemyProp::update(vector<EnemyProp>& enemies, Player* player, vector<FighterProp>& E_bullets)
 {
-    float maxR = R_bullet + R_enemy;
-    for (auto it = player->p_bullets.begin(); it != player->p_bullets.end();){
-        if (health > 0 && getDistance(it->x,it->y,x,y) < maxR ){
-                health -= player->dmg;
-                it = player->p_bullets.erase(it);
-                if (health <= 0){
-                    now = 0;
-                    maxFrame = maxFrameExplosion;
-                    resetMov(false);
-                }
-        }
-        else{
-                ++it;
-        }
-    }
-}
-
-void EnemyMeleeProp::collisionPlayer(Player* player)
-{
-    if (getDistance(player->x,player->y,x,y) < R_player + range){
-        if (reload == ENEMY_RELOAD) {
-                player->health -= dmg;
-                reload = 0;
-        }
-        resetMov(false);
-    } else if (reload > 60) resetMov(true);
-}
-
-void EnemyMeleeProp::update(vector <EnemyMeleeProp>& enemies,Player* player)
-{
-    updateStat(player);
+    updateStat(player,E_bullets);
     if (health > 0) {
         now = (now + 1)%maxFrame;
         updateAngle(player->x,player->y);
@@ -106,105 +119,29 @@ void EnemyMeleeProp::update(vector <EnemyMeleeProp>& enemies,Player* player)
     else now++;
 }
 
-EnemyRangedProp::EnemyRangedProp(const float& x_, const float& y_, const float& angle_, const float& _speed, const int& _maxReload, const int& _maxFrame)
-{
-    x = x_, y = y_, angle = angle_, speed = _speed * frameDelay, maxReload = _maxReload;
-    maxFrame = _maxFrame, now = 0, reload = 0;
-    health = ENEMY_HEALH[ENEMY_RANGED];
-    dmg = ENEMY_DMG[ENEMY_RANGED];
-    range = enemy_ranged_range;
-    resetMov(true);
-    alive = true;
-}
 
-void EnemyRangedProp::updateStat(Player* player)
-{
-    if (health <= 0 && now == maxFrame)
-    {
-        alive = false;
-        return;
-    }
-
-    collisionBullet(player);
-}
-
-void EnemyRangedProp::updateBullet(Player* player){
-    if (getDistance(player->x,player->y,x,y) < R_player + range){
-        if (reload == ENEMY_RELOAD) {
-                shoot(player);
-                reload = 0;
-        }
-        resetMov(false);
-    } else if (reload > 60) resetMov(true);
-    float maxR = R_bullet + R_player;
-    for (auto prop = E_bullets.begin(); prop != E_bullets.end();)
-    {
-        prop->updatePos();
-        prop->now = (prop->now + 1)%prop->maxFrame;
-        if (prop->s > range)
-        {
-            prop = E_bullets.erase(prop);
-            continue;
-        }
-        if (getDistance(player->x,player->y,prop->x,prop->y) < maxR)
-        {
-            player->health -= dmg;
-            prop = E_bullets.erase(prop);
-            continue;
-        }
-        ++prop;
-    }
-    if (reload < ENEMY_RELOAD) reload++;
-}
-
-void EnemyRangedProp::shoot(Player* player)
-{
-    FighterProp newBullet(x + 25 * cosf(angle), y + 25 * sinf(angle) , angle ,BULLET_P_SPEED, 4*5);
-    E_bullets.push_back(newBullet);
-    reload = 0;
-}
-
-void EnemyRangedProp::updateEnemyPos(vector<EnemyRangedProp>& enemies)
-{
-    float dx = cosf(angle);
-    float dy = sinf(angle);
-    if ((left && dx < 0) || (right && dx > 0)) x += speed * dx;
-    if ((up && dy < 0) || (down && dy > 0)) y += speed * dy;
-}
-
-void EnemyRangedProp::update(vector<EnemyRangedProp>& enemies, Player* player)
-{
-    updateStat(player);
-    if (health > 0) {
-        now = (now + 1)%maxFrame;
-        updateAngle(player->x,player->y);
-        updateEnemyPos(enemies);
-    }
-    else now++;
-
-    updateBullet(player);
-}
-
-            //spawn Enemy
-void spawnEnemyMelee(const Uint64& time, vector <EnemyMeleeProp>& enemy, Player* player,Map* gMap)
+  //spawn Enemy
+void spawnEnemyMelee(const Uint64& time, vector <EnemyProp>& enemy, Player* player,Map* gMap)
 {
     int distance = 800 + (rand() % 201);
     float angle = (rand()%360 - 180) * M_PI/180 ;
     float difficulty = 1.5 * time;
     difficulty /= (time + 50000);
-    EnemyMeleeProp x(player->x + distance * cos(angle),player->y + distance * sin(angle),
-                     angle,ENEMY_SPEED * (1 + difficulty));
+    EnemyProp x(ENEMY_MELEE,player->x + distance * cos(angle),player->y + distance * sin(angle),
+                     angle);
+    x.speed *= (1 + difficulty);
     enemy.push_back(x);
 }
 
 
-void spawnEnemyRanged(const Uint64& time, vector<EnemyRangedProp>& enemies, Player* player, Map* gMap)
+void spawnEnemyRanged(const Uint64& time, vector<EnemyProp>& enemies, Player* player, Map* gMap)
 {
     int distance = 800 + (rand() % 201);
     float angle = (rand()%360 - 180) * M_PI/180 ;
-    float difficulty = 1.5 * time;
-    difficulty /= (time + 40000);
-    EnemyRangedProp x(player->x + distance * cos(angle),player->y + distance * sin(angle),
-                     angle,ENEMY_SPEED, ENEMY_RELOAD * (1 + difficulty));
+    float difficulty = 0.5 * time;
+    difficulty /= (time + 30000);
+    EnemyProp x(ENEMY_RANGED, player->x + distance * cos(angle),player->y + distance * sin(angle),
+                     angle);
+    x.reload *= (1 - difficulty);
     enemies.push_back(x);
 }

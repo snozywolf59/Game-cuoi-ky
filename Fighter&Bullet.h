@@ -25,11 +25,11 @@ struct Bullet:Entity
 struct FighterProp
 {
     float x, y, angle, speed;
-    int now, maxFrame;
+    int now, maxFrame, dmg;
     float s;
 
     FighterProp(const float& x_ = 0,const float& y_ = 0,const float& angle_ = 0,
-                const float& _speed = 0, const int& _maxFrame = 0);
+                const float& _speed = 0,const int& _dmg = 1, const int& _maxFrame = 0);
 
     void updatePos();
 

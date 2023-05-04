@@ -61,8 +61,8 @@ void Game::resetStage()
     player->x += camera.x;
     player->y += camera.y;
     //enemy
-    enemy_melee_list.clear();
-    enemy_ranged_list.clear();
+    enemy_list.clear();
+    E_bullets.clear();
 }
 
 //GAME LOOP
@@ -161,37 +161,45 @@ void Game::doKeyBoard()
     }
 }
 
+void Game::updateEBullets()
+{
+    for (auto b = E_bullets.begin(); b != E_bullets.end();)
+    {
+        b->updatePos();
+        b->now = (b->now + 1)%b->maxFrame;
+        bool alive = true;
+        if (getDistance(b->x,b->y,player->x,player->y) < R_bullet + R_player)
+        {
+            player->health -= b->dmg;
+            alive = false;
+        }
+        if (b->s > E_RANGE[ENEMY_RANGED]) {
+            alive = false;
+        }
+        if (alive) ++b;
+        else b = E_bullets.erase(b);
+    }
+}
 
 //UPDATE
 void Game::updateEnemy()
 {
     //spawn
-    if (currentTime % enemy_melee_spawntime == 0) {
-        spawnEnemyMelee(currentTime, enemy_melee_list,player,gMap);
+    if (currentTime % E_SPAWN_T[ENEMY_MELEE] == 0) {
+        spawnEnemyMelee(currentTime, enemy_list,player,gMap);
     }
 
-    if (currentTime % enemy_ranged_spawntime == 0){
-        spawnEnemyRanged(currentTime, enemy_ranged_list,player,gMap);
+    if (currentTime % E_SPAWN_T[ENEMY_RANGED] == 0){
+        spawnEnemyRanged(currentTime, enemy_list,player,gMap);
     }
     //check all enemies
-    for (auto prop = enemy_melee_list.begin(); prop != enemy_melee_list.end();)
+    for (auto prop = enemy_list.begin(); prop != enemy_list.end();)
     {
-       prop->update(enemy_melee_list,player);
+       prop->update(enemy_list,player,E_bullets);
        if (prop->alive ==  false)
        {
-           prop = enemy_melee_list.erase(prop);
-           sub_score += 4;
-       }else{
-            ++prop;
-       }
-    }
-    for (auto prop = enemy_ranged_list.begin(); prop != enemy_ranged_list.end();)
-    {
-       prop->update(enemy_ranged_list,player);
-       if (prop->alive ==  false)
-       {
-           prop = enemy_ranged_list.erase(prop);
-           sub_score += 3;
+           prop = enemy_list.erase(prop);
+           sub_score += 3 + prop->type;
        }else{
             ++prop;
        }
@@ -202,6 +210,8 @@ void Game::update()
 {
     if (!pause)
     {
+        updateEBullets();
+
         updateEnemy();
 
         //UPDATE PLAYER
@@ -238,38 +248,21 @@ void Game::drawButtons()
     }
 }
 
-void Game::drawEnemyMelee()
+void Game::drawEnemy()
 {
     SDL_Rect cur;
-    for (EnemyMeleeProp& x: enemy_melee_list)
+    for (EnemyProp& x: enemy_list)
     {
         if (x.health > 0)
         {
             cur = {(x.now /DELAY) * 51, x.st * 51,51,51};
-            res->enemy_melee->angle = x.angle;
-            res->enemy_melee->draw(&cur,x.x,x.y,50,50,1,camera);
-        }else{
-            cur = {x.now/DELAY * 48,0,48,48};
-            res->explosion->draw(&cur,x.x,x.y,60,60,1,camera);
-        }
-    }
-}
-
-void Game::drawEnemyRanged()
-{
-    SDL_Rect cur;
-    for (EnemyRangedProp& x: enemy_ranged_list)
-    {
-        if (x.health > 0)
-        {
-            cur = {(x.now /DELAY) * 51, x.st * 51,51,51};
-            res->enemy_ranged->angle = x.angle;
-            res->enemy_ranged->draw(&cur,x.x,x.y,50,50,1,camera);
-            for (FighterProp& bul:x.E_bullets)
-            {
-                cur = {((bul.now/8)%4) * 32, 0, 32, 32};
-                res->e_bullet->angle = bul.angle;
-                res->e_bullet->draw(&cur, bul.x,bul.y,50,50,1,camera);
+            if (x.type == ENEMY_MELEE){
+                res->enemy_melee->angle = x.angle;
+                res->enemy_melee->draw(&cur,x.x,x.y,50,50,1,camera);
+            }
+            if (x.type == ENEMY_RANGED){
+                res->enemy_ranged->angle = x.angle;
+                res->enemy_ranged->draw(&cur,x.x,x.y,50,50,1,camera);
             }
         }else{
             cur = {x.now/DELAY * 48,0,48,48};
@@ -278,10 +271,15 @@ void Game::drawEnemyRanged()
     }
 }
 
-void Game::drawEnemy()
+void Game::drawEBullets()
 {
-    drawEnemyMelee();
-    drawEnemyRanged();
+    SDL_Rect cur;
+    for (FighterProp& bul:E_bullets)
+    {
+        cur = {((bul.now/8)%4) * 32, 0, 32, 32};
+        res->e_bullet->angle = bul.angle;
+        res->e_bullet->draw(&cur, bul.x,bul.y,50,50,1,camera);
+    }
 }
 
 void Game::drawPlayer()
@@ -314,6 +312,7 @@ void Game::render()
         drawMap();
         drawPlayer();
         drawEnemy();
+        drawEBullets();
         drawPoint();
     }
     drawButtons();
@@ -364,7 +363,7 @@ int Game::GameLoop()
 //clear
 void Game::clearGame()
 {
-    enemy_melee_list.clear();
-    enemy_ranged_list.clear();
+    enemy_list.clear();
+    E_bullets.clear();
     player->p_bullets.clear();
 }

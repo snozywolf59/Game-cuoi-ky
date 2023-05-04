@@ -142,7 +142,7 @@ void Player::updateEngine(Vec2f& camera,Mouse* mouse, Map* gMap)
 
 void Player::shoot(Mouse* mouse)
 {
-    FighterProp newBullet(x + w/2 * cosf(angle), y + w/2 * sinf(angle) , angle ,BULLET_P_SPEED, 4*5);
+    FighterProp newBullet(x + w/2 * cosf(angle), y + w/2 * sinf(angle) , angle ,BULLET_P_SPEED,dmg, 4*5);
     p_bullets.push_back(newBullet);
     reload = 0;
     Mix_PlayChannel(SND_PLAYER_SHOOT,attack,0);

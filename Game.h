@@ -27,17 +27,17 @@ public:
 
     void doMouse();
 
+    void updateEBullets();
+
     void updateEnemy();
 
     void update();
 
     void drawButtons();
 
-    void drawEnemyMelee();
-
-    void drawEnemyRanged();
-
     void drawEnemy();
+
+    void drawEBullets();
 
     void drawPlayer();
 
@@ -66,8 +66,8 @@ private:
     Vec2f camera;
 
     //enemies
-    vector <EnemyMeleeProp> enemy_melee_list;
-    vector <EnemyRangedProp> enemy_ranged_list;
+    vector <EnemyProp> enemy_list;
+    vector <FighterProp> E_bullets;
     //count time
     Uint64 currentTime;
     int old_choose,choose;

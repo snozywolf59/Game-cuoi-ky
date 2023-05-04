@@ -16,10 +16,11 @@ void Bullet::update(Map& gMap)
 }
 
 FighterProp::FighterProp(const float& x_, const float& y_, const float& angle_,
-                          const float& _speed, const int& _maxFrame)
+                          const float& _speed, const int& _dmg, const int& _maxFrame)
 {
     x = x_, y = y_, angle = angle_;
     speed = _speed * frameDelay, maxFrame = _maxFrame;
+    dmg = _dmg;
     now = 0, s = 0;
 }
 
