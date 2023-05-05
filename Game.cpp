@@ -211,7 +211,7 @@ void Game::updateItems()
 {
     for (auto it = items.begin(); it != items.end();){
         it->update();
-        player->getItem(*it,score);
+        player->getItem(*it,sub_score);
         if (it->last == 0) it = items.erase(it);
         else it++;
     }
