@@ -8,21 +8,20 @@
 - Chúng sẽ cố tấn công để tiêu diệt bạn.
 
 ### Cách cài đặt:
-- Chạy file My Game.exe
+- Chạy file GameBanQuai.exe
 
 ### Cách chơi:
 - W: di chuyển lên
 - A: di chuyển sang trái
 - D: di chuyển sang phải
 - S: di chuyển xuống
-- F hoặc click: Bắn đạn
+- F hoặc LClick: Bắn đạn
 - Theo thời gian, quái đánh gần sẽ chạy nhanh hơn, quái đánh xa bắn nhanh hơn.
 
 ### Một số tùy chỉnh:
 - Bạn có thể điều chỉnh âm lượng nhạc và sfx trong phần option ở main menu.
 
 ### Một số hình ảnh:
-- link
  ![Ảnh demo](https://user-images.githubusercontent.com/120768537/235300002-62a2c498-14de-4d05-934c-ce0f3ee37081.png)
 
 ### Các tài nguyên được lấy từ:
