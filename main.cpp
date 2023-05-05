@@ -1,7 +1,6 @@
 #include "GameMenu.h"
 
 
-
 SDL_Window* gWindow;
 SDL_Renderer* gRenderer;
 Resource* res;

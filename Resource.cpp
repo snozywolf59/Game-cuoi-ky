@@ -34,6 +34,9 @@ Resource::Resource(SDL_Renderer* _renderer)
     explosion = new Entity(renderer,file_explosion);
     e_bullet = new Entity(renderer,file_enemy_bullet);
 
+    for (int i = 0; i < TOTAL_ITEMS; i++)
+        Items[i] = new Entity(renderer,file_ITEMS[i]);
+
     //mouse
     Menu_Mouse = new Mouse(renderer,file_menu_mouse);
     InGame_Mouse = new Mouse(renderer,file_ing_mouse);
@@ -46,7 +49,7 @@ Resource::Resource(SDL_Renderer* _renderer)
     But_beChosen = Mix_LoadWAV(snd_menu_beChosen);
 
     //font
-    font = TTF_OpenFont(gameFont.c_str(),font_size);
+    font = TTF_OpenFont(file_game_font.c_str(),font_size);
 
     //word
     congratulate = new Word(0,0,renderer,font,NULL);

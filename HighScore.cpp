@@ -10,7 +10,7 @@ HighScoreMenu::HighScoreMenu(Resource* _res)
 
     for (int i = 0; i < TOP_SCORE; i++)
     {
-        topScore[i] = new Word(0,0,res->renderer,res->font,res->pad);
+        topScore[i] = new Word(0,0,res->renderer,res->font,NULL);
     }
     read();
     createTexture();
@@ -178,8 +178,8 @@ void HighScoreMenu::createTexture()
     {
         if (topScore[i]->texture != NULL) SDL_DestroyTexture(topScore[i]->texture);
         stringstream point;
-        point << '#' << i+1 << "      " << top[i].name;
-        for (int j = 15 - top[i].name.size(); j > 0; j--) point << ' ';
+        point << " #" << i+1 << "      " << top[i].name;
+        for (int j = NameMaxLength + 3 - top[i].name.size(); j > 0; j--) point << ' ';
         point << top[i].point ;
         topScore[i]->loadFromRenderedText(point.str());
     }
@@ -210,7 +210,7 @@ void HighScoreMenu::render()
     res->score->draw(NULL,SCREEN_WIDTH/2,53,234,45,1);
     for (int i = 0; i < TOP_SCORE; i++)
     {
-        topScore[i]->drawWord(300,100 * i + 120);
+        topScore[i]->drawWord(150,100 * i + 120);
     }
     res->But_Back->drawButton(0,SCREEN_HEIGHT - ING_BUT_H,ING_BUT_W,ING_BUT_H);
     res->Menu_Mouse->draw(NULL);

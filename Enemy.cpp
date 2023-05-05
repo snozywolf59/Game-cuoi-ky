@@ -26,7 +26,7 @@ void EnemyProp::shoot(Player* player, vector <FighterProp>& E_bullets)
     switch(type)
     {
         case ENEMY_MELEE:
-            player->health -= dmg;
+            player->getDmg(dmg);
             break;
         case ENEMY_RANGED:
             FighterProp newBullet(x + 25 * cosf(angle), y + 25 * sinf(angle) , angle ,BULLET_P_SPEED,dmg, 4*5);

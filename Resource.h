@@ -4,6 +4,7 @@
 #include "Button.h"
 #include "Mouse.h"
 #include "Word.h"
+#include "Item.h"
 
 enum BUTTON_MENU_TYPE
 {
@@ -69,8 +70,14 @@ const string file_pad = "image/GameUI/InGame/Pad.png";
 const string file_board = "image/GameUI/Board.png";
 const string file_score_img = "image/GameUI/Score1.png";
 
-const string gameFont = "font/Ouders.ttf";
+const string file_game_font = "font/Zector.ttf";
 const int font_size = 50;
+
+const string file_ITEMS[] = {
+    "image/Items/Point.png",
+    "image/Items/Health.png",
+    "image/Items/Shield.png"
+};
 
 struct Resource
 {
@@ -108,6 +115,7 @@ struct Resource
     Entity* e_bullet;
     Entity* explosion;
 
+    Entity* Items[TOTAL_ITEMS];
 
     //font
     TTF_Font* font;

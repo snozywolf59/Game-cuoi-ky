@@ -31,6 +31,8 @@ public:
 
     void updateEnemy();
 
+    void updateItems();
+
     void update();
 
     void drawButtons();
@@ -42,6 +44,8 @@ public:
     void drawPlayer();
 
     void drawMap();
+
+    void drawItems();
 
     void drawPoint();
 
@@ -65,11 +69,13 @@ private:
     Map* gMap;
     Vec2f camera;
 
+    vector <Item> items;
+
     //enemies
     vector <EnemyProp> enemy_list;
     vector <FighterProp> E_bullets;
     //count time
-    Uint64 currentTime;
+    Uint32 currentTime;
     int old_choose,choose;
 
     //score

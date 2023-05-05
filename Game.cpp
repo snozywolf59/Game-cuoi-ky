@@ -170,7 +170,7 @@ void Game::updateEBullets()
         bool alive = true;
         if (getDistance(b->x,b->y,player->x,player->y) < R_bullet + R_player)
         {
-            player->health -= b->dmg;
+            player->getDmg(b->dmg);
             alive = false;
         }
         if (b->s > E_RANGE[ENEMY_RANGED]) {
@@ -198,18 +198,32 @@ void Game::updateEnemy()
        prop->update(enemy_list,player,E_bullets);
        if (prop->alive ==  false)
        {
-           prop = enemy_list.erase(prop);
+           spawnItem(items,prop->x,prop->y,currentTime);
            sub_score += 3 + prop->type;
+           prop = enemy_list.erase(prop);
        }else{
             ++prop;
        }
     }
 }
 
+void Game::updateItems()
+{
+    for (auto it = items.begin(); it != items.end();){
+        it->update();
+        player->getItem(*it,score);
+        if (it->last == 0) it = items.erase(it);
+        else it++;
+    }
+}
+
+
 void Game::update()
 {
     if (!pause)
     {
+        updateItems();
+
         updateEBullets();
 
         updateEnemy();
@@ -290,6 +304,14 @@ void Game::drawMap()
 {
     gMap->drawMap(camera);
 }
+void Game::drawItems()
+{
+    SDL_Rect t;
+    for (Item& it: items){
+        t = {((it.now/7) % 6) * 16, 0, 16, 16};
+        res->Items[it.type]->draw(&t,it.x,it.y,25,25,1,camera);
+    }
+}
 
 void Game::drawPoint()
 {
@@ -313,11 +335,11 @@ void Game::render()
         drawPlayer();
         drawEnemy();
         drawEBullets();
+        drawItems();
         drawPoint();
     }
     drawButtons();
     drawMouse();
-
     SDL_RenderPresent(res->renderer);
 }
 

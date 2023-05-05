@@ -19,12 +19,13 @@ void Player::initEngine()
     health_bar = new Entity(renderer, file_bar_health);
 
     bullet = new Bullet(renderer,file_player_bullet,file_player_bullet_fire);
-
+    shield = new Entity(renderer, file_player_shield);
     pulse = new Entity(renderer,file_player_pulse);
     pulse->w = 28;
     pulse->h = 14;
     attack = Mix_LoadWAV(snd_player_shoot);
     isHitted = Mix_LoadWAV(snd_player_hitted);
+
 }
 
 
@@ -46,7 +47,29 @@ void Player::initPos()
     y = SCREEN_HEIGHT/2;
 }
 
-/****************************************************/
+void Player::getDmg(const int& hurt)
+{
+    if (shield_time <= 0) health -= hurt;
+}
+
+void Player::getItem(Item& it, unsigned int& score)
+{
+    if (getDistance(it.x,it.y,x,y) < R_player + R_item){
+        it.last = 0;
+        switch(it.type){
+        case HEALH:
+            if (health <= PLAYER_MAX_HP - 5) health += 5;
+            else health = PLAYER_MAX_HP;
+            break;
+        case POINT:
+            score += 5;
+            break;
+        case SHIELD:
+            shield_time = SHIELD_TIME;
+            break;
+        }
+    }
+}
 
 void Player::update(Vec2f& camera,Mouse* mouse,Map* gMap)
 {
@@ -69,9 +92,6 @@ void Player::updateAngle(Mouse* mouse)
 
 void Player::updatePos(Vec2f& camera,Map* gMap)
 {
-    int nextI = (x + speed * cosf(angle))/BLOCK_SIZE;
-    int nextJ = (y + speed * sinf(angle))/BLOCK_SIZE;
-
     Vec2f direction;
     direction.x = right - left;
     direction.y = down - up;
@@ -108,7 +128,6 @@ void Player::updatePos(Vec2f& camera,Map* gMap)
     }
 }
 
-
 void Player::updateBullet(Vec2f& camera, Mouse* mouse, Map* gMap)
 {
     for (auto prop = p_bullets.begin(); prop != p_bullets.end();)
@@ -128,6 +147,7 @@ void Player::updateBullet(Vec2f& camera, Mouse* mouse, Map* gMap)
 
     bullet->fire->angle = angle;
 }
+
 void Player::updateEngine(Vec2f& camera,Mouse* mouse, Map* gMap)
 {
     updateBullet(camera,mouse,gMap);
@@ -135,10 +155,11 @@ void Player::updateEngine(Vec2f& camera,Mouse* mouse, Map* gMap)
     pulse->angle = angle;
     pulse->x = x - (w/2 + 14) * cosf(angle);
     pulse->y = y - (w/2 + 14) * sinf(angle);
+
+    if (shield_time > 0) {
+        shield_time--;
+    }
 }
-
-
-/****************************************************/
 
 void Player::shoot(Mouse* mouse)
 {
@@ -148,13 +169,12 @@ void Player::shoot(Mouse* mouse)
     Mix_PlayChannel(SND_PLAYER_SHOOT,attack,0);
 }
 
-/****************************************************/
-
 void Player::drawEngine(Vec2f& camera)
 {
+    SDL_Rect t;
     for (FighterProp& b: p_bullets)
     {
-        SDL_Rect t = {b.now/5 * 48, 0, 48, 32};
+        t = {b.now/5 * 48, 0, 48, 32};
         bullet->angle = b.angle;
         bullet->draw(&t, b.x, b.y, 48 , 32,1,camera);
     }
@@ -163,11 +183,15 @@ void Player::drawEngine(Vec2f& camera)
           bullet->fire->draw(NULL,x + (w/2 + 7) * cosf(angle) ,y + (w/2 + 7) * sinf(angle) ,40,18,1,camera);
     }
 
-    SDL_Rect temp = {((now/DELAY) % 4) * 32, 0, 32, 32};
-    pulse->draw(&temp,camera,1);
+    t = {((now/DELAY) % 4) * 32, 0, 32, 32};
+    pulse->draw(&t,camera,1);
+
+    if (shield_time > 0) {
+        t = {((now/DELAY) % 4) * 64, 0, 64, 64};
+        shield->draw(&t,x,y,80,80,1,camera);
+    }
 }
 
-/****************************************************/
 void Player::drawHealthBar()
 {
 
