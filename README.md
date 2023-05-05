@@ -7,7 +7,7 @@
 - Bạn điều khiển máy bay tấn công các quái vật xuất hiện trên màn hình.
 - Chúng sẽ cố tấn công để tiêu diệt bạn.
 
-### Cách cài đặt:
+### Cách chạy game:
 - Chạy file GameBanQuai.exe
 
 ### Cách chơi:
