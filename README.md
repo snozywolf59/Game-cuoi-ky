@@ -8,14 +8,7 @@
 - Chúng sẽ cố tấn công để tiêu diệt bạn.
 
 ### Cách cài đặt:
-- Cần mingw32
-- Cài đặt thư viện SDL2, SDL2_image, SDL2_ttf, SDL2_Mixer vào Code::Blocks.
-  + [SDL](https://lazyfoo.net/tutorials/SDL/01_hello_SDL/index.php)
-  + [SDL_image](https://lazyfoo.net/tutorials/SDL/06_extension_libraries_and_loading_other_image_formats/index.php)
-  + [SDL_mixer](https://lazyfoo.net/tutorials/SDL/21_sound_effects_and_music/index.php)
-  + [SDL_ttf](https://lazyfoo.net/tutorials/SDL/16_true_type_fonts/index.php)
-- Tạo một project mới. Cho các file .h và .cpp vào project.
-- Build & Run
+- Chạy file My Game.exe
 
 ### Cách chơi:
 - W: di chuyển lên
