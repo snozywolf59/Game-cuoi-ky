@@ -8,7 +8,7 @@ Item::Item(ITEM _type, const int& _x, const int& _y)
 
 void Item::update()
 {
-    now = (now + 1)%42;
+    now = (now + 1)%30;
     last--;
 }
 
@@ -29,7 +29,6 @@ void spawnItem(vector<Item>& items, const int& x, const int& y, const Uint32& ti
             break;
          }
        }
-       cout << newR << ' ' << type << endl;
        Item nItem = Item(type,x,y);
        items.push_back(nItem);
    }

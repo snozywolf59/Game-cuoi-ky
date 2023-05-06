@@ -235,6 +235,7 @@ void Game::update()
 
         //update score;
         score = sub_score + currentTime/500;
+        if (score_word->texture != NULL) SDL_DestroyTexture(score_word->texture);
         score_word->loadFromRenderedText(convertIntToString(score));
     }
 
@@ -308,7 +309,7 @@ void Game::drawItems()
 {
     SDL_Rect t;
     for (Item& it: items){
-        t = {((it.now/7) % 6) * 16, 0, 16, 16};
+        t = {((it.now/5) % 6) * 16, 0, 16, 16};
         res->Items[it.type]->draw(&t,it.x,it.y,25,25,1,camera);
     }
 }
@@ -317,7 +318,6 @@ void Game::drawPoint()
 {
     player->drawHealthBar();
     score_word->drawWord();
-    SDL_DestroyTexture(score_word->texture);
 }
 
 void Game::drawMouse()

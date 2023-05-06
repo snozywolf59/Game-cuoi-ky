@@ -33,7 +33,7 @@ void Player::initStat()
 {
     health = PLAYER_MAX_HP;
     reload = PLAYER_RELOAD;
-    speed = PLAYER_SPEED * frameDelay;
+    speed = PLAYER_SPEED;
     dmg = PLAYER_DMG;
     alive = true;
     right = 0, left = 0, up = 0, down = 0;
