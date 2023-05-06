@@ -104,7 +104,8 @@ Vec2f Rotate(const float& angle, const Vec2f& v)
 
 float tangent(const Vec2f& m, const Vec2f& c, const float& r)
 {
-    return atan2(r, (m-c).length());
+    Vec2f n = m - c;
+    return atan2(r, n.length()) + atan2(n.y,n.x);
 }
 
 

@@ -104,7 +104,7 @@ void Player::updatePos(Vec2f& camera, Map* gMap)
 
 
     int i = newX / BLOCK_SIZE, j = newY / BLOCK_SIZE;
-    if (getDistance(newX, newY, (i + 0.5f) * BLOCK_SIZE, (j+ 0.5f) * BLOCK_SIZE) >= gMap->getRadius(j,i) + 25.0f)
+    if (getDistance(newX, newY, (i + 0.5f) * BLOCK_SIZE, (j+ 0.5f) * BLOCK_SIZE) >= gMap->getRadius(j,i))
     {
        if (dx > 0){
             if (newX <= MAP_SIZE) x = newX;

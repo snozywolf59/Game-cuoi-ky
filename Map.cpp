@@ -45,7 +45,7 @@ void Map::updateMap()
 {
     for (i = 0; i < NUM_BLOCKS; i++)
         for (j = 0; j < NUM_BLOCKS; j++)
-        UniObjProp[i][j] = (UniObjProp[i][j] + 1)%640;
+        UniObjProp[i][j] = (UniObjProp[i][j] + 1)%960;
 }
 
 
@@ -75,8 +75,8 @@ void Map::drawMap(const Vec2f& camera)
 
             if (type != 0)
             {
-                if (type < 3) src = {((UniObjProp[i][j]/10) % 8) * 128, ((UniObjProp[i][j]/10) / 8) * 128,128,128};
-                else src = {((UniObjProp[i][j]/10) % 8) * 256, ((UniObjProp[i][j]/10) / 8) * 256,256,256};
+                if (type < 3) src = {((UniObjProp[i][j]/15) % 8) * 128, ((UniObjProp[i][j]/15) / 8) * 128,128,128};
+                else src = {((UniObjProp[i][j]/15) % 8) * 256, ((UniObjProp[i][j]/15) / 8) * 256,256,256};
                 planet[type]->draw(&src,des.x,des.y,des.w,des.h);
             }
         }
@@ -97,7 +97,7 @@ int Map::getRadius(const int& row, const int& col)
     int x = getPlanet(row,col);
     if (x == Star || x == Planet3) return -128;
     if (x == Planet2) return 32;
-    return 32;
+    return 64;
 }
 
 int Map::getPlanet(const int& row, const int& col)

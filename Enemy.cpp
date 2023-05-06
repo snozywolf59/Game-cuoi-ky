@@ -1,8 +1,8 @@
 #include "Enemy.h"
 
 int ti,tj;
-int Enemy_Vision = 200;
-int E_length = 51;
+float newX, newY;
+
 
 EnemyProp::EnemyProp(ENEMY_TYPE _type, const float& x_, const float& y_,
                      const float& angle_)
@@ -87,13 +87,20 @@ Vec2f EnemyProp::separate(vector<EnemyProp>& enemies)
     return normal(sum);
 }
 
+
 void EnemyProp::avoidObs(Map* gMap)
 {
     Vec2f pos(x,y);
     Vec2f obs((ti + 0.5) * BLOCK_SIZE, (tj + 0.5) * BLOCK_SIZE);
-    angle = angle + tangent(pos, obs, 128);
-    x += speed * cosf(angle);
-    y += speed * sinf(angle);
+    float oAngle = angle;
+    angle = tangent(pos, obs, 150);
+    newX = x + speed * cosf(angle);
+    newY = y + speed * sinf(angle);
+    if (getDistance(newX, newY, (ti + 0.5) * BLOCK_SIZE, (tj + 0.5) * BLOCK_SIZE) >= gMap->getRadius(tj,ti)){
+        if ((left && newX < x) || (right && newX > x)) x = newX;
+        if ((up && newY < y) || (down && newY > y)) y = newY;
+    }
+    angle = oAngle;
 }
 
 
@@ -123,8 +130,8 @@ void EnemyProp::updateEnemyPos(vector<EnemyProp>& enemies, Map* gMap)
     Vec2f sep = separate(enemies);
     Vec2f d = normal(Vec2f(cosf(angle) + sep.x, sinf(angle) + sep.y));
 
-    float newX = x + speed * d.x, newY = y + speed * d.y;
-    ti = (newX)/ BLOCK_SIZE, tj = (newY) / BLOCK_SIZE;
+    newX = x + speed * d.x, newY = y + speed * d.y;
+    ti = newX / BLOCK_SIZE, tj = newY / BLOCK_SIZE;
 
     if (getDistance(newX, newY, (ti + 0.5) * BLOCK_SIZE, (tj + 0.5) * BLOCK_SIZE) >= gMap->getRadius(tj,ti) + 80){
         if ((left && d.x < 0) || (right && d.x > 0)) x = newX;
