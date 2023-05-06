@@ -36,7 +36,7 @@ void Player::initStat()
     speed = PLAYER_SPEED;
     dmg = PLAYER_DMG;
     alive = true;
-    right = 0, left = 0, up = 0, down = 0;
+    right = 0, down = 0, left = 0, up = 0;
     atk = 0;
 }
 
@@ -49,7 +49,10 @@ void Player::initPos()
 
 void Player::getDmg(const int& hurt)
 {
-    if (shield_time <= 0) health -= hurt;
+    if (shield_time <= 0) {
+        health -= hurt;
+        Mix_PlayChannel(SND_PLAYER_HITTED, isHitted, 0);
+    }
 }
 
 void Player::getItem(Item& it, unsigned int& score)
@@ -90,40 +93,38 @@ void Player::updateAngle(Mouse* mouse)
 }
 
 
-void Player::updatePos(Vec2f& camera,Map* gMap)
+void Player::updatePos(Vec2f& camera, Map* gMap)
 {
-    Vec2f direction;
-    direction.x = right - left;
-    direction.y = down - up;
-    float temp = direction.length();
-    if (temp == 0) return;
-    float d = speed/temp;
-    if (left){
-        if (x >= MAX_CAM_X + SCREEN_WIDTH/2 + d) x -= d;
-        else{
-            if (camera.x <= MAX_CAM_X && camera.x >= MIN_CAM_X) camera.x -= min(d,camera.x - MIN_CAM_X);
-            if (x >= MIN_CAM_X + d) x -= d;
+    int dx = right - left;
+    int dy = down - up;
+    if (dx == 0 && dy == 0) return;
+    speed = PLAYER_SPEED / sqrt(dx * dx + dy * dy);
+    float newX = x + speed * dx;
+    float newY = y + speed * dy;
+
+
+    int i = newX / BLOCK_SIZE, j = newY / BLOCK_SIZE;
+    if (getDistance(newX, newY, (i + 0.5f) * BLOCK_SIZE, (j+ 0.5f) * BLOCK_SIZE) >= gMap->getRadius(j,i) + 25.0f)
+    {
+       if (dx > 0){
+            if (newX <= MAP_SIZE) x = newX;
+            if (camera.x <= MAX_CAM_X && camera.x >= MIN_CAM_X && x >= SCREEN_WIDTH/2)
+                camera.x += min(dx * speed,MAX_CAM_X - camera.x);
         }
-    }
-    if (right){
-        if (x <= MIN_CAM_X + SCREEN_WIDTH/2 - d) x += d;
-        else{
-            if (camera.x <= MAX_CAM_X && camera.x >= MIN_CAM_X) camera.x += min(d,MAX_CAM_X - camera.x);
-            if ( x <= MAP_SIZE - d) x += d;
+        if (dx < 0){
+            if (newX >= 0) x = newX;
+            if (camera.x <= MAX_CAM_X && camera.x >= MIN_CAM_X && x <= MAX_CAM_X + SCREEN_WIDTH/2)
+                camera.x -= min(dx * (-speed), camera.x - MIN_CAM_X);
         }
-    }
-    if (up){
-        if (y >= MAX_CAM_Y + SCREEN_HEIGHT/2 + d) y -= d;
-        else{
-            if (camera.y <= MAX_CAM_Y && camera.y >= MIN_CAM_Y) camera.y -= min(d, camera.y - MIN_CAM_Y);
-            if (y >= -SCREEN_WIDTH/2 +d) y -= d;
+        if (dy > 0){
+            if (newY <= MAP_SIZE) y = newY;
+            if (camera.y <= MAX_CAM_Y && camera.y >= MIN_CAM_Y && y >= SCREEN_HEIGHT/2)
+                camera.y += min(dy * speed,MAX_CAM_Y - camera.y);
         }
-    }
-    if (down){
-        if (y <= MIN_CAM_Y + SCREEN_HEIGHT/2 - d) y += d;
-        else{
-            if (camera.y <= MAX_CAM_Y && camera.y >= MIN_CAM_Y) camera.y += min(d, MAX_CAM_Y - camera.y);
-            if ( y <= MAP_SIZE - d) y += d;
+        if (dy < 0){
+            if (newY >= 0) y = newY;
+            if (camera.y <= MAX_CAM_Y && camera.y >= MIN_CAM_Y && y <= MAX_CAM_Y + SCREEN_HEIGHT/2)
+                camera.y -= min(dy * (-speed), camera.y - MIN_CAM_Y);
         }
     }
 }

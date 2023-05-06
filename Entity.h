@@ -38,6 +38,7 @@ struct Entity
     float getAngle(Entity* temp);
 
     void draw(SDL_Rect* clip,const Vec2f& camera = p, int atCenter = 0);
+    void draw(SDL_Rect* clip,const int& _x,const int& _y,const Vec2f& camera = p, int atCenter = 0);
     void draw(SDL_Rect* clip,const int& _x,const int& _y, const int& _w,
               const int& _h, int atCenter = 0,const Vec2f& camera = p);
 };

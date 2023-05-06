@@ -14,7 +14,7 @@ const string file_player_shield = "image/Player/shield.png";
 
 const int PLAYER_MAX_HP = 50;
 const int PLAYER_RELOAD = 12;
-const float PLAYER_SPEED = 0.2f * frameDelay;
+const float PLAYER_SPEED = 0.3f * frameDelay;
 const int PLAYER_DMG = 3;
 const int SHIELD_TIME = 5 * FPS;
 const float R_player = 25.0f;
@@ -27,7 +27,7 @@ struct Player:Entity
 {
     Player(SDL_Renderer* renderer);
 
-    int left = 0, right = 0, up = 0,down = 0;
+    int right, left, down, up;
     int health,dmg,reload;
     int shield_time = 0;
     float speed;
@@ -62,7 +62,7 @@ struct Player:Entity
 
     void updateAngle(Mouse* mouse);
 
-    void updatePos(Vec2f& camera,Map* gMap);
+    void updatePos(Vec2f& camera, Map* gMap);
 
     void updateBullet(Vec2f& camera, Mouse* mouse, Map* gMap);
 

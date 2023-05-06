@@ -7,7 +7,7 @@ float getAngleGlobal(const float& x1, const float& y1,const float& x2, const flo
 
 float getDistance(const float& x1, const float& y1, const float& x2, const float& y2)
 {
-    return sqrt(pow(x1-x2,2) + pow(y1-y2,2));
+    return sqrtf(pow(x1-x2,2) + pow(y1-y2,2));
 }
 
 
@@ -71,6 +71,17 @@ void Entity::draw(SDL_Rect* clip,const Vec2f& camera, int atCenter)
 
     //Render to screen
     SDL_RenderCopyEx(renderer, texture, clip, &renderQuad,
+                                    angle * 180 / PI,NULL, SDL_FLIP_NONE);
+}
+
+void Entity::draw(SDL_Rect* clip, const int& _x, const int& _y, const Vec2f& camera, int atCenter)
+{
+    SDL_Rect des = {    _x  -  w/2 * scale *  atCenter - camera.x,
+                        _y  -  h/2 * scale * atCenter - camera.y,
+                        w * scale,
+                        h * scale
+                    };
+    SDL_RenderCopyEx(renderer, texture, clip, &des,
                                     angle * 180 / PI,NULL, SDL_FLIP_NONE);
 }
 

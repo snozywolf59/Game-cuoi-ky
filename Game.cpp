@@ -148,7 +148,6 @@ void Game::doKeyBoard()
         case SDLK_s: player->down = 1; break;
         case SDLK_a: player->left = 1; break;
         case SDLK_d: player->right = 1;break;
-                        //case SDLK_SPACE: pause = true; break;
     }
     if (e.type == SDL_KEYUP)
     switch (e.key.keysym.sym)
@@ -156,8 +155,7 @@ void Game::doKeyBoard()
         case SDLK_w: player->up = 0; break;
         case SDLK_s: player->down = 0; break;
         case SDLK_a: player->left = 0; break;
-        case SDLK_d: player->right = 0; break;
-                    //case SDLK_SPACE: pause = false; break;
+        case SDLK_d: player->right = 0;break;
     }
 }
 
@@ -168,12 +166,13 @@ void Game::updateEBullets()
         b->updatePos();
         b->now = (b->now + 1)%b->maxFrame;
         bool alive = true;
-        if (getDistance(b->x,b->y,player->x,player->y) < R_bullet + R_player)
+        if (gMap->getRadius(b->y/BLOCK_SIZE, b->x/BLOCK_SIZE) > 0) alive = false;
+        else if (getDistance(b->x,b->y,player->x,player->y) < R_bullet + R_player)
         {
             player->getDmg(b->dmg);
             alive = false;
         }
-        if (b->s > E_RANGE[ENEMY_RANGED]) {
+        else if (b->s > E_RANGE[ENEMY_RANGED]) {
             alive = false;
         }
         if (alive) ++b;
@@ -185,17 +184,17 @@ void Game::updateEBullets()
 void Game::updateEnemy()
 {
     //spawn
-    if (currentTime % E_SPAWN_T[ENEMY_MELEE] == 0) {
-        spawnEnemyMelee(currentTime, enemy_list,player,gMap);
-    }
+    if (currentTime % E_SPAWN_T[ENEMY_MELEE] == 0)
+        if (enemy_list.size() <= 1)
+            spawnEnemyMelee(currentTime, enemy_list,player,gMap);
 
-    if (currentTime % E_SPAWN_T[ENEMY_RANGED] == 0){
-        spawnEnemyRanged(currentTime, enemy_list,player,gMap);
-    }
+//    if (currentTime % E_SPAWN_T[ENEMY_RANGED] == 0)
+//        if (enemy_list.size() <= 1)
+//            spawnEnemyRanged(currentTime, enemy_list,player,gMap);
     //check all enemies
     for (auto prop = enemy_list.begin(); prop != enemy_list.end();)
     {
-       prop->update(enemy_list,player,E_bullets);
+       prop->update(enemy_list,player,E_bullets,gMap);
        if (prop->alive ==  false)
        {
            spawnItem(items,prop->x,prop->y,currentTime);

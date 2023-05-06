@@ -28,6 +28,7 @@ Resource::Resource(SDL_Renderer* _renderer)
 
     slider = new Entity(renderer, file_slider);
     yellow_bar = new Entity(renderer, file_yellow_bar);
+    But_slide = new Entity(renderer,file_but_slide);
 
     enemy_melee = new Entity(renderer,file_enemy_melee);
     enemy_ranged = new Entity(renderer,file_enemy_ranged);

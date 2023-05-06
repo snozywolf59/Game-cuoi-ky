@@ -46,11 +46,13 @@ struct EnemyProp:FighterProp
 
     Vec2f separate(vector <EnemyProp>& enemies);
 
+    void avoidObs(Map* gMap);
+
     void updateStat(Player* player,  vector<FighterProp>& E_bullets);
 
-    void updateEnemyPos(vector <EnemyProp>& enemies);
+    void updateEnemyPos(vector <EnemyProp>& enemies, Map* gMap);
 
-    void update(vector <EnemyProp>& enemies,Player* player, vector<FighterProp>& E_bullets) ;
+    void update(vector <EnemyProp>& enemies,Player* player, vector<FighterProp>& E_bullets,Map* gMap) ;
 };
 
         /////////////SPAWN enemy

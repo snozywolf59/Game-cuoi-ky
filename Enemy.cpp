@@ -1,5 +1,9 @@
 #include "Enemy.h"
 
+int ti,tj;
+int Enemy_Vision = 200;
+int E_length = 51;
+
 EnemyProp::EnemyProp(ENEMY_TYPE _type, const float& x_, const float& y_,
                      const float& angle_)
 {
@@ -72,7 +76,7 @@ Vec2f EnemyProp::separate(vector<EnemyProp>& enemies)
         if (&t != this && distance(pos, other) < maxR)
         {
             Vec2f diff = pos - other;
-            sum += normalize(diff);
+            sum += normal(diff);
             cnt++;
         }
     }
@@ -80,8 +84,18 @@ Vec2f EnemyProp::separate(vector<EnemyProp>& enemies)
     {
         sum /= cnt;
     }
-    return normalize(sum);
+    return normal(sum);
 }
+
+void EnemyProp::avoidObs(Map* gMap)
+{
+    Vec2f pos(x,y);
+    Vec2f obs((ti + 0.5) * BLOCK_SIZE, (tj + 0.5) * BLOCK_SIZE);
+    angle = angle + tangent(pos, obs, 128);
+    x += speed * cosf(angle);
+    y += speed * sinf(angle);
+}
+
 
 void EnemyProp::updateStat(Player* player, vector<FighterProp>& E_bullets)
 {
@@ -104,21 +118,28 @@ void EnemyProp::updateStat(Player* player, vector<FighterProp>& E_bullets)
 }
 
 
-void EnemyProp::updateEnemyPos(vector<EnemyProp>& enemies)
+void EnemyProp::updateEnemyPos(vector<EnemyProp>& enemies, Map* gMap)
 {
     Vec2f sep = separate(enemies);
-    Vec2f d = normalize(Vec2f(cosf(angle) + sep.x, sinf(angle) + sep.y));
-    if ((left && d.x < 0) || (right && d.x > 0)) x += speed * d.x;
-    if ((up && d.y < 0) || (down && d.y > 0)) y += speed * d.y;
+    Vec2f d = normal(Vec2f(cosf(angle) + sep.x, sinf(angle) + sep.y));
+
+    float newX = x + speed * d.x, newY = y + speed * d.y;
+    ti = (newX)/ BLOCK_SIZE, tj = (newY) / BLOCK_SIZE;
+
+    if (getDistance(newX, newY, (ti + 0.5) * BLOCK_SIZE, (tj + 0.5) * BLOCK_SIZE) >= gMap->getRadius(tj,ti) + 80){
+        if ((left && d.x < 0) || (right && d.x > 0)) x = newX;
+        if ((up && d.y < 0) || (down && d.y > 0)) y = newY;
+    }else avoidObs(gMap);
+
 }
 
-void EnemyProp::update(vector<EnemyProp>& enemies, Player* player, vector<FighterProp>& E_bullets)
+void EnemyProp::update(vector<EnemyProp>& enemies, Player* player, vector<FighterProp>& E_bullets,Map* gMap)
 {
     updateStat(player,E_bullets);
     if (health > 0) {
         now = (now + 1)%maxFrame;
         updateAngle(player->x,player->y);
-        updateEnemyPos(enemies);
+        updateEnemyPos(enemies,gMap);
     }
     else now++;
 }
@@ -127,12 +148,18 @@ void EnemyProp::update(vector<EnemyProp>& enemies, Player* player, vector<Fighte
   //spawn Enemy
 void spawnEnemyMelee(const Uint64& time, vector <EnemyProp>& enemy, Player* player,Map* gMap)
 {
-    int distance = 800 + (rand() % 201);
-    float angle = (rand()%360 - 180) * M_PI/180 ;
-    float difficulty = 1.5 * time;
-    difficulty /= (time + 50000);
-    EnemyProp x(ENEMY_MELEE,player->x + distance * cos(angle),player->y + distance * sin(angle),
-                     angle);
+    int i , j;
+    float spawnX, spawnY, angle, difficulty;
+    do{
+        int distance = 800 + (rand() % 201);
+        angle = (rand()%360 - 180) * M_PI/180 ;
+        difficulty = 1.5 * time;
+        difficulty /= (time + 50000);
+        spawnX = max(min(MAP_SIZE * 1.0f, player->x + distance * cosf(angle)),0.0f);
+        spawnY = max(min(MAP_SIZE * 1.0f, player->y + distance * sinf(angle)),0.0f);
+        i = spawnY / BLOCK_SIZE, j = spawnX/BLOCK_SIZE;
+    }while(gMap->getRadius(i,j) > 0);
+    EnemyProp x(ENEMY_MELEE,spawnX,spawnY,angle);
     x.speed *= (1 + difficulty);
     enemy.push_back(x);
 }
@@ -140,12 +167,18 @@ void spawnEnemyMelee(const Uint64& time, vector <EnemyProp>& enemy, Player* play
 
 void spawnEnemyRanged(const Uint64& time, vector<EnemyProp>& enemies, Player* player, Map* gMap)
 {
-    int distance = 800 + (rand() % 201);
-    float angle = (rand()%360 - 180) * M_PI/180 ;
-    float difficulty = 0.5 * time;
-    difficulty /= (time + 30000);
-    EnemyProp x(ENEMY_RANGED, player->x + distance * cos(angle),player->y + distance * sin(angle),
-                     angle);
+    int i , j;
+    float spawnX, spawnY, angle, difficulty;
+    do{
+        int distance = 800 + (rand() % 201);
+        angle = (rand()%360 - 180) * M_PI/180 ;
+        difficulty = 0.5 * time;
+        difficulty /= (time + 30000);
+        spawnX = max(min(MAP_SIZE * 1.0f, player->x + distance * cosf(angle)),0.0f);
+        spawnY = max(min(MAP_SIZE * 1.0f, player->y + distance * sinf(angle)),0.0f);
+        i = spawnY / BLOCK_SIZE, j = spawnX/BLOCK_SIZE;
+    }while(gMap->getRadius(i,j) > 0);
+    EnemyProp x(ENEMY_RANGED, spawnX, spawnY,angle);
     x.reload *= (1 - difficulty);
     enemies.push_back(x);
 }

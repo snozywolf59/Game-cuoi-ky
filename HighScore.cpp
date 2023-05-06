@@ -206,11 +206,12 @@ void HighScoreMenu::updateScore(const Name& newScore)
 void HighScoreMenu::render()
 {
     SDL_RenderClear(res->renderer);
-    res->board->draw(NULL,0,0,SCREEN_WIDTH,SCREEN_HEIGHT);
-    res->score->draw(NULL,SCREEN_WIDTH/2,53,234,45,1);
+    res->MenuBG->draw(NULL,0,0,SCREEN_WIDTH,SCREEN_HEIGHT);
+    res->board->draw(NULL,SCREEN_WIDTH/2,SCREEN_HEIGHT/2,SCREEN_WIDTH - 100,SCREEN_HEIGHT - 50,1);
+    res->score->draw(NULL,SCREEN_WIDTH/2,65,234,45,1);
     for (int i = 0; i < TOP_SCORE; i++)
     {
-        topScore[i]->drawWord(150,100 * i + 120);
+        topScore[i]->drawWord(135,100 * i + 130);
     }
     res->But_Back->drawButton(0,SCREEN_HEIGHT - ING_BUT_H,ING_BUT_W,ING_BUT_H);
     res->Menu_Mouse->draw(NULL);

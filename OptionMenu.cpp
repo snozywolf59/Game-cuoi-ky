@@ -1,7 +1,7 @@
 #include "OptionMenu.h"
 
 int tempX = 300;
-int tempY = 100;
+int tempY = 260;
 int slideW = 500;
 int slideH = 25;
 
@@ -91,6 +91,8 @@ void OptionMenu::doSnd(unsigned int& snd, SDL_Event* e)
 void OptionMenu::render(const unsigned int& vol, const unsigned int& snd)
 {
     SDL_RenderClear(res->renderer);
+    res->MenuBG->draw(NULL,0,0,SCREEN_WIDTH,SCREEN_HEIGHT);
+    res->board->draw(NULL,SCREEN_WIDTH/2,SCREEN_HEIGHT/2,SCREEN_WIDTH - 100,SCREEN_HEIGHT - 50,1);
     res->But_Back->drawButton(0, SCREEN_HEIGHT - ING_BUT_H,ING_BUT_W,ING_BUT_H);
 
     if (vol > 0) res->But_MusicOff->drawButton(tempX - 100,tempY - 35,ING_BUT_W,ING_BUT_H);
@@ -102,10 +104,12 @@ void OptionMenu::render(const unsigned int& vol, const unsigned int& snd)
     res->slider->draw(NULL,tempX,tempY, slideW,slideH);
     SDL_Rect src = {0,0,vol / 128.0f * res->yellow_bar->w, res->yellow_bar->h};
     res->yellow_bar->draw(&src,tempX + 2,tempY + 1, (slideW - 3)/ 128.0f * vol,slideH - 2);
+    res->But_slide->draw(NULL,tempX - 10 + (slideW - 3)/ 128.0f * vol, tempY - 4,25,32);
 
     src = {0,0,snd / 128.0f * res->yellow_bar->w, res->yellow_bar->h};
     res->slider->draw(NULL,tempX,tempY + 200, slideW,slideH);
     res->yellow_bar->draw(&src,tempX + 2,tempY + 201, (slideW - 3)/ 128.0f * snd,slideH - 2);
+    res->But_slide->draw(NULL,tempX - 10 +(slideW - 3)/ 128.0f * snd, tempY + 196,25,32);
     res->Menu_Mouse->draw(NULL);
 
     SDL_RenderPresent(res->renderer);

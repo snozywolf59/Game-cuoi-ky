@@ -68,7 +68,7 @@ const string file_slider = "image/GameUI/GameOption/Bar.png";
 const string file_yellow_bar = "image/GameUI/GameOption/Yellow.png";
 const string file_pad = "image/GameUI/InGame/Pad.png";
 const string file_board = "image/GameUI/Board.png";
-const string file_score_img = "image/GameUI/Score1.png";
+const string file_score_img = "image/GameUI/HighScoreMenu/Score1.png";
 
 const string file_game_font = "font/Zector.ttf";
 const int font_size = 50;
@@ -78,6 +78,8 @@ const string file_ITEMS[] = {
     "image/Items/Health.png",
     "image/Items/Shield.png"
 };
+
+const string file_but_slide = "image/GameUI/Slider02.png";
 
 struct Resource
 {
@@ -107,6 +109,7 @@ struct Resource
 
     Entity* slider;
     Entity* yellow_bar;
+    Entity* But_slide;
 
     Entity* game_over;
 
