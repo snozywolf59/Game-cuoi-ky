@@ -10,7 +10,7 @@
 ### Cách tải và chạy game:
 - Mở thư mục muốn tải và git clone https://github.com/snozywolf59/Game-cuoi-ky.git để tải thư mục về.
 - Chạy file GameBanQuai.exe.
-- Nếu bạn muốn đọc code có thể vào các file .h và .cpp để đọc.
+- Nếu bạn muốn đọc code hoặc tự build file hãy vào các file .h và .cpp để đọc.
 - Có thể đổi hình ảnh cho game. Nhưng phải cùng frame và có size giống ảnh cũ.
 
 ### Cách chơi:
@@ -29,32 +29,31 @@
 - Nếu bạn đạt điểm cao, có thể nhập tên để lưu lại.
 
 ### Một số hình ảnh:
- ![Menu](https://user-images.githubusercontent.com/120768537/236673301-a9bb5104-647b-4ecc-a2cb-55f9927865da.png)
- ![Gameplay 1](https://user-images.githubusercontent.com/120768537/235300002-62a2c498-14de-4d05-934c-ce0f3ee37081.png)
- ![Gameplay 2](https://user-images.githubusercontent.com/120768537/236673480-5a0630dc-df16-4ea4-8783-b067a4dba1d1.png)
+ ![Menu](https://user-images.githubusercontent.com/120768537/236673301-a9bb5104-647b-4ecc-a2cb-55f9927865da.png).
+ ![Gameplay 1](https://user-images.githubusercontent.com/120768537/235300002-62a2c498-14de-4d05-934c-ce0f3ee37081.png).
+ ![Gameplay 2](https://user-images.githubusercontent.com/120768537/236673480-5a0630dc-df16-4ea4-8783-b067a4dba1d1.png).
 
 ### Credit
 Chân thành cảm ơn:
 #### Assets game được lấy từ:
-- [Các artist trên itch.io](https://itch.io/game-assets)
-- [Các artist trên craftpix.net](https://craftpix.net)
-- [Âm thanh từ mixkit.co](https://mixkit.co/)
+- [Các artist trên itch.io](https://itch.io/game-assets).
+- [Các artist trên craftpix.net](https://craftpix.net).
+- [Âm thanh từ mixkit.co](https://mixkit.co/).
 - Minecraft sound effect.
 
 #### Các nguồn tham khảo code:
- + Chat GPT
- + [LazyFoo](http://lazyfoo.net/tutorials/SDL/)
+ + Chat GPT.
+ + [LazyFoo](http://lazyfoo.net/tutorials/SDL/).
  + AI For Game Developers - David M. Bourg, Glenn Seeman.
- + [How to Make and Design Computer Games](https://gamedevelopment.tutsplus.com/)
+ + [How to Make and Design Computer Games](https://gamedevelopment.tutsplus.com/).
 
 #### Các nguồn convert file:
- -[y2mate](https://www-y2mate.com/)
- -[PineTool](https://pinetools.com/)
+ - [y2mate](https://www-y2mate.com/).
+ - [PineTool](https://pinetools.com/).
 
 ## Một số thuật toán trong game:
 - Thuật toán Flocking giúp quái không bị đè lên nhau.
 - Một số quái thông minh sẽ biết di chuyển tránh các hành tinh để tiếp cận người chơi (xử lí bằng thuật toán).
 
-
-## Thông tin liên lạc
+## Thông tin liên lạc:
 - Email: thbang727@gmail.com
