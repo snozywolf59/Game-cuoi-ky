@@ -19,7 +19,7 @@ const int maxFrameExplosion = 8 * DELAY;
 const float E_RELOAD[] = {1.2 * FPS, 2 * FPS};
 const float R_enemy = 30.0f;
 
-const float E_SPEED = 0.2;
+const float E_SPEED = 0.2f * frameDelay;
 
 const int E_MAX_FRAME[] = {6 * DELAY, 6 * DELAY};
 const int E_SPAWN_T[] = {FPS, 2 * FPS};

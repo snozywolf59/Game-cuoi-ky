@@ -228,7 +228,7 @@ void Game::update()
         updateEnemy();
 
         //UPDATE PLAYER
-        player->update(camera,res->InGame_Mouse,gMap);
+        player->update(camera,res->InGame_Mouse,gMap,currentTime);
 
         if (player->alive == false) gameOver = true;
 

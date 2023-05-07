@@ -64,8 +64,8 @@ void Entity::draw(SDL_Rect* clip,const Vec2f& camera, int atCenter)
 {
     if (clip != NULL)
     {
-        w = clip->w;
-        h = clip->h;
+        w = clip->w * scale;
+        h = clip->h * scale;
     }
 
     SDL_Rect renderQuad = { int(x - w/2 * scale * atCenter - camera.x),

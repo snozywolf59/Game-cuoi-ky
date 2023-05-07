@@ -9,14 +9,17 @@ const string file_player_bullet = "image/Player/bullet.png";
 const string file_player_bullet_fire = "image/Player/fire.png";
 const string file_bar = "image/Player/bar.png";
 const string file_bar_health = "image/Player/red.png";
+const string file_bar_mana = "image/Player/blue.png";
 const string file_player_pulse = "image/Player/pulse.png";
 const string file_player_shield = "image/Player/shield.png";
 
 const int PLAYER_MAX_HP = 50;
+const int PLAYER_MAX_MANA = 300;
 const int PLAYER_RELOAD = 12;
 const float PLAYER_SPEED = 0.2f * frameDelay;
 const int PLAYER_DMG = 3;
 const int SHIELD_TIME = 5 * FPS;
+const int Speed_TIME = 10 * FPS;
 const float R_player = 25.0f;
 
 const float player_range = 1000.0f;
@@ -28,9 +31,10 @@ struct Player:Entity
     Player(SDL_Renderer* renderer);
 
     int right, left, down, up;
-    int health,dmg,reload;
-    int shield_time = 0;
-    float speed;
+    int health, maxH, mana, maxM, dmg, bDmg, reload, maxReload, bReload;
+
+    int shield_time = 0, s_boost = 0;
+    float speed, bSpeed;
     bool alive = false;
 
     int now;
@@ -40,6 +44,7 @@ struct Player:Entity
     Entity* pulse;
     Entity* bar;
     Entity* health_bar;
+    Entity* mana_bar;
     Entity* shield;
 
     //sound
@@ -58,7 +63,7 @@ struct Player:Entity
 
     void getItem(Item& it, unsigned int& score);
 
-    void update(Vec2f& camera, Mouse* mouse, Map* gMap);
+    void update(Vec2f& camera, Mouse* mouse, Map* gMap, const Uint32& time);
 
     void updateAngle(Mouse* mouse);
 
@@ -66,7 +71,7 @@ struct Player:Entity
 
     void updateBullet(Vec2f& camera, Mouse* mouse, Map* gMap);
 
-    void updateEngine(Vec2f& camera,Mouse* mouse, Map* gMap);
+    void updateEngine(Vec2f& camera,Mouse* mouse, Map* gMap, const Uint32& time);
 
     void shoot(Mouse* mouse);
 

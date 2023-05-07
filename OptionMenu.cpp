@@ -102,11 +102,11 @@ void OptionMenu::render(const unsigned int& vol, const unsigned int& snd)
     else res->But_SoundOn->drawButton(tempX - 100,tempY + 165,ING_BUT_W,ING_BUT_H);
 
     res->slider->draw(NULL,tempX,tempY, slideW,slideH);
-    SDL_Rect src = {0,0,vol / 128.0f * res->yellow_bar->w, res->yellow_bar->h};
+    SDL_Rect src = {0,0,int(vol / 128.0f * res->yellow_bar->w), res->yellow_bar->h};
     res->yellow_bar->draw(&src,tempX + 2,tempY + 1, (slideW - 3)/ 128.0f * vol,slideH - 2);
     res->But_slide->draw(NULL,tempX - 10 + (slideW - 3)/ 128.0f * vol, tempY - 4,25,32);
 
-    src = {0,0,snd / 128.0f * res->yellow_bar->w, res->yellow_bar->h};
+    src = {0,0,int(snd / 128.0f * res->yellow_bar->w), res->yellow_bar->h};
     res->slider->draw(NULL,tempX,tempY + 200, slideW,slideH);
     res->yellow_bar->draw(&src,tempX + 2,tempY + 201, (slideW - 3)/ 128.0f * snd,slideH - 2);
     res->But_slide->draw(NULL,tempX - 10 +(slideW - 3)/ 128.0f * snd, tempY + 196,25,32);

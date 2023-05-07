@@ -17,6 +17,7 @@ void Player::initEngine()
 
     bar = new Entity(renderer,file_bar);
     health_bar = new Entity(renderer, file_bar_health);
+    mana_bar = new Entity(renderer, file_bar_mana);
 
     bullet = new Bullet(renderer,file_player_bullet,file_player_bullet_fire);
     shield = new Entity(renderer, file_player_shield);
@@ -32,9 +33,13 @@ void Player::initEngine()
 void Player::initStat()
 {
     health = PLAYER_MAX_HP;
-    reload = PLAYER_RELOAD;
-    speed = PLAYER_SPEED;
-    dmg = PLAYER_DMG;
+    bReload = PLAYER_RELOAD;
+    reload = 0, maxReload = bReload;
+    bSpeed = PLAYER_SPEED;
+    bDmg = PLAYER_DMG;
+    speed = bSpeed;
+    dmg = bDmg;
+    mana = PLAYER_MAX_MANA / 3;
     alive = true;
     right = 0, down = 0, left = 0, up = 0;
     atk = 0;
@@ -68,16 +73,18 @@ void Player::getItem(Item& it, unsigned int& score)
             score += 5;
             break;
         case DRUG:
-            speed = 1.2f * PLAYER_SPEED;
+            s_boost = Speed_TIME;
             break;
         case SHIELD:
             shield_time = SHIELD_TIME;
+            break;
+        default:
             break;
         }
     }
 }
 
-void Player::update(Vec2f& camera,Mouse* mouse,Map* gMap)
+void Player::update(Vec2f& camera,Mouse* mouse,Map* gMap, const Uint32& time)
 {
     if (health <= 0) alive = false;
 
@@ -87,7 +94,7 @@ void Player::update(Vec2f& camera,Mouse* mouse,Map* gMap)
 
     updateAngle(mouse);
 
-    updateEngine(camera,mouse, gMap);
+    updateEngine(camera,mouse, gMap, time);
 }
 
 void Player::updateAngle(Mouse* mouse)
@@ -101,7 +108,7 @@ void Player::updatePos(Vec2f& camera, Map* gMap)
     int dx = right - left;
     int dy = down - up;
     if (dx == 0 && dy == 0) return;
-    speed = PLAYER_SPEED / sqrt(dx * dx + dy * dy);
+    speed = speed / sqrt(dx * dx + dy * dy);
     float newX = x + speed * dx;
     float newY = y + speed * dy;
 
@@ -145,15 +152,19 @@ void Player::updateBullet(Vec2f& camera, Mouse* mouse, Map* gMap)
         else ++prop;
     }
 
-    if (atk == 1 && reload == PLAYER_RELOAD) shoot(mouse);
+    if (atk == 1 && reload >= maxReload) shoot(mouse);
 
-    if (reload < PLAYER_RELOAD) reload++;
+    if (reload <= maxReload) reload++;
 
     bullet->fire->angle = angle;
 }
 
-void Player::updateEngine(Vec2f& camera,Mouse* mouse, Map* gMap)
+void Player::updateEngine(Vec2f& camera,Mouse* mouse, Map* gMap, const Uint32& time)
 {
+    bDmg = int(sqrtf(time)/350.0f * PLAYER_DMG) + PLAYER_DMG;
+    bSpeed = sqrtf(time)/400.0f * PLAYER_SPEED + PLAYER_SPEED;
+    bReload = - int(sqrt(time)/(1.67f * sqrt(time) + 450.0f) * PLAYER_RELOAD) + PLAYER_RELOAD;
+
     updateBullet(camera,mouse,gMap);
 
     pulse->angle = angle;
@@ -163,14 +174,29 @@ void Player::updateEngine(Vec2f& camera,Mouse* mouse, Map* gMap)
     if (shield_time > 0) {
         shield_time--;
     }
+    if (s_boost > 0) {
+        speed = 1.5f * bSpeed;
+        maxReload = 0.68f * bReload;
+        pulse->scale = 1.24f;
+        s_boost--;
+    }
+    else {
+        speed = bSpeed;
+        maxReload = bReload;
+        pulse->scale = 1.0f;
+    }
 }
 
 void Player::shoot(Mouse* mouse)
 {
     FighterProp newBullet(x + w/2 * cosf(angle), y + w/2 * sinf(angle) , angle ,BULLET_P_SPEED,dmg, 4*5);
+    newBullet.R = R_bullet;
     p_bullets.push_back(newBullet);
-    reload = 0;
+    reload -= maxReload;
+    if (reload < 0) reload = 0;
     Mix_PlayChannel(SND_PLAYER_SHOOT,attack,0);
+    if (mana < PLAYER_MAX_MANA) ++mana;
+    if (mana < 0) mana = 0;
 }
 
 void Player::drawEngine(Vec2f& camera)
@@ -183,7 +209,7 @@ void Player::drawEngine(Vec2f& camera)
         bullet->draw(&t, b.x, b.y, 48 , 32,1,camera);
     }
 
-    if (reload < 5){
+    if (reload < maxReload/2){
           bullet->fire->draw(NULL,x + (w/2 + 7) * cosf(angle) ,y + (w/2 + 7) * sinf(angle) ,40,18,1,camera);
     }
 
@@ -198,12 +224,16 @@ void Player::drawEngine(Vec2f& camera)
 
 void Player::drawHealthBar()
 {
-
-    bar->draw(NULL,0,75,50,500,0);
+    bar->draw(NULL,0,100,30,500,0);
+    bar->draw(NULL,SCREEN_WIDTH - 30,100,30,500,0);
     float temp = health * 1.0f /PLAYER_MAX_HP;
     SDL_Rect sr = {0,0, 48, int(temp * 256 )};
-    SDL_Rect des = {0,75 + (1 - temp) * 500,50,int(temp * 500)};
-    SDL_RenderCopyEx(renderer,health_bar->texture,&sr,&des,180,NULL,SDL_FLIP_NONE);
+    SDL_FRect des = {0,100 + (1 - temp) * 500,30,temp * 500};
+    SDL_RenderCopyExF(renderer,health_bar->texture,&sr,&des,180,NULL,SDL_FLIP_NONE);
+    temp = mana * 1.0f / PLAYER_MAX_MANA;
+    sr = {0,0, 48, int(temp * 256 )};
+    des = {SCREEN_WIDTH - 30,100 + (1 - temp) * 500,30,temp * 500};
+    SDL_RenderCopyExF(renderer,mana_bar->texture,&sr,&des,180,NULL,SDL_FLIP_NONE);
 }
 
 
