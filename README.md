@@ -16,19 +16,19 @@
 - Nếu bạn muốn đọc code hoặc tự build file hãy vào các file .h và .cpp để đọc.
 - Có thể đổi hình ảnh cho game. Nhưng phải cùng frame và có size giống ảnh cũ.
 #### Cách 2:
-- Ấn vào [link](https://github.com/snozywolf59/Game-cuoi-ky/archive/refs/heads/main.zip)
+- Ấn vào [link](https://github.com/snozywolf59/Game-cuoi-ky/archive/refs/heads/main.zip).
 #### Tự build:
   Nếu muốn tự build game có thể follow theo các hướng dẫn của LazyFoo:
-  + [Cài SDL](https://lazyfoo.net/tutorials/SDL/01_hello_SDL/index.php)
-  + [Cài SDL_image](https://lazyfoo.net/tutorials/SDL/06_extension_libraries_and_loading_other_image_formats/index.php)
-  + [Cài SDL_ttf](https://lazyfoo.net/tutorials/SDL/16_true_type_fonts/index.php)
-  + [Cài SDL_mixer](https://lazyfoo.net/tutorials/SDL/21_sound_effects_and_music/index.php)
+  + [Cài SDL](https://lazyfoo.net/tutorials/SDL/01_hello_SDL/index.php).
+  + [Cài SDL_image](https://lazyfoo.net/tutorials/SDL/06_extension_libraries_and_loading_other_image_formats/index.php).
+  + [Cài SDL_ttf](https://lazyfoo.net/tutorials/SDL/16_true_type_fonts/index.php).
+  + [Cài SDL_mixer](https://lazyfoo.net/tutorials/SDL/21_sound_effects_and_music/index.php).
 ### Cách chơi:
-- W: di chuyển lên
-- A: di chuyển sang trái
-- D: di chuyển sang phải
-- S: di chuyển xuống
-- LClick: Bắn đạn
+- W: di chuyển lên.
+- A: di chuyển sang trái.
+- D: di chuyển sang phải.
+- S: di chuyển xuống.
+- LClick: Bắn đạn.
 - Q và Space: Chiêu thức.
 - Theo thời gian, quái sẽ mạnh hơn, người chơi cũng vậy.
 - Giết quái sẽ sinh ra vật phẩm để người chơi nhặt và nhận thêm buff.
