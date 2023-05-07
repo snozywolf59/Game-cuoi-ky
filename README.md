@@ -8,7 +8,9 @@
 - Chúng sẽ cố tấn công để tiêu diệt bạn.
 
 ### Cách tải và chạy game:
-- Mở thư mục muốn tải và git clone https://github.com/snozywolf59/Game-cuoi-ky.git để tải thư mục về.
+- Mở thư mục muốn tải game vào.
+- Mở git bash.
+- Git clone https://github.com/snozywolf59/Game-cuoi-ky.git để tải thư mục về.
 - Chạy file GameBanQuai.exe.
 - Nếu bạn muốn đọc code hoặc tự build file hãy vào các file .h và .cpp để đọc.
 - Có thể đổi hình ảnh cho game. Nhưng phải cùng frame và có size giống ảnh cũ.
