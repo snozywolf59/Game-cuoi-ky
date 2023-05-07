@@ -38,7 +38,8 @@ void EnemyProp::shoot(Player* player, vector <BulletProp>& E_bullets)
                 break;
             case ENEMY_RANGED:
                 BulletProp newBullet(NOR,x + 25 * cosf(angle), y + 25 * sinf(angle),
-                                       angle ,BULLET_P_SPEED, 4*5);
+                                       angle ,BULLET_P_SPEED, 4);
+                newBullet.R = E_RANGE[type];
                 newBullet.dmg = dmg;
                 E_bullets.push_back(newBullet);
                 break;
@@ -59,7 +60,7 @@ void EnemyProp::collisionBullet(Player* player)
                     now = 0;
                     maxFrame = maxFrameExplosion;
                     resetMov(false);
-                    player->getMana();
+                    player->getMana(2);
                 }
         }
         else ++it;

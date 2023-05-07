@@ -56,6 +56,7 @@ struct Player:Entity
     //sound
     Mix_Chunk* attack;
     Mix_Chunk* isHitted;
+    Mix_Chunk* ulti;
 
     vector <BulletProp> p_bullets;
 

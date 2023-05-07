@@ -20,6 +20,7 @@ Resource::Resource(SDL_Renderer* _renderer)
 
     //entity
     MenuBG = new Entity(renderer,file_bg);
+    BG2 = new Entity(renderer, file_bg2);
     pad = new Entity(renderer,file_pad);
     board = new Entity(renderer,file_board);
     score = new Entity(renderer, file_score_img);

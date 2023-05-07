@@ -93,12 +93,12 @@ void Entity::draw(SDL_Rect* clip, const int& _x, const int& _y, const Vec2f& cam
 void Entity::draw(SDL_Rect* clip, const int& _x,const int& _y, const int& _w, const int& _h,
                    int atCenter, const Vec2f& camera)
 {
-    SDL_Rect des = {    _x  -  _w/2 * scale *  atCenter - camera.x,
+    SDL_FRect des = {    _x  -  _w/2 * scale *  atCenter - camera.x,
                         _y  -  _h/2 * scale * atCenter - camera.y,
                         _w * scale,
                         _h * scale
                     };
-    SDL_RenderCopyEx(renderer, texture, clip, &des,
+    SDL_RenderCopyExF(renderer, texture, clip, &des,
                                     angle * 180 / PI,NULL, SDL_FLIP_NONE);
 }
 

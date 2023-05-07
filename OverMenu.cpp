@@ -44,8 +44,10 @@ int OverMenu::handle()
 void OverMenu::render()
 {
     SDL_RenderClear(res->renderer);
+    SDL_Rect temp = {0,0,SCREEN_WIDTH,SCREEN_HEIGHT};
+    res->BG2->draw(&temp,0,0,SCREEN_WIDTH,SCREEN_HEIGHT);
     int now = cnt % 120;
-    SDL_Rect temp = {(now - (now/5) * 5)/6 * 250,(now / 5)/6 * 28 , 250, 28};
+    temp = {(now - (now/5) * 5)/6 * 250,(now / 5)/6 * 28 , 250, 28};
     res->game_over->draw(&temp,300,80,375,42);
 
     SDL_SetTextureAlphaMod(res->But_NewGame->texture, cnt > 255 ? 255:cnt);

@@ -15,7 +15,7 @@ enum BULLET{
 };
 
 const float BulletMaxS[] = {1000, 900, MAP_SIZE};
-const int ManaCost[] = {0, 150, 60};
+const int ManaCost[] = {0, 0, 60};
 const float BulletReload[] = {1, 3, 3};
 
 struct FighterProp

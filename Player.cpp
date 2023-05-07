@@ -32,7 +32,7 @@ void Player::initEngine()
 
     attack = Mix_LoadWAV(snd_player_shoot);
     isHitted = Mix_LoadWAV(snd_player_hitted);
-
+    ulti = Mix_LoadWAV(snd_player_ulti);
 }
 
 
@@ -85,7 +85,7 @@ void Player::getItem(Item& it, unsigned int& score)
             shield_time = SHIELD_TIME;
             break;
         case MANA:
-            getMana(3);
+            getMana(10);
             break;
         default:
             break;
@@ -225,6 +225,7 @@ void Player::castSkill_1()
     newBullet.R = 12 * R_bullet;
     p_bullets.push_back(newBullet);
     mana -= ManaCost[SKILL1];
+    Mix_PlayChannel(SND_PLAYER_ULTI, ulti, 0);
 }
 void Player::castSkill_2()
 {

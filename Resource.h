@@ -39,6 +39,7 @@ const string FILE_MENU_IMAGE[] = {
 
 
 const string file_bg = "image/GameUI/GameMenu/bg.png";
+const string file_bg2 = "image/GameUI/HighScoreMenu/bg2.png";
 
 
 //GAME
@@ -105,6 +106,7 @@ struct Resource
 
     //entity
     Entity* MenuBG;
+    Entity* BG2;
     Entity* pad;
     Entity* board;
     Entity* score;

@@ -12,6 +12,7 @@ HighScoreMenu::HighScoreMenu(Resource* _res)
     {
         topScore[i] = new Word(0,0,res->renderer,res->font,NULL);
     }
+    newS = new Word(0,0,res->renderer, res->font,NULL);
     read();
     createTexture();
     maxL = false;
@@ -146,10 +147,12 @@ void HighScoreMenu::render_enter_name(const string& returnName)
     SDL_Texture* inputTexture = SDL_CreateTextureFromSurface(res->renderer, inputSurface);
     int w,h;
     SDL_QueryTexture(inputTexture,NULL,NULL,&w,&h);
-    SDL_Rect des = {SCREEN_WIDTH/2 - w/2,300,w,h};
-    res->board->draw(NULL,0,-50,SCREEN_WIDTH,SCREEN_HEIGHT + 100);
-    res->congratulate->drawWord(200,100);
-    res->enter_name->drawWord(350,200);
+    SDL_Rect des = {0,0,SCREEN_WIDTH,SCREEN_HEIGHT};
+    res->BG2->draw(&des,0,0,SCREEN_WIDTH,SCREEN_HEIGHT);
+    res->congratulate->drawWord(SCREEN_WIDTH/2 - res->congratulate->w/2,100);
+    newS->drawWord(SCREEN_WIDTH/2 - newS->w/2, 165);
+    res->enter_name->drawWord(SCREEN_WIDTH/2 - res->enter_name->w/2,230);
+    des = {SCREEN_WIDTH/2 - w/2,320,w,h};
     SDL_RenderCopy(res->renderer, inputTexture, NULL, &des);
     if (maxL) res->too_long->drawWord(260,450);
     res->Menu_Mouse->draw(NULL);
@@ -161,9 +164,12 @@ void HighScoreMenu::render_enter_name(const string& returnName)
     SDL_Delay(frameDelay);
 }
 
-bool HighScoreMenu::check(const unsigned int& newS)
+bool HighScoreMenu::check(const unsigned int& newScore)
 {
-    if (newS > top[TOP_SCORE - 1].point) return true;
+    if (newScore > top[TOP_SCORE - 1].point) {
+        newS->loadFromRenderedText(convertIntToString(int(newScore)));
+        return true;
+    }
     return false;
 }
 

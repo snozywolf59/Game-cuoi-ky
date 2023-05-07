@@ -63,6 +63,10 @@ void Game::resetStage()
     //enemy
     enemy_list.clear();
     E_bullets.clear();
+
+    for (int i = 0 ; i < ING_TOTAL; i++){
+        SDL_SetTextureAlphaMod(res->But_InG[i]->texture, 255);
+    }
 }
 
 //GAME LOOP
@@ -168,7 +172,7 @@ void Game::updateEBullets()
     for (auto b = E_bullets.begin(); b != E_bullets.end();)
     {
         b->update();
-        b->now = (b->now + 1)%b->maxFrame;
+        b->now++;
         bool alive = true;
         if (gMap->getRadius(b->y/BLOCK_SIZE, b->x/BLOCK_SIZE) > 0) alive = false;
         else if (getDistance(b->x,b->y,player->x,player->y) < R_bullet + R_player)
@@ -257,7 +261,6 @@ void Game::drawButtons()
                                           ING_BUT_W, ING_BUT_H);
     }
     else{
-        SDL_RenderClear(res->renderer);
         for (int i = ING_RESUME; i < ING_TOTAL; i++)
             {
                 res->But_InG[i]->drawButton(SCREEN_WIDTH/2 - BUTTON_WIDTH/2,
@@ -295,7 +298,7 @@ void Game::drawEBullets()
     SDL_Rect cur;
     for (BulletProp& bul:E_bullets)
     {
-        cur = {((bul.now/8)%4) * 32, 0, 32, 32};
+        cur = {((bul.now/5)%4) * 32, 0, 32, 32};
         res->e_bullet->angle = bul.angle;
         res->e_bullet->draw(&cur, bul.x,bul.y,50,50,1,camera);
     }

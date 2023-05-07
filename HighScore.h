@@ -35,6 +35,7 @@ public:
 private:
     Name top[TOP_SCORE];
     Word* topScore[TOP_SCORE];
+    Word* newS;
     Resource* res;
     bool maxL;
 };
