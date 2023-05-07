@@ -12,7 +12,11 @@
 - Chạy file GameBanQuai.exe.
 - Nếu bạn muốn đọc code hoặc tự build file hãy vào các file .h và .cpp để đọc.
 - Có thể đổi hình ảnh cho game. Nhưng phải cùng frame và có size giống ảnh cũ.
-
+- Nếu muốn tự build game có thể follow theo các hướng dẫn của LazyFoo:
+ + [Cài SDL](https://lazyfoo.net/tutorials/SDL/01_hello_SDL/index.php)
+ + [Cài SDL_image](https://lazyfoo.net/tutorials/SDL/06_extension_libraries_and_loading_other_image_formats/index.php)
+ + [Cài SDL_ttf](https://lazyfoo.net/tutorials/SDL/16_true_type_fonts/index.php)
+ + [Cài SDL_mixer](https://lazyfoo.net/tutorials/SDL/21_sound_effects_and_music/index.php)
 ### Cách chơi:
 - W: di chuyển lên
 - A: di chuyển sang trái
