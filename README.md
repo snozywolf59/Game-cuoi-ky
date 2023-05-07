@@ -15,8 +15,9 @@
 - A: di chuyển sang trái
 - D: di chuyển sang phải
 - S: di chuyển xuống
-- F hoặc LClick: Bắn đạn
-- Theo thời gian, quái đánh gần sẽ chạy nhanh hơn, quái đánh xa bắn nhanh hơn.
+- LClick: Bắn đạn
+- Q và Space: Chiêu thức
+- Theo thời gian, quái sẽ mạnh hơn, người chơi cũng vậy.
 
 ### Một số tùy chỉnh:
 - Bạn có thể điều chỉnh âm lượng nhạc và sfx trong phần option ở main menu.
