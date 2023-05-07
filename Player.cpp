@@ -229,7 +229,7 @@ void Player::castSkill_1()
 }
 void Player::castSkill_2()
 {
-    BulletProp newBullet(SKILL2, x , y  , 0 , BULLET_P_SPEED * 0.8f, 4);
+    BulletProp newBullet(SKILL2, x , y  , angle , BULLET_P_SPEED * 0.8f, 4);
     newBullet.dmg = 0.85f * dmg;
     newBullet.R = 2.8f * R_bullet;
     p_bullets.push_back(newBullet);
@@ -253,7 +253,6 @@ void Player::drawBullet(const Vec2f& camera)
         case SKILL2:
             t = {(temp % b.maxFrame) * 32, 0, 32, 32};
             skill2->draw(&t, b.x, b.y, 2 * b.R, 2 * b.R, 1, camera);
-            cout << b.R << endl;
             break;
         }
     }

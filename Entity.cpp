@@ -1,5 +1,7 @@
 #include "Entity.h"
 
+static int* a;
+
 float getAngleGlobal(const float& x1, const float& y1,const float& x2, const float& y2)
 {
     return atan2(y1 - y2, x1 - x2) + PI;

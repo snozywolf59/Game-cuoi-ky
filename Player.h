@@ -27,8 +27,6 @@ const float R_player = 25.0f;
 
 const float player_range = 1000.0f;
 
-/////////////////PLAYER////////////////
-
 struct Player:Entity
 {
     Player(SDL_Renderer* renderer);
