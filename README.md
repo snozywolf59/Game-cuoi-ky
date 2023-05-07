@@ -17,6 +17,8 @@
 - Có thể đổi hình ảnh cho game. Nhưng phải cùng frame và có size giống ảnh cũ.
 #### Cách 2:
 - Ấn vào [link](https://github.com/snozywolf59/Game-cuoi-ky/archive/refs/heads/main.zip).
+- Tải file về và giải nén.
+- Vào file mở GameBanQuai.exe.
 #### Tự build:
   Nếu muốn tự build game có thể follow theo các hướng dẫn của LazyFoo:
   + [Cài SDL](https://lazyfoo.net/tutorials/SDL/01_hello_SDL/index.php).
