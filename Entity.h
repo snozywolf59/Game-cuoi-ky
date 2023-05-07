@@ -10,6 +10,7 @@ SDL_Texture* loadTexture(const string& path, SDL_Renderer* renderer );
 float getAngleGlobal(const float& x1, const float& y1,const float& x2, const float& y2);
 
 float getDistance(const float& x1, const float& y1,const float& x2, const float& y2);
+float getSqDis(const float& x1, const float& y1,const float& x2, const float& y2);
 
 //entity
 

@@ -36,6 +36,7 @@ Vec2f Rotate(const float& angle, const Vec2f& v);
 
 float distance(const Vec2f& a, const Vec2f& b);
 
-float tangent(const Vec2f& m, const Vec2f& c, const float& r);
+float tangent1(const Vec2f& m, const Vec2f& c, const float& r);
+float tangent2(const Vec2f& m, const Vec2f& c, const float& r);
 
 void drawCircle(SDL_Renderer* renderer, int x, int y, int radius);

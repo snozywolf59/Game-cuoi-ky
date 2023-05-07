@@ -15,10 +15,11 @@ void Item::update()
 
 void spawnItem(vector<Item>& items, const int& x, const int& y, const Uint32& time)
 {
-   //thoi gian cang tang, rate sinh ra cang giam.
-   //rate max = 50%, rate min = 20%
-   float temp = 3000.0f / time;
-   float rate = 20 + min(30.0f,temp);
+   //time increases, rate increases.
+   //rate max = 30%, rate min = 50%
+   float temp = 20 * time;
+   temp /= (time + 320);
+   float rate = 20 + temp;
    if ((rand() % 100) <= rate)
    {
        int newR = rand() % 100;

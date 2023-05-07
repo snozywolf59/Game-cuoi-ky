@@ -10,6 +10,11 @@ float getDistance(const float& x1, const float& y1, const float& x2, const float
     return sqrtf(pow(x1-x2,2) + pow(y1-y2,2));
 }
 
+float getSqDis(const float& x1, const float& y1, const float& x2, const float& y2)
+{
+    return (x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2);
+}
+
 
 SDL_Texture* loadTexture(const string& path, SDL_Renderer* renderer )
 {

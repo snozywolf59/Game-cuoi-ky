@@ -102,12 +102,17 @@ Vec2f Rotate(const float& angle, const Vec2f& v)
     return {x, y};
 }
 
-float tangent(const Vec2f& m, const Vec2f& c, const float& r)
+float tangent1(const Vec2f& m, const Vec2f& c, const float& r)
 {
     Vec2f n = m - c;
     return atan2(r, n.length()) + atan2(n.y,n.x);
 }
 
+float tangent2(const Vec2f& m, const Vec2f& c, const float& r)
+{
+    Vec2f n = m - c;
+    return -atan2(r, n.length()) + atan2(n.y,n.x);
+}
 
 void drawCircle(SDL_Renderer* renderer, int x, int y, int radius)
 {

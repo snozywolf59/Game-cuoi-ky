@@ -14,7 +14,7 @@ const string file_player_shield = "image/Player/shield.png";
 
 const int PLAYER_MAX_HP = 50;
 const int PLAYER_RELOAD = 12;
-const float PLAYER_SPEED = 0.3f * frameDelay;
+const float PLAYER_SPEED = 0.2f * frameDelay;
 const int PLAYER_DMG = 3;
 const int SHIELD_TIME = 5 * FPS;
 const float R_player = 25.0f;

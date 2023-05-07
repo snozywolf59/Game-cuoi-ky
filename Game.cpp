@@ -189,7 +189,7 @@ void Game::updateEnemy()
             spawnEnemyMelee(currentTime, enemy_list,player,gMap);
 
 //    if (currentTime % E_SPAWN_T[ENEMY_RANGED] == 0)
-//        if (enemy_list.size() <= 6 + currentTime/800)
+//        if (enemy_list.size() <= 6 + currentTime/400)
 //            spawnEnemyRanged(currentTime, enemy_list,player,gMap);
     //check all enemies
     for (auto prop = enemy_list.begin(); prop != enemy_list.end();)

@@ -1,7 +1,7 @@
 #include "Enemy.h"
 
 int ti,tj;
-float newX, newY;
+float newX, newY, newX1, newY1;
 
 
 EnemyProp::EnemyProp(ENEMY_TYPE _type, const float& x_, const float& y_,
@@ -88,18 +88,20 @@ Vec2f EnemyProp::separate(vector<EnemyProp>& enemies)
 }
 
 
-void EnemyProp::avoidObs(Map* gMap)
+void EnemyProp::avoidObs(Player* player, Map* gMap)
 {
     Vec2f pos(x,y);
     Vec2f obs((ti + 0.5) * BLOCK_SIZE, (tj + 0.5) * BLOCK_SIZE);
     float oAngle = angle;
-    angle = tangent(pos, obs, 150);
+    angle = tangent1(pos, obs, 150);
     newX = x + speed * cosf(angle);
     newY = y + speed * sinf(angle);
-    if (getDistance(newX, newY, (ti + 0.5) * BLOCK_SIZE, (tj + 0.5) * BLOCK_SIZE) >= gMap->getRadius(tj,ti)){
-        if ((left && newX < x) || (right && newX > x)) x = newX;
-        if ((up && newY < y) || (down && newY > y)) y = newY;
-    }
+    angle = tangent2(pos, obs, 150);
+    newX1 = x + speed * cosf(angle);
+    newY1 = y + speed * sinf(angle);
+    if (getSqDis(newX1,newY1, player->x,player->y) < getSqDis(newX,newY, player->x,player->y)){
+        x = newX1, y = newY1;
+    }else{x = newX, y = newY;}
     angle = oAngle;
 }
 
@@ -125,7 +127,7 @@ void EnemyProp::updateStat(Player* player, vector<FighterProp>& E_bullets)
 }
 
 
-void EnemyProp::updateEnemyPos(vector<EnemyProp>& enemies, Map* gMap)
+void EnemyProp::updateEnemyPos(Player* player, vector<EnemyProp>& enemies, Map* gMap)
 {
     Vec2f sep = separate(enemies);
     Vec2f d = normal(Vec2f(cosf(angle) + sep.x, sinf(angle) + sep.y));
@@ -136,7 +138,7 @@ void EnemyProp::updateEnemyPos(vector<EnemyProp>& enemies, Map* gMap)
     if (getDistance(newX, newY, (ti + 0.5) * BLOCK_SIZE, (tj + 0.5) * BLOCK_SIZE) >= gMap->getRadius(tj,ti) + 80){
         if ((left && d.x < 0) || (right && d.x > 0)) x = newX;
         if ((up && d.y < 0) || (down && d.y > 0)) y = newY;
-    }else avoidObs(gMap);
+    }else avoidObs(player, gMap);
 
 }
 
@@ -146,7 +148,7 @@ void EnemyProp::update(vector<EnemyProp>& enemies, Player* player, vector<Fighte
     if (health > 0) {
         now = (now + 1)%maxFrame;
         updateAngle(player->x,player->y);
-        updateEnemyPos(enemies,gMap);
+        updateEnemyPos(player,enemies,gMap);
     }
     else now++;
 }
@@ -161,7 +163,7 @@ void spawnEnemyMelee(const Uint64& time, vector <EnemyProp>& enemy, Player* play
         int distance = 800 + (rand() % 201);
         angle = (rand()%360 - 180) * M_PI/180 ;
         difficulty = 1.5 * time;
-        difficulty /= (time + 50000);
+        difficulty /= (time + 800);
         spawnX = max(min(MAP_SIZE * 1.0f, player->x + distance * cosf(angle)),0.0f);
         spawnY = max(min(MAP_SIZE * 1.0f, player->y + distance * sinf(angle)),0.0f);
         i = spawnY / BLOCK_SIZE, j = spawnX/BLOCK_SIZE;
@@ -180,7 +182,7 @@ void spawnEnemyRanged(const Uint64& time, vector<EnemyProp>& enemies, Player* pl
         int distance = 800 + (rand() % 201);
         angle = (rand()%360 - 180) * M_PI/180 ;
         difficulty = 0.5 * time;
-        difficulty /= (time + 30000);
+        difficulty /= (time + 700);
         spawnX = max(min(MAP_SIZE * 1.0f, player->x + distance * cosf(angle)),0.0f);
         spawnY = max(min(MAP_SIZE * 1.0f, player->y + distance * sinf(angle)),0.0f);
         i = spawnY / BLOCK_SIZE, j = spawnX/BLOCK_SIZE;

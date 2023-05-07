@@ -44,13 +44,15 @@ struct EnemyProp:FighterProp
 
     void collisionBullet(Player* player);
 
+    //each enemy will not stack up others (may be not xD)
     Vec2f separate(vector <EnemyProp>& enemies);
 
-    void avoidObs(Map* gMap);
+    //avoid obstacles (in this case: some planets)
+    void avoidObs(Player* player, Map* gMap);
 
     void updateStat(Player* player,  vector<FighterProp>& E_bullets);
 
-    void updateEnemyPos(vector <EnemyProp>& enemies, Map* gMap);
+    void updateEnemyPos(Player* player, vector <EnemyProp>& enemies, Map* gMap);
 
     void update(vector <EnemyProp>& enemies,Player* player, vector<FighterProp>& E_bullets,Map* gMap) ;
 };
