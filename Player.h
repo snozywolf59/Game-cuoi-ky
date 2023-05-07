@@ -13,6 +13,9 @@ const string file_bar_mana = "image/Player/blue.png";
 const string file_player_pulse = "image/Player/pulse.png";
 const string file_player_shield = "image/Player/shield.png";
 
+const string file_skill1 = "image/Player/ThunderExplos.png";
+const string file_skill2 = "image/Player/UltimateBall.png";
+
 const int PLAYER_MAX_HP = 50;
 const int PLAYER_MAX_MANA = 300;
 const int PLAYER_RELOAD = 12;
@@ -38,9 +41,12 @@ struct Player:Entity
     bool alive = false;
 
     int now;
-    int atk;
+    int atk, skl1, skl2;
 
-    Bullet* bullet;
+    Entity* bullet;
+    Entity* skill1;
+    Entity* skill2;
+    Entity* fire;
     Entity* pulse;
     Entity* bar;
     Entity* health_bar;
@@ -51,7 +57,7 @@ struct Player:Entity
     Mix_Chunk* attack;
     Mix_Chunk* isHitted;
 
-    vector <FighterProp> p_bullets;
+    vector <BulletProp> p_bullets;
 
     void initStat();
 
@@ -62,6 +68,8 @@ struct Player:Entity
     void getDmg(const int& hurt);
 
     void getItem(Item& it, unsigned int& score);
+
+    void getMana(const int& bonus = 1);
 
     void update(Vec2f& camera, Mouse* mouse, Map* gMap, const Uint32& time);
 
@@ -74,6 +82,11 @@ struct Player:Entity
     void updateEngine(Vec2f& camera,Mouse* mouse, Map* gMap, const Uint32& time);
 
     void shoot(Mouse* mouse);
+
+    void castSkill_1();
+    void castSkill_2();
+
+    void drawBullet(const Vec2f& camera);
 
     void drawEngine(Vec2f& camera);
 

@@ -42,9 +42,9 @@ void Word::loadFromRenderedText(const string& textureText)
 
 void Word::drawWord()
 {
-    SDL_FRect temp = {170 - w , y + 5 , w , h};
+    SDL_Rect temp = {170 - w , y + 5 , w , h};
     if (pad != NULL) pad->draw(NULL,x,y,180,60);
-    SDL_RenderCopyF(renderer,texture,NULL,&temp);
+    SDL_RenderCopy(renderer,texture,NULL,&temp);
 }
 
 void Word::drawWord(const int& _x, const int& _y)
@@ -53,7 +53,6 @@ void Word::drawWord(const int& _x, const int& _y)
     if (pad != NULL)  pad->draw(NULL,_x,_y,w,h,0);
     SDL_RenderCopy(renderer,texture,NULL,&temp);
 }
-
 
 void Word::drawWord(const int& _x, const int& _y, const int& _w, const int& _h)
 {

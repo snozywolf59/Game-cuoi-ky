@@ -13,7 +13,6 @@ GameMenu::GameMenu(Resource* _res)
     snd = MIX_MAX_VOLUME;
     over = new OverMenu(res);
     scores = new HighScoreMenu(res);
-
     quit = false;
 
 }
@@ -110,7 +109,7 @@ void GameMenu::menuOpTion()
     {
         if (Mix_PlayingMusic() == 0)
         {
-        Mix_PlayMusic(res->Menu_bgMusic,0);
+            Mix_PlayMusic(res->Menu_bgMusic,0);
         }
         current = op->handleAndUpdate(volume,snd);
         op->render(volume,snd);
@@ -157,6 +156,7 @@ void GameMenu::menuScores()
             scores->render();
             if (current != NORMAL) break;
     }
+    scores->deleteTexure();
 }
 
 

@@ -17,6 +17,7 @@ EnemyProp::EnemyProp(ENEMY_TYPE _type, const float& x_, const float& y_,
     resetMov(true);
     alive = true;
     R = R_enemy;
+    smart = rand()%5;
 }
 
 void EnemyProp::resetMov(const bool& t)
@@ -26,7 +27,7 @@ void EnemyProp::resetMov(const bool& t)
     else st = ATTACK;
 }
 
-void EnemyProp::shoot(Player* player, vector <FighterProp>& E_bullets)
+void EnemyProp::shoot(Player* player, vector <BulletProp>& E_bullets)
 {
     if (health > 0)
     {
@@ -36,8 +37,9 @@ void EnemyProp::shoot(Player* player, vector <FighterProp>& E_bullets)
                 player->getDmg(dmg);
                 break;
             case ENEMY_RANGED:
-                FighterProp newBullet(x + 25 * cosf(angle), y + 25 * sinf(angle),
-                                       angle ,BULLET_P_SPEED,dmg, 4*5);
+                BulletProp newBullet(NOR,x + 25 * cosf(angle), y + 25 * sinf(angle),
+                                       angle ,BULLET_P_SPEED, 4*5);
+                newBullet.dmg = dmg;
                 E_bullets.push_back(newBullet);
                 break;
         }
@@ -52,11 +54,12 @@ void EnemyProp::collisionBullet(Player* player)
     for (auto it = player->p_bullets.begin(); it != player->p_bullets.end();){
         if (health > 0 && getDistance(it->x,it->y,x,y) < R + it->R ){
                 health -= player->dmg;
-                it = player->p_bullets.erase(it);
+                if (it->type == NOR) it = player->p_bullets.erase(it);
                 if (health <= 0){
                     now = 0;
                     maxFrame = maxFrameExplosion;
                     resetMov(false);
+                    player->getMana();
                 }
         }
         else ++it;
@@ -106,7 +109,7 @@ void EnemyProp::avoidObs(Player* player, Map* gMap)
 }
 
 
-void EnemyProp::updateStat(Player* player, vector<FighterProp>& E_bullets)
+void EnemyProp::updateStat(Player* player, vector<BulletProp>& E_bullets)
 {
     if (health <= 0 && now == maxFrame)
     {
@@ -135,14 +138,14 @@ void EnemyProp::updateEnemyPos(Player* player, vector<EnemyProp>& enemies, Map* 
     newX = x + speed * d.x, newY = y + speed * d.y;
     ti = newX / BLOCK_SIZE, tj = newY / BLOCK_SIZE;
 
-    if (getDistance(newX, newY, (ti + 0.5) * BLOCK_SIZE, (tj + 0.5) * BLOCK_SIZE) >= gMap->getRadius(tj,ti) + 80){
+    if (getDistance(newX, newY, (ti + 0.5) * BLOCK_SIZE, (tj + 0.5) * BLOCK_SIZE) >= gMap->getRadius(tj,ti) + 30){
         if ((left && d.x < 0) || (right && d.x > 0)) x = newX;
         if ((up && d.y < 0) || (down && d.y > 0)) y = newY;
-    }else avoidObs(player, gMap);
+    }else if (smart) avoidObs(player, gMap);
 
 }
 
-void EnemyProp::update(vector<EnemyProp>& enemies, Player* player, vector<FighterProp>& E_bullets,Map* gMap)
+void EnemyProp::update(vector<EnemyProp>& enemies, Player* player, vector<BulletProp>& E_bullets,Map* gMap)
 {
     updateStat(player,E_bullets);
     if (health > 0) {

@@ -14,6 +14,9 @@ int main(int argc, char* argv[])
 
     init(0);
 
+    SDL_Texture* newT;
+    if (newT != NULL) SDL_DestroyTexture(newT);
+
     res = new Resource(gRenderer);
 
     GameMenu* menu =  new GameMenu(res);

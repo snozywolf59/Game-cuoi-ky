@@ -35,12 +35,13 @@ struct EnemyProp:FighterProp
     bool left, right, up, down;
     ENEMY_TYPE type;
     bool alive;
+    bool smart;
 
     EnemyProp(ENEMY_TYPE _type, const float& x_ = 0,const float& y_ = 0,const float& angle_ = 0);
 
     void resetMov(const bool& t);
 
-    void shoot(Player* player, vector <FighterProp>& E_bullets);
+    void shoot(Player* player, vector <BulletProp>& E_bullets);
 
     void collisionBullet(Player* player);
 
@@ -50,11 +51,11 @@ struct EnemyProp:FighterProp
     //avoid obstacles (in this case: some planets)
     void avoidObs(Player* player, Map* gMap);
 
-    void updateStat(Player* player,  vector<FighterProp>& E_bullets);
+    void updateStat(Player* player,  vector<BulletProp>& E_bullets);
 
     void updateEnemyPos(Player* player, vector <EnemyProp>& enemies, Map* gMap);
 
-    void update(vector <EnemyProp>& enemies,Player* player, vector<FighterProp>& E_bullets,Map* gMap) ;
+    void update(vector <EnemyProp>& enemies,Player* player, vector<BulletProp>& E_bullets,Map* gMap) ;
 };
 
         /////////////SPAWN enemy

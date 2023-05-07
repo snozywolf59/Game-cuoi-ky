@@ -73,7 +73,7 @@ private:
 
     //enemies
     vector <EnemyProp> enemy_list;
-    vector <FighterProp> E_bullets;
+    vector <BulletProp> E_bullets;
     //count time
     Uint32 currentTime;
     int old_choose,choose;

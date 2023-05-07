@@ -14,7 +14,6 @@ HighScoreMenu::HighScoreMenu(Resource* _res)
     }
     read();
     createTexture();
-
     maxL = false;
 }
 
@@ -27,8 +26,7 @@ HighScoreMenu::~HighScoreMenu()
         if (topScore[i]->texture != NULL)
         {
             SDL_DestroyTexture(topScore[i]->texture);
-            delete topScore[i];
-            topScore[i] = NULL;
+            topScore[i]->texture = NULL;
         }
     }
 }
@@ -53,7 +51,11 @@ void HighScoreMenu::read()
 
         if (cnt >= TOP_SCORE) break;
     }
-
+    if (cnt < TOP_SCORE)
+    {
+        cout << "High score file is invalid\n";
+        exit(1);
+    }
     readfile.close();
 }
 
@@ -174,14 +176,24 @@ void HighScoreMenu::update(const Name& newScore)
 
 void HighScoreMenu::createTexture()
 {
+    for (int i1 = 0; i1 < TOP_SCORE; i1++)
+    {
+        stringstream point;
+        point << " #" << i1+1 << "      " << top[i1].name;
+        for (int j1 = NameMaxLength + 3 - top[i1].name.size(); j1 > 0; j1--) point << ' ';
+        point << top[i1].point ;
+        topScore[i1]->loadFromRenderedText(point.str());
+    }
+}
+void HighScoreMenu::deleteTexure()
+{
     for (int i = 0; i < TOP_SCORE; i++)
     {
-        if (topScore[i]->texture != NULL) SDL_DestroyTexture(topScore[i]->texture);
-        stringstream point;
-        point << " #" << i+1 << "      " << top[i].name;
-        for (int j = NameMaxLength + 3 - top[i].name.size(); j > 0; j--) point << ' ';
-        point << top[i].point ;
-        topScore[i]->loadFromRenderedText(point.str());
+        if (topScore[i]->texture != NULL)
+        {
+            SDL_DestroyTexture(topScore[i]->texture);
+            topScore[i]->texture = NULL;
+        }
     }
 }
 

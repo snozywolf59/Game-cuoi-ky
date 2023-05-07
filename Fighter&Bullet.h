@@ -3,38 +3,44 @@
 #include "Entity.h"
 #include "Map.h"
 
-const float BULLET_P_SPEED = 0.6;
-const float R_bullet = 12;
+const float BULLET_P_SPEED = 0.63f * frameDelay;
+const float R_bullet = 13.3;
 
 const int DELAY = 7;
 
-////////////////BULLET/////////////////
-
-struct Bullet:Entity
-{
-    Entity* fire;
-
-    float speed;
-
-    Bullet(SDL_Renderer* _renderer, const string& bullet_file, const string& bullet_fire_file);
-
-    void update(Map& gMap);
+enum BULLET{
+    NOR,
+    SKILL1,
+    SKILL2
 };
 
+const float BulletMaxS[] = {1000, 900, MAP_SIZE};
+const int ManaCost[] = {0, 150, 60};
+const float BulletReload[] = {1, 3, 3};
 
 struct FighterProp
 {
+
     float x, y, angle, speed;
     int now, maxFrame, dmg;
-    float s , R;
+    float R;
 
     FighterProp(const float& x_ = 0,const float& y_ = 0,const float& angle_ = 0,
                 const float& _speed = 0,const int& _dmg = 1, const int& _maxFrame = 0);
 
-    void updatePos();
-
     void updateAngle(const int& _x, const int& _y);
-
-    void draw(Entity* x,const Vec2f& camera, int now = -1);
 };
+
+struct BulletProp:FighterProp{
+    BULLET type;
+
+    float s, maxS;
+
+    BulletProp(BULLET _type, const float& x_ = 0,const float& y_ = 0,const float& angle_ = 0,
+                const float& _speed = 0, const int& _maxFrame = 0);
+
+    bool update();
+};
+
+
 

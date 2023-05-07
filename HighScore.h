@@ -24,6 +24,7 @@ public:
     void update(const Name& newScore);
     void updateScore(const Name& newScore);
     void createTexture();
+    void deleteTexure();
 
     string enter_name();
 

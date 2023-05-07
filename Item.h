@@ -7,6 +7,7 @@ enum ITEM
     NONE = -1,
     POINT ,
     DRUG ,
+    MANA ,
     HEALH ,
     SHIELD ,
     TOTAL_ITEMS
@@ -14,7 +15,7 @@ enum ITEM
 
 const int R_item = 10;
 //Ith: Item Threshold
-const int Ith[] = {0,35,65,90,100};
+const int Ith[] = {0,32,52,70,90,100};
 
 const int Item_Time = 12 * FPS;
 

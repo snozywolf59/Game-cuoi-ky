@@ -148,6 +148,8 @@ void Game::doKeyBoard()
         case SDLK_s: player->down = 1; break;
         case SDLK_a: player->left = 1; break;
         case SDLK_d: player->right = 1;break;
+        case SDLK_q: player->skl2 = 1; break;
+        case SDLK_SPACE: player->skl1 = 1; break;
     }
     if (e.type == SDL_KEYUP)
     switch (e.key.keysym.sym)
@@ -156,6 +158,8 @@ void Game::doKeyBoard()
         case SDLK_s: player->down = 0; break;
         case SDLK_a: player->left = 0; break;
         case SDLK_d: player->right = 0;break;
+        case SDLK_q: player->skl2 = 0; break;
+        case SDLK_SPACE: player->skl1 = 0; break;
     }
 }
 
@@ -163,7 +167,7 @@ void Game::updateEBullets()
 {
     for (auto b = E_bullets.begin(); b != E_bullets.end();)
     {
-        b->updatePos();
+        b->update();
         b->now = (b->now + 1)%b->maxFrame;
         bool alive = true;
         if (gMap->getRadius(b->y/BLOCK_SIZE, b->x/BLOCK_SIZE) > 0) alive = false;
@@ -185,12 +189,12 @@ void Game::updateEnemy()
 {
     //spawn
     if (currentTime % E_SPAWN_T[ENEMY_MELEE] == 0)
-        if (enemy_list.size() <= 0)
+        if (enemy_list.size() <= 7 + currentTime/800)
             spawnEnemyMelee(currentTime, enemy_list,player,gMap);
 
-//    if (currentTime % E_SPAWN_T[ENEMY_RANGED] == 0)
-//        if (enemy_list.size() <= 6 + currentTime/400)
-//            spawnEnemyRanged(currentTime, enemy_list,player,gMap);
+    if (currentTime % E_SPAWN_T[ENEMY_RANGED] == 0)
+        if (enemy_list.size() <= 7 + currentTime/1000)
+            spawnEnemyRanged(currentTime, enemy_list,player,gMap);
     //check all enemies
     for (auto prop = enemy_list.begin(); prop != enemy_list.end();)
     {
@@ -200,6 +204,7 @@ void Game::updateEnemy()
            spawnItem(items,prop->x,prop->y,currentTime);
            sub_score += 3 + prop->type;
            prop = enemy_list.erase(prop);
+           Mix_PlayChannel(SND_ENEMY_DIE, res->enemy_die, 0);
        }else{
             ++prop;
        }
@@ -288,7 +293,7 @@ void Game::drawEnemy()
 void Game::drawEBullets()
 {
     SDL_Rect cur;
-    for (FighterProp& bul:E_bullets)
+    for (BulletProp& bul:E_bullets)
     {
         cur = {((bul.now/8)%4) * 32, 0, 32, 32};
         res->e_bullet->angle = bul.angle;

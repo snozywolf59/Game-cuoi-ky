@@ -2,6 +2,8 @@
 
 ///////////////////////////PLAYER/////////////////////////
 
+SDL_Rect t;
+
 Player::Player(SDL_Renderer* trenderer)
 {
     renderer = trenderer;
@@ -19,11 +21,15 @@ void Player::initEngine()
     health_bar = new Entity(renderer, file_bar_health);
     mana_bar = new Entity(renderer, file_bar_mana);
 
-    bullet = new Bullet(renderer,file_player_bullet,file_player_bullet_fire);
+    bullet = new Entity(renderer,file_player_bullet);
+    fire = new Entity(renderer, file_player_bullet_fire);
     shield = new Entity(renderer, file_player_shield);
     pulse = new Entity(renderer,file_player_pulse);
     pulse->w = 28;
     pulse->h = 14;
+    skill1 = new Entity(renderer, file_skill1);
+    skill2 = new Entity(renderer, file_skill2);
+
     attack = Mix_LoadWAV(snd_player_shoot);
     isHitted = Mix_LoadWAV(snd_player_hitted);
 
@@ -78,17 +84,29 @@ void Player::getItem(Item& it, unsigned int& score)
         case SHIELD:
             shield_time = SHIELD_TIME;
             break;
+        case MANA:
+            getMana(3);
+            break;
         default:
             break;
         }
     }
 }
 
+void Player::getMana(const int& bonus)
+{
+    if (mana < PLAYER_MAX_MANA) mana += bonus;
+    if (mana > PLAYER_MAX_MANA) mana = PLAYER_MAX_MANA;
+    if (mana < 0) mana = 0;
+}
+
+
 void Player::update(Vec2f& camera,Mouse* mouse,Map* gMap, const Uint32& time)
 {
     if (health <= 0) alive = false;
 
-    now = (now + 1)%100;
+    now = now + 1;
+    if (now >= 100000) now = 0;
 
     updatePos(camera, gMap);
 
@@ -143,20 +161,21 @@ void Player::updateBullet(Vec2f& camera, Mouse* mouse, Map* gMap)
 {
     for (auto prop = p_bullets.begin(); prop != p_bullets.end();)
     {
-        prop->updatePos();
-        prop->now = (prop->now + 1)%prop->maxFrame;
-        if (prop->s > player_range)
-        {
-            prop = p_bullets.erase(prop);
-        }
-        else ++prop;
+        bool t = prop->update();
+        if (prop->type == SKILL1){prop->x = x, prop->y = y;}
+        if (t) ++prop;
+        else prop = p_bullets.erase(prop);
     }
 
     if (atk == 1 && reload >= maxReload) shoot(mouse);
 
+    if (skl1 == 1 && mana > ManaCost[SKILL1]) castSkill_1();
+
+    if (skl2 == 1 && mana > ManaCost[SKILL2]) castSkill_2();
+
     if (reload <= maxReload) reload++;
 
-    bullet->fire->angle = angle;
+    fire->angle = angle;
 }
 
 void Player::updateEngine(Vec2f& camera,Mouse* mouse, Map* gMap, const Uint32& time)
@@ -175,8 +194,8 @@ void Player::updateEngine(Vec2f& camera,Mouse* mouse, Map* gMap, const Uint32& t
         shield_time--;
     }
     if (s_boost > 0) {
-        speed = 1.5f * bSpeed;
-        maxReload = 0.68f * bReload;
+        speed = 1.25f * bSpeed;
+        maxReload = 0.72f * bReload;
         pulse->scale = 1.24f;
         s_boost--;
     }
@@ -185,32 +204,65 @@ void Player::updateEngine(Vec2f& camera,Mouse* mouse, Map* gMap, const Uint32& t
         maxReload = bReload;
         pulse->scale = 1.0f;
     }
+    if (now % 24 == 0) getMana();
 }
 
 void Player::shoot(Mouse* mouse)
 {
-    FighterProp newBullet(x + w/2 * cosf(angle), y + w/2 * sinf(angle) , angle ,BULLET_P_SPEED,dmg, 4*5);
+    BulletProp newBullet(NOR, x , y , angle ,BULLET_P_SPEED, 4);
+    newBullet.dmg = dmg;
     newBullet.R = R_bullet;
     p_bullets.push_back(newBullet);
     reload -= maxReload;
     if (reload < 0) reload = 0;
     Mix_PlayChannel(SND_PLAYER_SHOOT,attack,0);
-    if (mana < PLAYER_MAX_MANA) ++mana;
-    if (mana < 0) mana = 0;
 }
+
+void Player::castSkill_1()
+{
+    BulletProp newBullet(SKILL1, x , y  , 0 ,0, 4);
+    newBullet.dmg = 1.5f * dmg;
+    newBullet.R = 12 * R_bullet;
+    p_bullets.push_back(newBullet);
+    mana -= ManaCost[SKILL1];
+}
+void Player::castSkill_2()
+{
+    BulletProp newBullet(SKILL2, x , y  , 0 , BULLET_P_SPEED * 0.8f, 4);
+    newBullet.dmg = 0.85f * dmg;
+    newBullet.R = 2.8f * R_bullet;
+    p_bullets.push_back(newBullet);
+    mana -= ManaCost[SKILL2];
+}
+
+void Player::drawBullet(const Vec2f& camera)
+{
+    for (BulletProp& b: p_bullets){
+            int temp = b.now / 5;
+        switch(b.type){
+        case NOR:
+            t = {(temp % b.maxFrame) * 48, 0, 48, 32};
+            bullet->angle = b.angle;
+            bullet->draw(&t, b.x, b.y, 39 , 26 ,1,camera);
+            break;
+        case SKILL1:
+            t = {(temp % b.maxFrame) * 32, 0, 32, 32};
+            skill1->draw(&t, b.x, b.y, 2* b.R, 2 * b.R, 1, camera);
+            break;
+        case SKILL2:
+            t = {(temp % b.maxFrame) * 32, 0, 32, 32};
+            skill2->draw(&t, b.x, b.y, 2 * b.R, 2 * b.R, 1, camera);
+            cout << b.R << endl;
+            break;
+        }
+    }
+}
+
 
 void Player::drawEngine(Vec2f& camera)
 {
-    SDL_Rect t;
-    for (FighterProp& b: p_bullets)
-    {
-        t = {b.now/5 * 48, 0, 48, 32};
-        bullet->angle = b.angle;
-        bullet->draw(&t, b.x, b.y, 48 , 32,1,camera);
-    }
-
     if (reload < maxReload/2){
-          bullet->fire->draw(NULL,x + (w/2 + 7) * cosf(angle) ,y + (w/2 + 7) * sinf(angle) ,40,18,1,camera);
+          fire->draw(NULL,x + (w/2 + 7) * cosf(angle) ,y + (w/2 + 7) * sinf(angle) ,40,18,1,camera);
     }
 
     t = {((now/DELAY) % 4) * 32, 0, 32, 32};
@@ -239,6 +291,7 @@ void Player::drawHealthBar()
 
 void Player::drawPlayer(Vec2f& camera)
 {
+    drawBullet(camera);
     draw(NULL,camera,1);
     drawEngine(camera);
     SDL_SetRenderDrawColor(renderer,0,0,0,255);
