@@ -67,6 +67,9 @@ void Player::getItem(Item& it, unsigned int& score)
         case POINT:
             score += 5;
             break;
+        case DRUG:
+            speed = 1.2f * PLAYER_SPEED;
+            break;
         case SHIELD:
             shield_time = SHIELD_TIME;
             break;
