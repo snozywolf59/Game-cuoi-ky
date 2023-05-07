@@ -6,6 +6,7 @@ enum ITEM
 {
     NONE = -1,
     POINT ,
+    DRUG ,
     HEALH ,
     SHIELD ,
     TOTAL_ITEMS
@@ -13,9 +14,9 @@ enum ITEM
 
 const int R_item = 10;
 //Ith: Item Threshold
-const int Ith[] = {0,50,80,100};
+const int Ith[] = {0,35,65,90,100};
 
-const int Item_Time = 10 * FPS;
+const int Item_Time = 12 * FPS;
 
 struct Item
 {

@@ -4,6 +4,7 @@ Item::Item(ITEM _type, const int& _x, const int& _y)
 {
     type = _type, x = _x, y = _y;
     now = 0;
+    last = Item_Time;
 }
 
 void Item::update()

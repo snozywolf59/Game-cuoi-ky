@@ -75,6 +75,7 @@ const int font_size = 50;
 
 const string file_ITEMS[] = {
     "image/Items/Point.png",
+    "image/Items/Drug.png",
     "image/Items/Health.png",
     "image/Items/Shield.png"
 };
